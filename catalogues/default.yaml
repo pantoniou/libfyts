@@ -1,0 +1,201 @@
+# tree-sitter GitHub organization languages catalogue
+- name: agda
+  display-name: Agda
+  repo: https://github.com/tree-sitter/tree-sitter-agda.git
+  tag: e8d47a6987effe34d5595baf321d82d3519a8527
+  entrypoint: tree_sitter_agda
+  extensions: [ ".agda" ]
+
+- name: bash
+  display-name: Bash
+  repo: https://github.com/tree-sitter/tree-sitter-bash.git
+  tag: a06c2e4415e9bc0346c6b86d401879ffb44058f7
+  entrypoint: tree_sitter_bash
+  extensions: [ ".sh", ".bash" ]
+
+- name: c
+  display-name: C
+  repo: https://github.com/tree-sitter/tree-sitter-c.git
+  tag: b780e47fc780ddc8da13afa35a3f4ed5c157823d
+  entrypoint: tree_sitter_c
+  extensions: [ ".c", ".h" ]
+
+- name: cpp
+  display-name: C++
+  repo: https://github.com/tree-sitter/tree-sitter-cpp.git
+  tag: 8b5b49eb196bec7040441bee33b2c9a4838d6967
+  entrypoint: tree_sitter_cpp
+  extensions: [ ".cpp", ".cxx", ".cc", ".hpp", ".hxx" ]
+
+- name: csharp
+  display-name: C#
+  repo: https://github.com/tree-sitter/tree-sitter-c-sharp.git
+  tag: af29416d729b7a6603101b513604392d8f675e3b
+  entrypoint: tree_sitter_c_sharp
+  extensions: [ ".cs" ]
+
+- name: css
+  display-name: Css
+  repo: https://github.com/tree-sitter/tree-sitter-css.git
+  tag: dda5cfc5722c429eaba1c910ca32c2c0c5bb1a3f
+  entrypoint: tree_sitter_css
+  extensions: [ ".css" ]
+
+- name: diff
+  display-name: Diff
+  repo: https://github.com/tree-sitter-grammars/tree-sitter-diff.git
+  tag: 2520c3f934b3179bb540d23e0ef45f75304b5fed
+  entrypoint: tree_sitter_diff
+  extensions: [ ".diff", ".patch" ]
+
+- name: embeddedtemplate
+  display-name: Embeddedtemplate
+  repo: https://github.com/tree-sitter/tree-sitter-embedded-template.git
+  tag: 3499d85f0a0d937c507a4a65368f2f63772786e1
+  entrypoint: tree_sitter_embedded_template
+  extensions: [ ".erb" ]
+
+- name: go
+  display-name: Go
+  repo: https://github.com/tree-sitter/tree-sitter-go.git
+  tag: 2346a3ab1bb3857b48b29d779a1ef9799a248cd7
+  entrypoint: tree_sitter_go
+  extensions: [ ".go" ]
+
+- name: haskell
+  display-name: Haskell
+  repo: https://github.com/tree-sitter/tree-sitter-haskell.git
+  tag: 0975ef72fc3c47b530309ca93937d7d143523628
+  entrypoint: tree_sitter_haskell
+  extensions: [ ".hs" ]
+
+- name: html
+  display-name: Html
+  repo: https://github.com/tree-sitter/tree-sitter-html.git
+  tag: 73a3947324f6efddf9e17c0ea58d454843590cc0
+  entrypoint: tree_sitter_html
+  extensions: [ ".html", ".htm" ]
+
+- name: java
+  display-name: Java
+  repo: https://github.com/tree-sitter/tree-sitter-java.git
+  tag: e10607b45ff745f5f876bfa3e94fbcc6b44bdc11
+  entrypoint: tree_sitter_java
+  extensions: [ ".java" ]
+
+- name: javascript
+  display-name: Javascript
+  repo: https://github.com/tree-sitter/tree-sitter-javascript.git
+  tag: 58404d8cf191d69f2674a8fd507bd5776f46cb11
+  entrypoint: tree_sitter_javascript
+  extensions: [ ".js", ".jsx", ".mjs", ".cjs" ]
+
+- name: jsdoc
+  display-name: Jsdoc
+  repo: https://github.com/tree-sitter/tree-sitter-jsdoc.git
+  tag: 658d18dcdddb75c760363faa4963427a7c6b52db
+  entrypoint: tree_sitter_jsdoc
+  extensions: [  ]
+
+- name: json
+  display-name: Json
+  repo: https://github.com/tree-sitter/tree-sitter-json.git
+  tag: 001c28d7a29832b06b0e831ec77845553c89b56d
+  entrypoint: tree_sitter_json
+  extensions: [ ".json" ]
+
+- name: julia
+  display-name: Julia
+  repo: https://github.com/tree-sitter/tree-sitter-julia.git
+  tag: e0f9dcd180fdcfcfa8d79a3531e11d99e79321d3
+  entrypoint: tree_sitter_julia
+  extensions: [ ".jl" ]
+
+- name: ocaml
+  display-name: Ocaml
+  repo: https://github.com/tree-sitter/tree-sitter-ocaml.git
+  tag: 527d62ef0f24ce0d97fbedf004921d75d0a7e086
+  entrypoint: tree_sitter_ocaml
+  directory: grammars/ocaml
+  extensions: [ ".ml" ]
+
+- name: ocaml_interface
+  display-name: OCaml Interface
+  repo: https://github.com/tree-sitter/tree-sitter-ocaml.git
+  tag: 527d62ef0f24ce0d97fbedf004921d75d0a7e086
+  entrypoint: tree_sitter_ocaml_interface
+  directory: grammars/interface
+  extensions: [ ".mli" ]
+
+- name: php
+  display-name: Php
+  repo: https://github.com/tree-sitter/tree-sitter-php.git
+  tag: 38216983c07bf9e1b56e16acde53b25adaeab61c
+  entrypoint: tree_sitter_php
+  directory: php
+  extensions: [ ".php" ]
+
+- name: python
+  display-name: Python
+  repo: https://github.com/tree-sitter/tree-sitter-python.git
+  tag: 26855eabccb19c6abf499fbc5b8dc7cc9ab8bc64
+  entrypoint: tree_sitter_python
+  extensions: [ ".py", ".pyi", ".pyw" ]
+
+- name: ql
+  display-name: QL
+  repo: https://github.com/tree-sitter/tree-sitter-ql.git
+  tag: 1fd627a4e8bff8c24c11987474bd33112bead857
+  entrypoint: tree_sitter_ql
+  extensions: [ ".ql" ]
+
+- name: regex
+  display-name: Regex
+  repo: https://github.com/tree-sitter/tree-sitter-regex.git
+  tag: b2ac15e27fce703d2f37a79ccd94a5c0cbe9720b
+  entrypoint: tree_sitter_regex
+  extensions: [  ]
+
+- name: ruby
+  display-name: Ruby
+  repo: https://github.com/tree-sitter/tree-sitter-ruby.git
+  tag: ad907a69da0c8a4f7a943a7fe012712208da6dee
+  entrypoint: tree_sitter_ruby
+  extensions: [ ".rb" ]
+
+- name: rust
+  display-name: Rust
+  repo: https://github.com/tree-sitter/tree-sitter-rust.git
+  tag: 77a3747266f4d621d0757825e6b11edcbf991ca5
+  entrypoint: tree_sitter_rust
+  extensions: [ ".rs" ]
+
+- name: scala
+  display-name: Scala
+  repo: https://github.com/tree-sitter/tree-sitter-scala.git
+  tag: 4d081d98670ff6e98ca42c085294fc75eec15e1d
+  entrypoint: tree_sitter_scala
+  extensions: [ ".scala" ]
+
+- name: tsx
+  display-name: Tsx
+  repo: https://github.com/tree-sitter/tree-sitter-typescript.git
+  tag: 75b3874edb2dc714fb1fd77a32013d0f8699989f
+  entrypoint: tree_sitter_tsx
+  directory: tsx
+  extensions: [ ".tsx" ]
+
+- name: typescript
+  display-name: Typescript
+  repo: https://github.com/tree-sitter/tree-sitter-typescript.git
+  tag: 75b3874edb2dc714fb1fd77a32013d0f8699989f
+  entrypoint: tree_sitter_typescript
+  directory: typescript
+  extensions: [ ".ts", ".mts", ".cts" ]
+
+- name: verilog
+  display-name: Verilog
+  repo: https://github.com/tree-sitter/tree-sitter-verilog.git
+  tag: 227d277b6a1a5e2bf818d6206935722a7503de08
+  entrypoint: tree_sitter_verilog
+  extensions: [ ".verilog" ]

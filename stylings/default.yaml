@@ -1,0 +1,59 @@
+captures:
+  # Capture styles are matched in order. The first substring match wins.
+  - capture: diff.plus
+    style: green
+  - capture: diff.minus
+    style: red
+  - capture: string.special.path
+    style: yellow
+  - capture: attribute
+    style: cyan
+  - capture: label
+    style: bright-magenta
+  - capture: comment
+    style: bright-black
+  - capture: string
+    style: green
+  - capture: number
+    style: magenta
+  - capture: constant
+    style: magenta
+  - capture: keyword
+    style: bold-blue
+  - capture: conditional
+    style: bold-blue
+  - capture: repeat
+    style: bold-blue
+  - capture: function
+    style: cyan
+  - capture: method
+    style: cyan
+  - capture: type
+    style: yellow
+  - capture: class
+    style: yellow
+  - capture: constructor
+    style: yellow
+  - capture: variable
+    style: white
+  - capture: parameter
+    style: white
+  - capture: property
+    style: white
+  - capture: operator
+    style: bold-white
+  - capture: punctuation
+    style: white
+
+styles:
+  bright-black: "\e[90m"
+  red: "\e[31m"
+  green: "\e[32m"
+  yellow: "\e[33m"
+  blue: "\e[34m"
+  magenta: "\e[35m"
+  cyan: "\e[36m"
+  white: "\e[37m"
+  bright-magenta: "\e[1;35m"
+  bold-blue: "\e[1;34m"
+  bold-white: "\e[1;37m"

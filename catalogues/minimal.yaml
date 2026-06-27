@@ -1,0 +1,35 @@
+# minimal languages catalogue
+- name: c
+  display-name: C
+  repo: https://github.com/tree-sitter/tree-sitter-c.git
+  tag: b780e47fc780ddc8da13afa35a3f4ed5c157823d
+  entrypoint: tree_sitter_c
+  extensions: [ ".c", ".C" ]
+
+- name: cpp
+  display-name: C++
+  repo: https://github.com/tree-sitter/tree-sitter-cpp.git
+  tag: 8b5b49eb196bec7040441bee33b2c9a4838d6967
+  entrypoint: tree_sitter_cpp
+  extensions: [ ".cc", ".cpp", ".cxx", ".hh", ".hpp", ".hxx" ]
+
+- name: bash
+  display-name: Bash
+  repo: https://github.com/tree-sitter/tree-sitter-bash.git
+  tag: a06c2e4415e9bc0346c6b86d401879ffb44058f7
+  entrypoint: tree_sitter_bash
+  extensions: [ ".bash", ".sh" ]
+
+- name: python
+  display-name: Python
+  repo: https://github.com/tree-sitter/tree-sitter-python.git
+  tag: 26855eabccb19c6abf499fbc5b8dc7cc9ab8bc64
+  entrypoint: tree_sitter_python
+  extensions: [ ".py", ".pyi" ]
+
+- name: diff
+  display-name: Diff
+  repo: https://github.com/tree-sitter-grammars/tree-sitter-diff.git
+  tag: 2520c3f934b3179bb540d23e0ef45f75304b5fed
+  entrypoint: tree_sitter_diff
+  extensions: [ ".diff", ".patch" ]

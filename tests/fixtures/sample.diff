@@ -1,0 +1,8 @@
+diff --git a/old.txt b/new.txt
+index 1111111..2222222 100644
+--- a/old.txt
++++ b/new.txt
+@@ -1,2 +1,2 @@
+-old line
++new line
+ context line

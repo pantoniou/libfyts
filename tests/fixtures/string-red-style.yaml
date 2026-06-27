@@ -1,0 +1,6 @@
+captures:
+  - capture: string
+    style: red
+
+styles:
+  red: "\e[31m"
