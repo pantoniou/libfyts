@@ -30,9 +30,12 @@ static void disable_terminal_wrap(void)
 
 static void usage(FILE *out)
 {
-	fprintf(out, "usage: fyts-highlight [-c auto|off|on] [-l language] [--list-languages] "
-		     "[--output-catalog] [--output-styling] [-q file.scm] [-s file.yaml] "
-		     "[-w auto|0|columns] <source>\n");
+	fprintf(out, "usage: fyts-highlight [-b auto|dark|light] [-c auto|off|on] [-l language] "
+		     "[--list-languages] [--output-catalog] [--output-styling] [-q file.scm] "
+		     "[-s file.yaml] [-w auto|0|columns] [--prolog text] [--epilog text] "
+		     "[--line-prefix text] [--line-suffix text] [--debug-captures] "
+		     "[--report-unmatched-captures] [--reverse] [--stream] "
+		     "<source>\n");
 }
 
 static int parse_color_mode(const char *arg, enum fyts_color_mode *mode)
@@ -47,6 +50,23 @@ static int parse_color_mode(const char *arg, enum fyts_color_mode *mode)
 	}
 	if (strcmp(arg, "on") == 0) {
 		*mode = FYTS_COLOR_ON;
+		return 1;
+	}
+	return 0;
+}
+
+static int parse_background_mode(const char *arg, enum fyts_background_mode *mode)
+{
+	if (strcmp(arg, "auto") == 0) {
+		*mode = FYTS_BACKGROUND_AUTO;
+		return 1;
+	}
+	if (strcmp(arg, "dark") == 0) {
+		*mode = FYTS_BACKGROUND_DARK;
+		return 1;
+	}
+	if (strcmp(arg, "light") == 0) {
+		*mode = FYTS_BACKGROUND_LIGHT;
 		return 1;
 	}
 	return 0;
@@ -125,6 +145,10 @@ static int output_buffer(char *data, size_t len)
 {
 	int rc;
 
+	if (!len) {
+		free(data);
+		return 0;
+	}
 	if (!data)
 		return 1;
 	rc = fyts_write_file(data, len, stdout);
@@ -132,12 +156,80 @@ static int output_buffer(char *data, size_t len)
 	return rc ? 1 : 0;
 }
 
+static int output_chunk(char **data, size_t len)
+{
+	int rc;
+
+	rc = output_buffer(*data, len);
+	*data = NULL;
+	return rc;
+}
+
+static int stream_file(const char *path, const struct fyts_config *config)
+{
+	FILE *file;
+	struct fyts_ctx *ctx;
+	char input[4096];
+	char *output = NULL;
+	size_t output_len = 0;
+	size_t len;
+	int rc = 1;
+
+	file = fopen(path, "rb");
+	if (!file) {
+		perror(path);
+		return 1;
+	}
+
+	ctx = fyts_ctx_create(config);
+	if (!ctx)
+		goto done;
+
+	for (;;) {
+		len = fread(input, 1, sizeof(input), file);
+		if (len > 0) {
+			if (fyts_ctx_feed(ctx, input, len, &output, &output_len))
+				goto done;
+			if (output_chunk(&output, output_len))
+				goto done;
+		}
+		if (len < sizeof(input)) {
+			if (ferror(file)) {
+				perror(path);
+				goto done;
+			}
+			break;
+		}
+	}
+
+	if (fyts_ctx_finish(ctx, &output, &output_len))
+		goto done;
+	if (output_chunk(&output, output_len))
+		goto done;
+	rc = 0;
+
+done:
+	free(output);
+	fyts_ctx_destroy(ctx);
+	fclose(file);
+	return rc;
+}
+
 int main(int argc, char **argv)
 {
 	enum {
 		OPT_OUTPUT_STYLING = 256,
+		OPT_STREAM,
+		OPT_PROLOG,
+		OPT_EPILOG,
+		OPT_LINE_PREFIX,
+		OPT_LINE_SUFFIX,
+		OPT_REVERSE,
+		OPT_DEBUG_CAPTURES,
+		OPT_REPORT_UNMATCHED_CAPTURES,
 	};
 	static const struct option options[] = {
+	    {"background", required_argument, NULL, 'b'},
 	    {"color", required_argument, NULL, 'c'},
 	    {"lang", required_argument, NULL, 'l'},
 	    {"query", required_argument, NULL, 'q'},
@@ -146,6 +238,14 @@ int main(int argc, char **argv)
 	    {"list-languages", no_argument, NULL, 'L'},
 	    {"output-catalog", no_argument, NULL, 'o'},
 	    {"output-styling", no_argument, NULL, OPT_OUTPUT_STYLING},
+	    {"stream", no_argument, NULL, OPT_STREAM},
+	    {"prolog", required_argument, NULL, OPT_PROLOG},
+	    {"epilog", required_argument, NULL, OPT_EPILOG},
+	    {"line-prefix", required_argument, NULL, OPT_LINE_PREFIX},
+	    {"line-suffix", required_argument, NULL, OPT_LINE_SUFFIX},
+	    {"debug-captures", no_argument, NULL, OPT_DEBUG_CAPTURES},
+	    {"report-unmatched-captures", no_argument, NULL, OPT_REPORT_UNMATCHED_CAPTURES},
+	    {"reverse", no_argument, NULL, OPT_REVERSE},
 	    {"help", no_argument, NULL, 'h'},
 	    {NULL, 0, NULL, 0},
 	};
@@ -159,6 +259,7 @@ int main(int argc, char **argv)
 	int should_list_languages = 0;
 	int should_output_catalogue = 0;
 	int should_output_styling = 0;
+	int should_stream = 0;
 	int requested_width = -1;
 	int opt;
 	int rc;
@@ -167,8 +268,15 @@ int main(int argc, char **argv)
 	config.write = fyts_write_file;
 	config.write_user = stdout;
 
-	while ((opt = getopt_long(argc, argv, "c:l:q:s:w:Loh", options, NULL)) != -1) {
+	while ((opt = getopt_long(argc, argv, "b:c:l:q:s:w:Loh", options, NULL)) != -1) {
 		switch (opt) {
+		case 'b':
+			if (!parse_background_mode(optarg, &config.background_mode)) {
+				fprintf(stderr, "invalid background mode: %s\n", optarg);
+				usage(stderr);
+				return 2;
+			}
+			break;
 		case 'c':
 			if (!parse_color_mode(optarg, &config.color_mode)) {
 				fprintf(stderr, "invalid color mode: %s\n", optarg);
@@ -200,6 +308,30 @@ int main(int argc, char **argv)
 			break;
 		case OPT_OUTPUT_STYLING:
 			should_output_styling = 1;
+			break;
+		case OPT_STREAM:
+			should_stream = 1;
+			break;
+		case OPT_PROLOG:
+			config.prolog = optarg;
+			break;
+		case OPT_EPILOG:
+			config.epilog = optarg;
+			break;
+		case OPT_LINE_PREFIX:
+			config.line_prefix = optarg;
+			break;
+		case OPT_LINE_SUFFIX:
+			config.line_suffix = optarg;
+			break;
+		case OPT_DEBUG_CAPTURES:
+			config.debug_captures = 1;
+			break;
+		case OPT_REPORT_UNMATCHED_CAPTURES:
+			config.report_unmatched_captures = 1;
+			break;
+		case OPT_REVERSE:
+			config.reverse = 1;
 			break;
 		case 'h':
 			usage(stdout);
@@ -250,15 +382,19 @@ int main(int argc, char **argv)
 		}
 	}
 
-	source = read_file(source_path, &source_len);
-	if (!source) {
-		free(detected_lang_name);
-		return 1;
-	}
-
 	if (config.color_mode != FYTS_COLOR_OFF)
 		disable_terminal_wrap();
-	rc = fyts_highlight_source(&config, source, source_len);
+
+	if (should_stream) {
+		rc = stream_file(source_path, &config);
+	} else {
+		source = read_file(source_path, &source_len);
+		if (!source) {
+			free(detected_lang_name);
+			return 1;
+		}
+		rc = fyts_highlight_source(&config, source, source_len);
+	}
 
 	free(source);
 	free(detected_lang_name);

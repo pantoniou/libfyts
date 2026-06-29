@@ -8,12 +8,15 @@ struct output {
 	size_t cap;
 };
 
-static int write_output(const void *data, size_t len, void *user)
+static int append_output(struct output *out, char **datap, size_t len)
 {
-	struct output *out = user;
 	char *next;
 	size_t cap;
+	char *data;
 
+	data = *datap;
+	if (!data)
+		return 0;
 	if (len > out->cap - out->len) {
 		cap = out->cap ? out->cap * 2 : 128;
 		while (len > cap - out->len)
@@ -26,6 +29,8 @@ static int write_output(const void *data, size_t len, void *user)
 	}
 	memcpy(out->data + out->len, data, len);
 	out->len += len;
+	free(data);
+	*datap = NULL;
 	return 0;
 }
 
@@ -48,25 +53,45 @@ int main(void)
 	struct output out = {0};
 	struct fyts_config config = {0};
 	struct fyts_ctx *ctx;
+	char *chunk = NULL;
+	size_t chunk_len = 0;
 	int rc = 1;
 
 	config.lang = "c";
 	config.color_mode = FYTS_COLOR_ON;
-	config.write = write_output;
-	config.write_user = &out;
 
 	ctx = fyts_ctx_create(&config);
 	if (!ctx)
 		goto done;
-	if (fyts_ctx_feed(ctx, "int main(void) {\n", 17))
+	if (fyts_ctx_feed(ctx, "int main", 8, &chunk, &chunk_len))
 		goto done;
-	if (fyts_ctx_feed(ctx, "  return 0;\n", 12))
+	if (append_output(&out, &chunk, chunk_len))
 		goto done;
-	if (fyts_ctx_feed(ctx, "}\n", 2))
+	if (out.len != 0)
 		goto done;
-	if (fyts_ctx_finish(ctx))
+	if (fyts_ctx_feed(ctx, "(void) {\n", 9, &chunk, &chunk_len))
+		goto done;
+	if (append_output(&out, &chunk, chunk_len))
+		goto done;
+	if (!out.data || !has_text(out.data, out.len, "main"))
+		goto done;
+	if (fyts_ctx_feed(ctx, "  return 0;\n", 12, &chunk, &chunk_len))
+		goto done;
+	if (append_output(&out, &chunk, chunk_len))
+		goto done;
+	if (fyts_ctx_feed(ctx, "}", 1, &chunk, &chunk_len))
+		goto done;
+	if (append_output(&out, &chunk, chunk_len))
+		goto done;
+	if (!has_text(out.data, out.len, "return") || has_text(out.data, out.len, "}"))
+		goto done;
+	if (fyts_ctx_finish(ctx, &chunk, &chunk_len))
+		goto done;
+	if (append_output(&out, &chunk, chunk_len))
 		goto done;
 	if (!out.data || !has_text(out.data, out.len, "return"))
+		goto done;
+	if (!has_text(out.data, out.len, "}"))
 		goto done;
 	if (!has_text(out.data, out.len, "\033["))
 		goto done;
@@ -74,6 +99,7 @@ int main(void)
 
 done:
 	fyts_ctx_destroy(ctx);
+	free(chunk);
 	free(out.data);
 	return rc;
 }

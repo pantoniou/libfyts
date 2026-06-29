@@ -1,0 +1,7 @@
+{
+  "name": "fyts",
+  "enabled": true,
+  "count": 3,
+  "escape": "line\nnext",
+  "nothing": null
+}

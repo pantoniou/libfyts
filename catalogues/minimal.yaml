@@ -33,3 +33,17 @@
   tag: 2520c3f934b3179bb540d23e0ef45f75304b5fed
   entrypoint: tree_sitter_diff
   extensions: [ ".diff", ".patch" ]
+
+- name: json
+  display-name: Json
+  repo: https://github.com/tree-sitter/tree-sitter-json.git
+  tag: 001c28d7a29832b06b0e831ec77845553c89b56d
+  entrypoint: tree_sitter_json
+  extensions: [ ".json" ]
+
+- name: yaml
+  display-name: Yaml
+  repo: https://github.com/tree-sitter-grammars/tree-sitter-yaml.git
+  tag: a1c4812a73ec5e089de8e441fdea3a921e8d5079
+  entrypoint: tree_sitter_yaml
+  extensions: [ ".yaml", ".yml" ]

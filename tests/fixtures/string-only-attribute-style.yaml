@@ -1,0 +1,10 @@
+captures:
+  - capture: ^string$
+    attribute: string
+
+attributes:
+  string:
+    default: red
+
+styles:
+  red: "\e[31m"

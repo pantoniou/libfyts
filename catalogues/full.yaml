@@ -1,17 +1,11 @@
-# full tree-sitter-language-pack catalogue
+# Full usable catalogue. Known-broken languages live in catalogues/full-broken.yaml.
+
 - name: abl
   display-name: Abl
   repo: https://github.com/usagi-coffee/tree-sitter-abl.git
   tag: 5b31862c9b56cc0c79d37bf15670bec4a3bc9b86
   entrypoint: tree_sitter_abl
   extensions: [ ".p", ".cls", ".w" ]
-
-- name: actionscript
-  display-name: Actionscript
-  repo: https://github.com/Rileran/tree-sitter-actionscript.git
-  tag: 24919034fc78fdf9bedaac6616b6a60af20ab9b5
-  entrypoint: tree_sitter_actionscript
-  extensions: [ ".as" ]
 
 - name: ada
   display-name: Ada
@@ -91,20 +85,6 @@
   tag: a06c2e4415e9bc0346c6b86d401879ffb44058f7
   entrypoint: tree_sitter_bash
   extensions: [ ".sh", ".bash" ]
-
-- name: bass
-  display-name: Bass
-  repo: https://github.com/vito/tree-sitter-bass.git
-  tag: 28dc7059722be090d04cd751aed915b2fee2f89a
-  entrypoint: tree_sitter_bass
-  extensions: [  ]
-
-- name: batch
-  display-name: Batch
-  repo: https://github.com/davidevofficial/tree-sitter-batch.git
-  tag: 737a031b42240bf61bf7ea5e4356d4e0580dd6d9
-  entrypoint: tree_sitter_batch
-  extensions: [ ".bat", ".cmd" ]
 
 - name: beancount
   display-name: Beancount
@@ -264,34 +244,6 @@
   entrypoint: tree_sitter_cmake
   extensions: [ ".cmake" ]
 
-- name: cobol
-  display-name: Cobol
-  repo: https://github.com/nolanlwin/tree-sitter-cobol.git
-  tag: 6f1a60ad52b52ccb5e794985454c6743531f17d7
-  entrypoint: tree_sitter_cobol
-  extensions: [ ".cobol", ".cob", ".cbl" ]
-
-- name: comment
-  display-name: Comment
-  repo: https://github.com/stsewd/tree-sitter-comment.git
-  tag: 66272d2b6c73fb61157541b69dd0a7ce7b42a5ad
-  entrypoint: tree_sitter_comment
-  extensions: [  ]
-
-- name: commonlisp
-  display-name: Commonlisp
-  repo: https://github.com/theHamsta/tree-sitter-commonlisp.git
-  tag: 32323509b3d9fe96607d151c2da2c9009eb13a2f
-  entrypoint: tree_sitter_commonlisp
-  extensions: [ ".lisp", ".cl" ]
-
-- name: cooklang
-  display-name: Cooklang
-  repo: https://github.com/addcninblue/tree-sitter-cooklang.git
-  tag: 4ebe237c1cf64cf3826fc249e9ec0988fe07e58e
-  entrypoint: tree_sitter_cooklang
-  extensions: [ ".cook" ]
-
 - name: corn
   display-name: Corn
   repo: https://github.com/jakestanger/tree-sitter-corn.git
@@ -312,13 +264,6 @@
   tag: 8b5b49eb196bec7040441bee33b2c9a4838d6967
   entrypoint: tree_sitter_cpp
   extensions: [ ".cpp", ".cxx", ".cc", ".hpp", ".hxx" ]
-
-- name: crystal
-  display-name: Crystal
-  repo: https://github.com/keidax/tree-sitter-crystal.git
-  tag: 51ad1411de9414b4600227553bb70953c352a627
-  entrypoint: tree_sitter_crystal
-  extensions: [ ".cr" ]
 
 - name: csharp
   display-name: C#
@@ -470,13 +415,6 @@
   entrypoint: tree_sitter_editorconfig
   extensions: [  ]
 
-- name: eds
-  display-name: Eds
-  repo: https://github.com/uyha/tree-sitter-eds.git
-  tag: 26d529e6cfecde391a03c21d1474eb51e0285805
-  entrypoint: tree_sitter_eds
-  extensions: [ ".eds" ]
-
 - name: eex
   display-name: Eex
   repo: https://github.com/connorlay/tree-sitter-eex.git
@@ -554,13 +492,6 @@
   entrypoint: tree_sitter_faust
   extensions: [ ".dsp" ]
 
-- name: fennel
-  display-name: Fennel
-  repo: https://github.com/TravonteD/tree-sitter-fennel.git
-  tag: 36eb796a84b4f57bdf159d0a99267260d4960c89
-  entrypoint: tree_sitter_fennel
-  extensions: [ ".fnl" ]
-
 - name: fidl
   display-name: Fidl
   repo: https://github.com/google/tree-sitter-fidl.git
@@ -633,13 +564,6 @@
   entrypoint: tree_sitter_gap
   extensions: [ ".g", ".gi" ]
 
-- name: gdscript
-  display-name: Gdscript
-  repo: https://github.com/PrestonKnopp/tree-sitter-gdscript.git
-  tag: 495cf07da02e5381f8147645c080bc56a13d8655
-  entrypoint: tree_sitter_gdscript
-  extensions: [ ".gd" ]
-
 - name: gdshader
   display-name: Gdshader
   repo: https://github.com/airblast-dev/tree-sitter-gdshader.git
@@ -680,6 +604,9 @@
   repo: https://github.com/shunsambongi/tree-sitter-gitignore.git
   tag: f4685bf11ac466dd278449bcfe5fd014e94aa504
   entrypoint: tree_sitter_gitignore
+  highlight-query-repo: https://github.com/nvim-treesitter/nvim-treesitter.git
+  highlight-query-tag: cf12346a3414fa1b06af75c79faebe7f76df080a
+  highlight-query-path: queries/gitignore/highlights.scm
   extensions: [ ".gitignore" ]
 
 - name: gherkin
@@ -731,13 +658,6 @@
   entrypoint: tree_sitter_go
   extensions: [ ".go" ]
 
-- name: godot_resource
-  display-name: Godot Resource
-  repo: https://github.com/PrestonKnopp/tree-sitter-godot-resource.git
-  tag: 302c1895f54bf74d53a08572f7b26a6614209adc
-  entrypoint: tree_sitter_godot_resource
-  extensions: [ ".tres", ".tscn" ]
-
 - name: gomod
   display-name: Gomod
   repo: https://github.com/camdencheek/tree-sitter-go-mod.git
@@ -778,6 +698,7 @@
   repo: https://github.com/bkegley/tree-sitter-graphql.git
   tag: 5e66e961eee421786bdda8495ed1db045e06b5fe
   entrypoint: tree_sitter_graphql
+  highlight-query: queries/graphql/highlights.scm
   extensions: [ ".graphql", ".gql" ]
 
 - name: gren
@@ -792,14 +713,10 @@
   repo: https://github.com/Decodetalkers/tree-sitter-groovy.git
   tag: a6cf8f80dd3d5246398ad4011c2e2caf995ee17f
   entrypoint: tree_sitter_groovy
+  highlight-query-repo: https://github.com/nvim-treesitter/nvim-treesitter.git
+  highlight-query-tag: cf12346a3414fa1b06af75c79faebe7f76df080a
+  highlight-query-path: queries/groovy/highlights.scm
   extensions: [ ".groovy", ".gradle" ]
-
-- name: gstlaunch
-  display-name: Gstlaunch
-  repo: https://github.com/tree-sitter-grammars/tree-sitter-gstlaunch.git
-  tag: 549aef253fd38a53995cda1bf55c501174372bf7
-  entrypoint: tree_sitter_gstlaunch
-  extensions: [  ]
 
 - name: hack
   display-name: Hack
@@ -834,6 +751,9 @@
   repo: https://github.com/MichaHoffmann/tree-sitter-hcl.git
   tag: 64ad62785d442eb4d45df3a1764962dafd5bc98b
   entrypoint: tree_sitter_hcl
+  highlight-query-repo: https://github.com/nvim-treesitter/nvim-treesitter.git
+  highlight-query-tag: cf12346a3414fa1b06af75c79faebe7f76df080a
+  highlight-query-path: queries/hcl/highlights.scm
   extensions: [ ".hcl" ]
 
 - name: heex
@@ -855,6 +775,9 @@
   repo: https://github.com/theHamsta/tree-sitter-hlsl.git
   tag: bab9111922d53d43668fabb61869bec51bbcb915
   entrypoint: tree_sitter_hlsl
+  highlight-query-repo: https://github.com/nvim-treesitter/nvim-treesitter.git
+  highlight-query-tag: cf12346a3414fa1b06af75c79faebe7f76df080a
+  highlight-query-path: queries/hlsl/highlights.scm
   extensions: [ ".hlsl" ]
 
 - name: hocon
@@ -962,18 +885,14 @@
   entrypoint: tree_sitter_javascript
   extensions: [ ".js", ".jsx", ".mjs", ".cjs" ]
 
-- name: jinja2
-  display-name: Jinja2
-  repo: https://github.com/dbt-labs/tree-sitter-jinja2.git
-  tag: a82ed374f4cb58a1358dd6b26a7157bde1bca3b7
-  entrypoint: tree_sitter_jinja2
-  extensions: [ ".j2", ".jinja2" ]
-
 - name: jq
   display-name: Jq
   repo: https://github.com/flurie/tree-sitter-jq.git
   tag: c204e36d2c3c6fce1f57950b12cabcc24e5cc4d9
   entrypoint: tree_sitter_jq
+  highlight-query-repo: https://github.com/nvim-treesitter/nvim-treesitter.git
+  highlight-query-tag: cf12346a3414fa1b06af75c79faebe7f76df080a
+  highlight-query-path: queries/jq/highlights.scm
   extensions: [ ".jq" ]
 
 - name: jsdoc
@@ -1016,6 +935,7 @@
   repo: https://github.com/IndianBoy42/tree-sitter-just.git
   tag: 5685543a6e64f66335e25518c9ae8ffa1dae3d01
   entrypoint: tree_sitter_just
+  highlight-query: queries-src/highlights.scm
   extensions: [ ".just" ]
 
 - name: kcl
@@ -1046,26 +966,12 @@
   entrypoint: tree_sitter_kotlin
   extensions: [ ".kt", ".kts" ]
 
-- name: latex
-  display-name: Latex
-  repo: https://github.com/latex-lsp/tree-sitter-latex.git
-  tag: 7e0ecdc02926c7b9b2e0c76003d4fe7b0944f957
-  entrypoint: tree_sitter_latex
-  extensions: [ ".tex" ]
-
 - name: lean
   display-name: Lean
   repo: https://github.com/Julian/tree-sitter-lean.git
   tag: 463a9d8a509c935f4e10854b5078bbe2839b274c
   entrypoint: tree_sitter_lean
   extensions: [ ".lean" ]
-
-- name: ledger
-  display-name: Ledger
-  repo: https://github.com/cbarrete/tree-sitter-ledger.git
-  tag: 22a1ab8195c1f6e808679f803007756fe7638c6f
-  entrypoint: tree_sitter_ledger
-  extensions: [ ".ldg", ".ledger", ".journal" ]
 
 - name: less
   display-name: Less
@@ -1188,13 +1094,6 @@
   entrypoint: tree_sitter_mojo
   extensions: [ ".mojo" ]
 
-- name: move
-  display-name: Move
-  repo: https://github.com/tree-sitter-grammars/tree-sitter-move.git
-  tag: b8ca25518749be10562455fd081a3dab30b93b8b
-  entrypoint: tree_sitter_move
-  extensions: [ ".move" ]
-
 - name: nasm
   display-name: Nasm
   repo: https://github.com/naclsn/tree-sitter-nasm.git
@@ -1223,13 +1122,6 @@
   entrypoint: tree_sitter_nickel
   extensions: [ ".ncl" ]
 
-- name: nim
-  display-name: Nim
-  repo: https://github.com/aMOPel/tree-sitter-nim.git
-  tag: 4900b68ead86049b67c4f7dfc4a805f170a7970e
-  entrypoint: tree_sitter_nim
-  extensions: [ ".nim", ".nims" ]
-
 - name: ninja
   display-name: Ninja
   repo: https://github.com/alemuller/tree-sitter-ninja.git
@@ -1244,13 +1136,6 @@
   entrypoint: tree_sitter_nix
   extensions: [ ".nix" ]
 
-- name: norg
-  display-name: Norg
-  repo: https://github.com/nvim-neorg/tree-sitter-norg.git
-  tag: d7edfaf89198aab652c7a1f0f818196efedaccfb
-  entrypoint: tree_sitter_norg
-  extensions: [ ".norg" ]
-
 - name: norg_meta
   display-name: Norg Meta
   repo: https://github.com/nvim-neorg/tree-sitter-norg-meta.git
@@ -1264,13 +1149,6 @@
   tag: 14e6da1627aaef21d2b2aa0c37d04269766dcc1d
   entrypoint: tree_sitter_nqc
   extensions: [ ".nqc" ]
-
-- name: nushell
-  display-name: Nushell
-  repo: https://github.com/nushell/tree-sitter-nu.git
-  tag: 348b787d8b0409091d85fe9d4eb007fe9f3406bb
-  entrypoint: tree_sitter_nu
-  extensions: [ ".nu" ]
 
 - name: objc
   display-name: Objc
@@ -1359,13 +1237,6 @@
   directory: php
   extensions: [ ".php" ]
 
-- name: phpdoc
-  display-name: Phpdoc
-  repo: https://github.com/claytonrcarter/tree-sitter-phpdoc.git
-  tag: 12d50307e6c02e5f4f876fa6cf2edea1f7808c0d
-  entrypoint: tree_sitter_phpdoc
-  extensions: [  ]
-
 - name: pkl
   display-name: Pkl
   repo: https://github.com/apple/tree-sitter-pkl.git
@@ -1394,13 +1265,6 @@
   entrypoint: tree_sitter_pony
   extensions: [ ".pony" ]
 
-- name: postscript
-  display-name: Postscript
-  repo: https://github.com/smoeding/tree-sitter-postscript.git
-  tag: d352ed652a2b39cfa1567c1b77a44e275399bacf
-  entrypoint: tree_sitter_postscript
-  extensions: [ ".ps", ".eps" ]
-
 - name: powershell
   display-name: Powershell
   repo: https://github.com/airbus-cert/tree-sitter-powershell.git
@@ -1421,20 +1285,6 @@
   tag: f1c30d82a5bf0b70ce33ef431f4acd7fd69968a3
   entrypoint: tree_sitter_prisma
   extensions: [ ".prisma" ]
-
-- name: prolog
-  display-name: Prolog
-  repo: https://github.com/Rukiza/tree-sitter-prolog.git
-  tag: c246cf2bf36590a3cb4de380205376d3c46208e8
-  entrypoint: tree_sitter_prolog
-  extensions: [ ".pro" ]
-
-- name: promql
-  display-name: Promql
-  repo: https://github.com/MichaHoffmann/tree-sitter-promql.git
-  tag: 77625d78eebc3ffc44d114a07b2f348dff3061b0
-  entrypoint: tree_sitter_promql
-  extensions: [ ".promql" ]
 
 - name: properties
   display-name: Properties
@@ -1626,20 +1476,6 @@
   entrypoint: tree_sitter_ron
   extensions: [ ".ron" ]
 
-- name: rst
-  display-name: Rst
-  repo: https://github.com/stsewd/tree-sitter-rst.git
-  tag: a60f1070b824cb8bb8409b4b6d7da0d07997c30e
-  entrypoint: tree_sitter_rst
-  extensions: [ ".rst" ]
-
-- name: rtf
-  display-name: Rtf
-  repo: https://github.com/GoodNotes/tree-sitter-rtf.git
-  tag: 3bbc47cb5d991bef4ebab1118459f6c8d5064c54
-  entrypoint: tree_sitter_rtf
-  extensions: [ ".rtf" ]
-
 - name: ruby
   display-name: Ruby
   repo: https://github.com/tree-sitter/tree-sitter-ruby.git
@@ -1674,13 +1510,6 @@
   tag: 2ef6d42e3ad7a8208900f9346f4529806ae0f9f9
   entrypoint: tree_sitter_scss
   extensions: [ ".scss" ]
-
-- name: slang
-  display-name: Slang
-  repo: https://github.com/tree-sitter-grammars/tree-sitter-slang.git
-  tag: 1dbcc4abc7b3cdd663eb03d93031167d6ed19f56
-  entrypoint: tree_sitter_slang
-  extensions: [ ".slang" ]
 
 - name: smali
   display-name: Smali
@@ -1724,13 +1553,6 @@
   entrypoint: tree_sitter_solidity
   extensions: [ ".sol" ]
 
-- name: souffle
-  display-name: Souffle
-  repo: https://github.com/langston-barrett/tree-sitter-souffle.git
-  tag: 0ca94fad4422bc9a391f81418b5716e3af00ed2f
-  entrypoint: tree_sitter_souffle
-  extensions: [ ".dl" ]
-
 - name: sourcepawn
   display-name: Sourcepawn
   repo: https://github.com/nilshelmig/tree-sitter-sourcepawn.git
@@ -1738,17 +1560,10 @@
   entrypoint: tree_sitter_sourcepawn
   extensions: [ ".sp", ".inc" ]
 
-- name: sparql
-  display-name: Sparql
-  repo: https://github.com/GordianDziwis/tree-sitter-sparql.git
-  tag: 1ef52d35a73a2a5f2e433ecfd1c751c1360a923b
-  entrypoint: tree_sitter_sparql
-  extensions: [ ".sparql" ]
-
 - name: sql
   display-name: Sql
   repo: https://github.com/DerekStride/tree-sitter-sql.git
-  tag: c2e1e08db1ea20dc23bdb8d228a81a8756e9c450
+  tag: 851e9cb257ba7c66cc8c14214a31c44d2f1e954e
   entrypoint: tree_sitter_sql
   extensions: [ ".sql" ]
 
@@ -1813,7 +1628,7 @@
 - name: swift
   display-name: Swift
   repo: https://github.com/alex-pinkus/tree-sitter-swift.git
-  tag: fc5bf2e693cfc021b7faa8b3cfd38e94104979da
+  tag: 31d17fe7e818a2048c808b5c6fdc2dc792f4f5b5
   entrypoint: tree_sitter_swift
   extensions: [ ".swift" ]
 
@@ -1871,6 +1686,9 @@
   repo: https://github.com/tree-sitter-grammars/tree-sitter-hcl.git
   tag: 64ad62785d442eb4d45df3a1764962dafd5bc98b
   entrypoint: tree_sitter_terraform
+  highlight-query-repo: https://github.com/nvim-treesitter/nvim-treesitter.git
+  highlight-query-tag: cf12346a3414fa1b06af75c79faebe7f76df080a
+  highlight-query-path: queries/terraform/highlights.scm
   directory: dialects/terraform
   extensions: [ ".tf", ".tfvars" ]
 
@@ -1902,13 +1720,6 @@
   entrypoint: tree_sitter_tlaplus
   extensions: [ ".tla" ]
 
-- name: tmux
-  display-name: Tmux
-  repo: https://github.com/Freed-Wu/tree-sitter-tmux.git
-  tag: 75d1b995b0c23400ac8e49db757a2e0386f9fa8f
-  entrypoint: tree_sitter_tmux
-  extensions: [  ]
-
 - name: todotxt
   display-name: Todotxt
   repo: https://github.com/arnarg/tree-sitter-todotxt.git
@@ -1938,13 +1749,6 @@
   entrypoint: tree_sitter_tsx
   directory: tsx
   extensions: [ ".tsx" ]
-
-- name: turtle
-  display-name: Turtle
-  repo: https://github.com/GordianDziwis/tree-sitter-turtle.git
-  tag: 7f789ea7ef765080f71a298fc96b7c957fa24422
-  entrypoint: tree_sitter_turtle
-  extensions: [ ".ttl" ]
 
 - name: twig
   display-name: Twig
@@ -1980,6 +1784,7 @@
   repo: https://github.com/uben0/tree-sitter-typst.git
   tag: 46cf4ded12ee974a70bf8457263b67ad7ee0379d
   entrypoint: tree_sitter_typst
+  highlight-query: queries/typst/highlights.scm
   extensions: [ ".typst" ]
 
 - name: udev
@@ -2010,18 +1815,14 @@
   entrypoint: tree_sitter_v
   extensions: [ ".v" ]
 
-- name: vb
-  display-name: Vb
-  repo: https://github.com/CodeAnt-AI/tree-sitter-vb-dotnet.git
-  tag: cfca210ce8fdcb5245bd9cd5c47ce0a21a8488d5
-  entrypoint: tree_sitter_vb_dotnet
-  extensions: [ ".vb" ]
-
 - name: verilog
   display-name: Verilog
   repo: https://github.com/tree-sitter/tree-sitter-verilog.git
   tag: 227d277b6a1a5e2bf818d6206935722a7503de08
   entrypoint: tree_sitter_verilog
+  highlight-query-repo: https://github.com/nvim-treesitter/nvim-treesitter.git
+  highlight-query-tag: cf12346a3414fa1b06af75c79faebe7f76df080a
+  highlight-query-path: queries/verilog/highlights.scm
   extensions: [ ".verilog" ]
 
 - name: vhdl
@@ -2064,23 +1865,8 @@
   repo: https://github.com/tree-sitter-grammars/tree-sitter-vue.git
   tag: ce8011a414fdf8091f4e4071752efc376f4afb08
   entrypoint: tree_sitter_vue
+  highlight-query: queries/vue/highlights.scm
   extensions: [ ".vue" ]
-
-- name: wast
-  display-name: Wast
-  repo: https://github.com/mkatychev/tree-sitter-wasm.git
-  tag: ec42b8446502783edad7f34cbfd0d9051ea672ee
-  entrypoint: tree_sitter_wast
-  directory: wast
-  extensions: [ ".wast" ]
-
-- name: wat
-  display-name: Wat
-  repo: https://github.com/mkatychev/tree-sitter-wasm.git
-  tag: ec42b8446502783edad7f34cbfd0d9051ea672ee
-  entrypoint: tree_sitter_wat
-  directory: wat
-  extensions: [ ".wat" ]
 
 - name: wgsl
   display-name: Wgsl
@@ -2088,13 +1874,6 @@
   tag: 40259f3c77ea856841a4e0c4c807705f3e4a2b65
   entrypoint: tree_sitter_wgsl
   extensions: [ ".wgsl" ]
-
-- name: wgsl_bevy
-  display-name: Wgsl Bevy
-  repo: https://github.com/tree-sitter-grammars/tree-sitter-wgsl-bevy.git
-  tag: d9306a798ede627001a8e5752f775858c8edd7e4
-  entrypoint: tree_sitter_wgsl_bevy
-  extensions: [  ]
 
 - name: wit
   display-name: Wit
@@ -2168,4 +1947,3 @@
   tag: 7a593401efb5418ffdedbe3c0e4c61c6d240166d
   entrypoint: tree_sitter_zsh
   extensions: [ ".zsh" ]
-

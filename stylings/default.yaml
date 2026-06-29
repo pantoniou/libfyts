@@ -1,59 +1,152 @@
 captures:
-  # Capture styles are matched in order. The first substring match wins.
-  - capture: diff.plus
-    style: green
-  - capture: diff.minus
-    style: red
-  - capture: string.special.path
-    style: yellow
-  - capture: attribute
-    style: cyan
-  - capture: label
-    style: bright-magenta
-  - capture: comment
-    style: bright-black
-  - capture: string
-    style: green
-  - capture: number
-    style: magenta
-  - capture: constant
-    style: magenta
-  - capture: keyword
-    style: bold-blue
-  - capture: conditional
-    style: bold-blue
-  - capture: repeat
-    style: bold-blue
-  - capture: function
-    style: cyan
-  - capture: method
-    style: cyan
-  - capture: type
-    style: yellow
-  - capture: class
-    style: yellow
-  - capture: constructor
-    style: yellow
-  - capture: variable
-    style: white
-  - capture: parameter
-    style: white
-  - capture: property
-    style: white
-  - capture: operator
-    style: bold-white
-  - capture: punctuation
-    style: white
+  # Capture attributes are matched as POSIX extended regular expressions in order.
+  - capture: ^diff\.plus$
+    attribute: diff-added
+  - capture: ^diff\.minus$
+    attribute: diff-removed
+  - capture: ^string\.special\.path$
+    attribute: path
+  - capture: ^string\.special\.key$
+    attribute: key
+  - capture: ^escape$
+    attribute: escape
+  - capture: ^embedded$
+    attribute: embedded
+  - capture: ^attribute$
+    attribute: attribute
+  - capture: ^label$
+    attribute: label
+  - capture: ^property$
+    attribute: property
+  - capture: ^boolean$
+    attribute: constant
+  - capture: ^comment$
+    attribute: comment
+  - capture: ^string$
+    attribute: string
+  - capture: ^number$
+    attribute: constant
+  - capture: ^constant(\..*)?$
+    attribute: constant
+  - capture: ^keyword$
+    attribute: keyword
+  - capture: ^conditional$
+    attribute: keyword
+  - capture: ^repeat$
+    attribute: keyword
+  - capture: ^function(\..*)?$
+    attribute: function
+  - capture: ^method$
+    attribute: function
+  - capture: ^module$
+    attribute: module
+  - capture: ^type$
+    attribute: type
+  - capture: ^class$
+    attribute: type
+  - capture: ^constructor$
+    attribute: type
+  - capture: ^variable(\..*)?$
+    attribute: text
+  - capture: ^parameter$
+    attribute: text
+  - capture: ^operator$
+    attribute: operator
+  - capture: ^delimiter$
+    attribute: text
+  - capture: ^punctuation(\..*)?$
+    attribute: text
+  - capture: ^spell$
+    attribute: text
+
+attributes:
+  diff-added:
+    dark: vim-dark-diff-added
+    light: vim-light-diff-added
+  diff-removed:
+    dark: vim-dark-diff-removed
+    light: vim-light-diff-removed
+  path:
+    dark: vim-dark-preproc
+    light: vim-light-preproc
+  key:
+    dark: vim-dark-identifier
+    light: vim-light-identifier
+  escape:
+    dark: vim-dark-special
+    light: vim-light-special
+  embedded:
+    dark: vim-dark-preproc
+    light: vim-light-preproc
+  attribute:
+    dark: vim-dark-identifier
+    light: vim-light-identifier
+  label:
+    dark: vim-dark-statement
+    light: vim-light-statement
+  property:
+    dark: vim-dark-identifier
+    light: vim-light-identifier
+  constant:
+    dark: vim-dark-constant
+    light: vim-light-constant
+  comment:
+    dark: vim-dark-comment
+    light: vim-light-comment
+  string:
+    dark: vim-dark-string
+    light: vim-light-string
+  keyword:
+    dark: vim-dark-statement
+    light: vim-light-statement
+  function:
+    dark: vim-dark-identifier
+    light: vim-light-identifier
+  module:
+    dark: vim-dark-preproc
+    light: vim-light-preproc
+  type:
+    dark: vim-dark-type
+    light: vim-light-type
+  text:
+    dark: vim-dark-normal
+    light: vim-light-normal
+  operator:
+    dark: vim-dark-special
+    light: vim-light-special
+
+frame:
+  dark-background: frame-dark-background
+  light-background: frame-light-background
+  dark-conflicts: []
+  light-conflicts: []
+  dark-contrast: frame-dark-contrast
+  light-contrast: frame-light-contrast
 
 styles:
-  bright-black: "\e[90m"
-  red: "\e[31m"
-  green: "\e[32m"
-  yellow: "\e[33m"
-  blue: "\e[34m"
-  magenta: "\e[35m"
-  cyan: "\e[36m"
-  white: "\e[37m"
-  bright-magenta: "\e[1;35m"
-  bold-blue: "\e[1;34m"
-  bold-white: "\e[1;37m"
+  vim-dark-normal: "\e[37m"
+  vim-dark-comment: "\e[38;2;118;118;118m"
+  vim-dark-constant: "\e[38;2;215;135;95m"
+  vim-dark-string: "\e[38;2;135;175;135m"
+  vim-dark-identifier: "\e[38;2;135;175;175m"
+  vim-dark-statement: "\e[38;2;175;135;175m"
+  vim-dark-preproc: "\e[38;2;175;175;135m"
+  vim-dark-type: "\e[38;2;135;175;215m"
+  vim-dark-special: "\e[38;2;95;135;135m"
+  vim-dark-diff-added: "\e[38;2;135;175;135m"
+  vim-dark-diff-removed: "\e[38;2;215;95;95m"
+  vim-light-normal: "\e[30m"
+  vim-light-comment: "\e[38;2;64;96;144m"
+  vim-light-constant: "\e[38;2;192;0;88m"
+  vim-light-string: "\e[38;2;46;139;87m"
+  vim-light-identifier: "\e[38;2;0;139;139m"
+  vim-light-statement: "\e[1;38;2;165;42;42m"
+  vim-light-preproc: "\e[38;2;205;0;205m"
+  vim-light-type: "\e[1;38;2;46;139;87m"
+  vim-light-special: "\e[38;2;106;90;205m"
+  vim-light-diff-added: "\e[38;2;46;139;87m"
+  vim-light-diff-removed: "\e[38;2;192;0;88m"
+  frame-dark-background: "\e[40m"
+  frame-light-background: "\e[47m"
+  frame-dark-contrast: "\e[37m"
+  frame-light-contrast: "\e[30m"

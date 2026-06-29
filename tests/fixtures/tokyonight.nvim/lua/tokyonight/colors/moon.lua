@@ -1,0 +1,15 @@
+return {
+  blue = "#82aaff",
+  blue5 = "#89ddff",
+  comment = "#636da6",
+  cyan = "#86e1fc",
+  fg = "#c8d3f5",
+  fg_dark = "#828bb8",
+  green = "#c3e88d",
+  green1 = "#4fd6be",
+  magenta = "#c099ff",
+  orange = "#ff966c",
+  purple = "#fca7ea",
+  red = "#ff757f",
+  yellow = "#ffc777",
+}

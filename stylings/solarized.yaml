@@ -1,0 +1,130 @@
+captures:
+  # Capture attributes are matched as POSIX extended regular expressions in order.
+  - capture: ^diff\.plus$
+    attribute: diff-added
+  - capture: ^diff\.minus$
+    attribute: diff-removed
+  - capture: ^string\.special\.path$
+    attribute: path
+  - capture: ^string\.special\.key$
+    attribute: key
+  - capture: ^escape$
+    attribute: escape
+  - capture: ^embedded$
+    attribute: embedded
+  - capture: ^attribute$
+    attribute: attribute
+  - capture: ^label$
+    attribute: label
+  - capture: ^property$
+    attribute: property
+  - capture: ^boolean$
+    attribute: constant
+  - capture: ^comment$
+    attribute: comment
+  - capture: ^string$
+    attribute: string
+  - capture: ^number$
+    attribute: constant
+  - capture: ^constant(\..*)?$
+    attribute: constant
+  - capture: ^keyword$
+    attribute: keyword
+  - capture: ^conditional$
+    attribute: keyword
+  - capture: ^repeat$
+    attribute: keyword
+  - capture: ^function(\..*)?$
+    attribute: function
+  - capture: ^method$
+    attribute: function
+  - capture: ^module$
+    attribute: module
+  - capture: ^type$
+    attribute: type
+  - capture: ^class$
+    attribute: type
+  - capture: ^constructor$
+    attribute: type
+  - capture: ^variable(\..*)?$
+    attribute: text
+  - capture: ^parameter$
+    attribute: text
+  - capture: ^operator$
+    attribute: strong-text
+  - capture: ^delimiter$
+    attribute: text
+  - capture: ^punctuation(\..*)?$
+    attribute: text
+  - capture: ^spell$
+    attribute: text
+
+attributes:
+  diff-added:
+    default: solarized-green
+  diff-removed:
+    default: solarized-red
+  path:
+    default: solarized-yellow
+  key:
+    default: solarized-cyan
+  escape:
+    dark: solarized-bold-base1
+    light: solarized-bold-base01
+  embedded:
+    default: solarized-yellow
+  attribute:
+    default: solarized-cyan
+  label:
+    default: solarized-violet
+  property:
+    default: solarized-cyan
+  constant:
+    default: solarized-magenta
+  comment:
+    dark: solarized-base01
+    light: solarized-base1
+  string:
+    default: solarized-green
+  keyword:
+    default: solarized-bold-blue
+  function:
+    default: solarized-cyan
+  module:
+    default: solarized-yellow
+  type:
+    default: solarized-yellow
+  text:
+    dark: solarized-base0
+    light: solarized-base00
+  strong-text:
+    dark: solarized-bold-base1
+    light: solarized-bold-base01
+
+frame:
+  dark-background: frame-dark-background
+  light-background: frame-light-background
+  dark-conflicts: []
+  light-conflicts: []
+  dark-contrast: frame-dark-contrast
+  light-contrast: frame-light-contrast
+
+styles:
+  solarized-base01: "\e[38;2;88;110;117m"
+  solarized-base00: "\e[38;2;101;123;131m"
+  solarized-base0: "\e[38;2;131;148;150m"
+  solarized-base1: "\e[38;2;147;161;161m"
+  solarized-red: "\e[38;2;220;50;47m"
+  solarized-green: "\e[38;2;133;153;0m"
+  solarized-yellow: "\e[38;2;181;137;0m"
+  solarized-blue: "\e[38;2;38;139;210m"
+  solarized-magenta: "\e[38;2;211;54;130m"
+  solarized-cyan: "\e[38;2;42;161;152m"
+  solarized-violet: "\e[38;2;108;113;196m"
+  solarized-bold-blue: "\e[1;38;2;38;139;210m"
+  solarized-bold-base01: "\e[1;38;2;88;110;117m"
+  solarized-bold-base1: "\e[1;38;2;147;161;161m"
+  frame-dark-background: "\e[48;2;0;0;0m"
+  frame-light-background: "\e[48;2;255;255;255m"
+  frame-dark-contrast: "\e[38;2;255;255;255m"
+  frame-light-contrast: "\e[38;2;0;0;0m"
