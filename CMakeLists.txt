@@ -1,9 +1,11 @@
 cmake_minimum_required(VERSION 3.16)
-project(c_tree_sitter_highlighter C CXX)
+project(c_tree_sitter_highlighter VERSION 0.1.0 LANGUAGES C CXX)
 
+include(GNUInstallDirs)
 include(FetchContent)
 include(CheckCCompilerFlag)
 include(CheckCSourceCompiles)
+include(CMakePackageConfigHelpers)
 find_package(Git REQUIRED)
 
 set(CMAKE_C_STANDARD 11)
@@ -13,6 +15,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 option(GITHUB_USE_SSH "Rewrite GitHub catalogue URLs from HTTPS to SSH" OFF)
 option(ENABLE_ASAN "Enable ASAN support" OFF)
+option(BUILD_SHARED_LIBS "Build shared libraries" ON)
 option(TS_GRAMMAR_FETCH_SPARSE "Fetch only generated grammar paths from language repositories" ON)
 set(TS_GRAMMAR_SOURCE_MODE "auto" CACHE STRING "Grammar source mode: auto, archive, vendor, sparse, or fetch")
 set_property(CACHE TS_GRAMMAR_SOURCE_MODE PROPERTY STRINGS auto archive vendor sparse fetch)
@@ -77,6 +80,13 @@ find_path(LIBFYAML_INCLUDE_DIR NAMES libfyaml.h)
 find_library(LIBFYAML_LIBRARY NAMES fyaml)
 if(NOT LIBFYAML_INCLUDE_DIR OR NOT LIBFYAML_LIBRARY)
   message(FATAL_ERROR "libfyaml not found")
+endif()
+if(NOT TARGET libfyaml::libfyaml)
+  add_library(libfyaml::libfyaml UNKNOWN IMPORTED)
+  set_target_properties(libfyaml::libfyaml PROPERTIES
+    IMPORTED_LOCATION "${LIBFYAML_LIBRARY}"
+    INTERFACE_INCLUDE_DIRECTORIES "${LIBFYAML_INCLUDE_DIR}"
+  )
 endif()
 
 set(TS_UPDATE_PACK_ARGS
@@ -524,11 +534,13 @@ add_library(fyts
   ${TS_GRAMMAR_SOURCES}
 )
 set_target_properties(fyts PROPERTIES
+  EXPORT_NAME fyts
   C_VISIBILITY_PRESET hidden
   CXX_VISIBILITY_PRESET hidden
   VISIBILITY_INLINES_HIDDEN ON
   POSITION_INDEPENDENT_CODE ON
 )
+add_library(libfyts::fyts ALIAS fyts)
 set_source_files_properties(src/fyts.c PROPERTIES COMPILE_OPTIONS "${FYTS_C_FLAGS}")
 if(HAVE_ASAN)
   target_compile_options(fyts PRIVATE ${ASAN_C_FLAGS})
@@ -537,18 +549,56 @@ if(HAVE_ASAN)
   endif()
 endif()
 target_include_directories(fyts PUBLIC
-  "${CMAKE_CURRENT_SOURCE_DIR}/include"
-  "${tree-sitter_SOURCE_DIR}/lib/include"
-  "${LIBFYAML_INCLUDE_DIR}"
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
 )
 target_include_directories(fyts PRIVATE
   "${tree-sitter_SOURCE_DIR}/lib/include"
   "${CMAKE_CURRENT_BINARY_DIR}/generated"
 )
+if(NOT BUILD_SHARED_LIBS)
+  target_sources(fyts PRIVATE "${tree-sitter_SOURCE_DIR}/lib/src/lib.c")
+  target_include_directories(fyts PRIVATE "${tree-sitter_SOURCE_DIR}/lib/src")
+endif()
 if(BUILD_SHARED_LIBS AND NOT APPLE AND NOT WIN32)
   target_link_options(fyts PRIVATE "LINKER:--version-script=${FYTS_VERSION_SCRIPT}")
 endif()
-target_link_libraries(fyts PUBLIC tree-sitter "${LIBFYAML_LIBRARY}")
+target_link_libraries(fyts PUBLIC libfyaml::libfyaml)
+if(BUILD_SHARED_LIBS)
+  target_link_libraries(fyts PRIVATE tree-sitter)
+endif()
+
+add_library(fyts_static STATIC
+  "${tree-sitter_SOURCE_DIR}/lib/src/lib.c"
+  src/fyts.c
+  ${TS_GRAMMAR_SOURCES}
+)
+set(FYTS_STATIC_OUTPUT_NAME fyts_static)
+if(BUILD_SHARED_LIBS AND NOT WIN32)
+  set(FYTS_STATIC_OUTPUT_NAME fyts)
+endif()
+set_target_properties(fyts_static PROPERTIES
+  EXPORT_NAME fyts_static
+  OUTPUT_NAME ${FYTS_STATIC_OUTPUT_NAME}
+  C_VISIBILITY_PRESET hidden
+  CXX_VISIBILITY_PRESET hidden
+  VISIBILITY_INLINES_HIDDEN ON
+  POSITION_INDEPENDENT_CODE ON
+)
+set_source_files_properties(src/fyts.c PROPERTIES COMPILE_OPTIONS "${FYTS_C_FLAGS}")
+if(HAVE_ASAN)
+  target_compile_options(fyts_static PRIVATE ${ASAN_C_FLAGS})
+endif()
+target_include_directories(fyts_static PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
+)
+target_include_directories(fyts_static PRIVATE
+  "${tree-sitter_SOURCE_DIR}/lib/include"
+  "${tree-sitter_SOURCE_DIR}/lib/src"
+  "${CMAKE_CURRENT_BINARY_DIR}/generated"
+)
+target_link_libraries(fyts_static PUBLIC libfyaml::libfyaml)
 
 add_executable(fyts-highlight
   src/fyts_highlight.c
@@ -802,3 +852,45 @@ if(HAVE_ASAN)
     "UBSAN_OPTIONS=halt_on_error=1"
   )
 endif()
+
+install(TARGETS fyts fyts-highlight
+  EXPORT libfyts-targets
+  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+)
+if(BUILD_SHARED_LIBS)
+  install(TARGETS fyts_static
+    EXPORT libfyts-targets
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  )
+endif()
+install(FILES include/fyts/fyts.h
+  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/fyts
+)
+
+set(LIBFYTS_INSTALL_CMAKEDIR "${CMAKE_INSTALL_LIBDIR}/cmake/libfyts")
+
+install(EXPORT libfyts-targets
+  FILE libfyts-targets.cmake
+  NAMESPACE libfyts::
+  DESTINATION ${LIBFYTS_INSTALL_CMAKEDIR}
+)
+
+configure_package_config_file(
+  "${CMAKE_CURRENT_SOURCE_DIR}/cmake/libfyts-config.cmake.in"
+  "${CMAKE_CURRENT_BINARY_DIR}/cmake/libfyts-config.cmake"
+  INSTALL_DESTINATION ${LIBFYTS_INSTALL_CMAKEDIR}
+)
+
+write_basic_package_version_file(
+  "${CMAKE_CURRENT_BINARY_DIR}/cmake/libfyts-config-version.cmake"
+  VERSION ${PROJECT_VERSION}
+  COMPATIBILITY AnyNewerVersion
+)
+
+install(FILES
+  "${CMAKE_CURRENT_BINARY_DIR}/cmake/libfyts-config.cmake"
+  "${CMAKE_CURRENT_BINARY_DIR}/cmake/libfyts-config-version.cmake"
+  DESTINATION ${LIBFYTS_INSTALL_CMAKEDIR}
+)

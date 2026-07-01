@@ -65,6 +65,26 @@ Useful configure options:
 - `GITHUB_USE_SSH=ON`
 - `ENABLE_ASAN=ON`
 
+By default the build follows libfyaml's library layout: it builds the normal
+`fyts` library from `BUILD_SHARED_LIBS` and also builds a static archive named
+`libfyts.a`.
+
+Install the library, CLI, header, and static archive with:
+
+```sh
+cmake --install build --prefix /usr/local
+```
+
+CMake consumers can use the installed package:
+
+```cmake
+find_package(libfyts REQUIRED CONFIG)
+target_link_libraries(app PRIVATE libfyts::fyts)
+```
+
+When the package was installed from a shared build, the static archive is also
+available as `libfyts::fyts_static`.
+
 ## CLI
 
 The build produces `fyts-highlight`:
