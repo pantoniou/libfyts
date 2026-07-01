@@ -829,6 +829,38 @@ static int source_char_width(unsigned char c, int col)
 	return 1;
 }
 
+static int text_visible_width(const char *text)
+{
+	int col = 0;
+	size_t i;
+
+	if (!text)
+		return 0;
+	for (i = 0; text[i]; i++)
+		col += source_char_width((unsigned char)text[i], col);
+	return col;
+}
+
+static int render_content_width(const struct fyts_config *config)
+{
+	int width;
+	int frame_width;
+
+	width = config->width;
+	if (width <= 0)
+		return width;
+
+	if (!config->reverse && !(config->line_prefix && *config->line_prefix) &&
+	    !(config->line_suffix && *config->line_suffix))
+		return width;
+
+	frame_width =
+	    text_visible_width(config->line_prefix) + text_visible_width(config->line_suffix);
+	if (frame_width >= width)
+		return 0;
+	return width - frame_width;
+}
+
 static int emit_source_range(Buffer *out, const char *source, uint32_t start, uint32_t end,
 			     int *col, int width)
 {
@@ -1270,7 +1302,7 @@ static int render_source(struct fyts_ctx *ctx, const char *source, size_t source
 		ok = string_set_emit(&unmatched, out);
 	else
 		ok = emit_highlighted(out, source, (uint32_t)source_len, spans, span_count,
-				      ctx->config.width, ctx->span_reset, ctx);
+				      render_content_width(&ctx->config), ctx->span_reset, ctx);
 
 done:
 	string_set_cleanup(&unmatched);

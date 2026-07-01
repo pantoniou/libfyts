@@ -826,6 +826,14 @@ set_tests_properties(width-fixed PROPERTIES
   FAIL_REGULAR_EXPRESSION "stdio"
 )
 
+add_test(NAME width-framed
+  COMMAND "$<TARGET_FILE:fyts-highlight>" --color off --width 6 --lang c --line-prefix "| " --line-suffix " |" "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/sample.c"
+)
+set_tests_properties(width-framed PROPERTIES
+  PASS_REGULAR_EXPRESSION "\\| #i \\|"
+  FAIL_REGULAR_EXPRESSION "#in"
+)
+
 add_test(NAME parse-only-fallback
   COMMAND "$<TARGET_FILE:fyts-highlight>" --lang c --query "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/no-captures.scm" "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/sample.c"
 )

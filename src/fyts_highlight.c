@@ -7,27 +7,6 @@
 #include <unistd.h>
 #include <fyts/fyts.h>
 
-static int terminal_wrap_disabled;
-
-static void restore_terminal_wrap(void)
-{
-	if (!terminal_wrap_disabled)
-		return;
-	fputs("\033[?7h", stdout);
-	fflush(stdout);
-	terminal_wrap_disabled = 0;
-}
-
-static void disable_terminal_wrap(void)
-{
-	if (terminal_wrap_disabled || !isatty(STDOUT_FILENO))
-		return;
-	fputs("\033[?7l", stdout);
-	fflush(stdout);
-	terminal_wrap_disabled = 1;
-	atexit(restore_terminal_wrap);
-}
-
 static void usage(FILE *out)
 {
 	fprintf(out, "usage: fyts-highlight [-b auto|dark|light] [-c auto|off|on] [-l language] "
@@ -260,7 +239,7 @@ int main(int argc, char **argv)
 	int should_output_catalogue = 0;
 	int should_output_styling = 0;
 	int should_stream = 0;
-	int requested_width = -1;
+	int requested_width = 0;
 	int opt;
 	int rc;
 
@@ -381,9 +360,6 @@ int main(int argc, char **argv)
 			return 2;
 		}
 	}
-
-	if (config.color_mode != FYTS_COLOR_OFF)
-		disable_terminal_wrap();
 
 	if (should_stream) {
 		rc = stream_file(source_path, &config);

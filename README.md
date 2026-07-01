@@ -112,6 +112,10 @@ build/fyts-highlight --debug-captures file.c
 build/fyts-highlight --report-unmatched-captures file.c
 ```
 
+Terminal output probes the tty width by default. `--width 100` clips visible
+source lines to a fixed width, while `--width auto` or `--width 0` probes the
+tty and leaves output unbounded when stdout is not a terminal.
+
 Catalogue and styling YAML can be emitted from the embedded build data:
 
 ```sh
