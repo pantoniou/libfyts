@@ -167,6 +167,8 @@ static int string_set_add(StringSet *set, const char *text, size_t len)
 	}
 	if (set->count == set->cap) {
 		cap = set->cap ? set->cap * 2 : 16;
+		if (cap < set->cap || cap > SIZE_MAX / sizeof(*items))
+			return 0;
 		items = (char **)realloc(set->items, cap * sizeof(*items));
 		if (!items)
 			return 0;
@@ -818,6 +820,8 @@ static int push_span(Span **spans, size_t *count, size_t *capacity, Span span)
 		return 1;
 	if (*count == *capacity) {
 		new_capacity = *capacity ? *capacity * 2 : 128;
+		if (new_capacity < *capacity || new_capacity > SIZE_MAX / sizeof(Span))
+			return 0;
 		next = (Span *)realloc(*spans, new_capacity * sizeof(Span));
 		if (!next)
 			return 0;
@@ -1261,7 +1265,8 @@ static int predicate_capture_matches_regex(const char *source, const TSQueryCapt
 	char *text;
 	char *regex_text;
 	regex_t regex;
-	int matched = 0;
+	int regex_compiled = 0;
+	int matched = -1;
 
 	if (!capture)
 		return 0;
@@ -1272,24 +1277,31 @@ static int predicate_capture_matches_regex(const char *source, const TSQueryCapt
 	len = end - start;
 	text = (char *)malloc(len + 1);
 	regex_text = (char *)malloc((size_t)pattern_len + 1);
-	if (!text || !regex_text)
+	if (!text || !regex_text) {
+		fprintf(stderr, "out of memory evaluating query predicate\n");
 		goto done;
+	}
 	memcpy(text, source + start, len);
 	text[len] = '\0';
 	memcpy(regex_text, pattern, pattern_len);
 	regex_text[pattern_len] = '\0';
-	if (regcomp(&regex, regex_text, REG_EXTENDED | REG_NOSUB) != 0)
+	if (regcomp(&regex, regex_text, REG_EXTENDED | REG_NOSUB) != 0) {
+		fprintf(stderr, "failed to compile query predicate regex\n");
 		goto done;
+	}
+	regex_compiled = 1;
 	matched = regexec(&regex, text, 0, NULL, 0) == 0;
-	regfree(&regex);
 
 done:
+	if (regex_compiled)
+		regfree(&regex);
 	free(text);
 	free(regex_text);
 	return matched;
 }
 
-static int query_match_predicates_ok(TSQuery *query, const TSQueryMatch *match, const char *source)
+static int query_match_predicates_ok(TSQuery *query, const TSQueryMatch *match, const char *source,
+				     int *ok_out)
 {
 	const TSQueryPredicateStep *steps;
 	const TSQueryPredicateStep *step;
@@ -1304,6 +1316,7 @@ static int query_match_predicates_ok(TSQuery *query, const TSQueryMatch *match, 
 	int matched;
 	int ok = 1;
 
+	*ok_out = 0;
 	steps = ts_query_predicates_for_pattern(query, match->pattern_index, &step_count);
 	step = steps;
 	end = steps + step_count;
@@ -1336,6 +1349,8 @@ static int query_match_predicates_ok(TSQuery *query, const TSQueryMatch *match, 
 		pattern = ts_query_string_value_for_id(query, step->value_id, &pattern_len);
 		step++;
 		matched = predicate_capture_matches_regex(source, capture, pattern, pattern_len);
+		if (matched < 0)
+			return -1;
 		if (negate ? matched : !matched)
 			ok = 0;
 		while (step < end && step->type != TSQueryPredicateStepTypeDone)
@@ -1345,6 +1360,7 @@ static int query_match_predicates_ok(TSQuery *query, const TSQueryMatch *match, 
 		if (!ok)
 			return 0;
 	}
+	*ok_out = ok;
 	return 1;
 }
 
@@ -1381,6 +1397,8 @@ static int render_source(struct fyts_ctx *ctx, const char *source, size_t source
 	int use_debug;
 	int use_unmatched_report;
 	int priority;
+	int predicates_ok;
+	int predicate_rc;
 
 	spec = find_language(ctx->config.lang);
 	if (!spec) {
@@ -1445,7 +1463,10 @@ static int render_source(struct fyts_ctx *ctx, const char *source, size_t source
 	for (;;) {
 		if (!ts_query_cursor_next_capture(cursor, &match, &capture_index))
 			break;
-		if (!query_match_predicates_ok(query, &match, source))
+		predicate_rc = query_match_predicates_ok(query, &match, source, &predicates_ok);
+		if (predicate_rc < 0)
+			goto done;
+		if (!predicates_ok)
 			continue;
 		if (capture_index < match.capture_count) {
 			capture = match.captures[capture_index];
