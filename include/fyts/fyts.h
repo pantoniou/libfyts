@@ -37,6 +37,7 @@ struct fyts_config {
 	const char *lang;
 	const char *query_path;
 	const char *styling_path;
+	const char *styling_name;	/* built-in styling by name (see fyts_list_stylings) */
 	fy_generic styling;
 	enum fyts_color_mode color_mode;
 	enum fyts_background_mode background_mode;
@@ -65,6 +66,11 @@ FYTS_EXPORT char *fyts_list_languages(size_t *lenp);
 FYTS_EXPORT int fyts_language_supported(const char *lang);
 FYTS_EXPORT char *fyts_output_catalogue(size_t *lenp);
 FYTS_EXPORT char *fyts_output_styling(size_t *lenp);
+/* Newline-separated names of the built-in stylings (heap, free with free()). */
+FYTS_EXPORT char *fyts_list_stylings(size_t *lenp);
+/* The named built-in styling as YAML text (heap, free with free()), or NULL if
+ * @name is not a built-in. Pass NULL for @name to get the default styling. */
+FYTS_EXPORT char *fyts_builtin_styling(const char *name, size_t *lenp);
 FYTS_EXPORT char *fyts_detect_language_for_path(const char *path);
 
 #ifdef __cplusplus

@@ -505,6 +505,36 @@ file(WRITE "${TS_EMBEDDED_STYLING}"
   "static const size_t EMBEDDED_STYLING_LEN = sizeof(EMBEDDED_STYLING);\n"
 )
 
+# Also embed every built-in styling under its file stem, so a caller can select
+# one by name (fyts_builtin_styling / styling_name). The table is emitted in
+# sorted order for deterministic listing.
+list(SORT TS_BUILTIN_STYLING_FILES)
+file(APPEND "${TS_EMBEDDED_STYLING}"
+  "\n/* Named built-in stylings (by file stem). */\n"
+)
+set(TS_STYLING_TABLE "")
+foreach(styling_file ${TS_BUILTIN_STYLING_FILES})
+  get_filename_component(styling_name "${styling_file}" NAME_WE)
+  string(MAKE_C_IDENTIFIER "${styling_name}" styling_sym)
+  file(READ "${styling_file}" styling_hex HEX)
+  string(REGEX REPLACE "([0-9a-fA-F][0-9a-fA-F])" "0x\\1," styling_bytes "${styling_hex}")
+  file(APPEND "${TS_EMBEDDED_STYLING}"
+    "static const unsigned char EMBEDDED_STYLING_${styling_sym}[] = {\n"
+    "${styling_bytes}"
+    "\n};\n"
+  )
+  string(APPEND TS_STYLING_TABLE
+    "\t{ \"${styling_name}\", EMBEDDED_STYLING_${styling_sym}, sizeof(EMBEDDED_STYLING_${styling_sym}) },\n")
+endforeach()
+file(APPEND "${TS_EMBEDDED_STYLING}"
+  "struct embedded_styling { const char *name; const unsigned char *data; size_t len; };\n"
+  "static const struct embedded_styling EMBEDDED_STYLINGS[] = {\n"
+  "${TS_STYLING_TABLE}"
+  "};\n"
+  "static const size_t EMBEDDED_STYLINGS_COUNT =\n"
+  "\tsizeof(EMBEDDED_STYLINGS) / sizeof(EMBEDDED_STYLINGS[0]);\n"
+)
+
 set(FYTS_VERSION_SCRIPT "${CMAKE_CURRENT_BINARY_DIR}/generated/fyts.map")
 file(WRITE "${FYTS_VERSION_SCRIPT}"
   "{\n"

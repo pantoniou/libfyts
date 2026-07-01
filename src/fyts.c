@@ -467,6 +467,35 @@ static int styling_load_generic(Styling *styling, fy_generic root)
 	return 1;
 }
 
+/*
+ * Locate a built-in styling by name (its source file stem). A NULL or empty
+ * name, or the name "default", selects the compile-time default styling. Returns
+ * the embedded bytes, or NULL if @name is not a known built-in.
+ */
+static const struct embedded_styling *styling_builtin_lookup(const char *name)
+{
+	size_t i;
+
+	if (!name || !*name)
+		name = "default";
+	for (i = 0; i < EMBEDDED_STYLINGS_COUNT; i++)
+		if (!strcmp(EMBEDDED_STYLINGS[i].name, name))
+			return &EMBEDDED_STYLINGS[i];
+	return NULL;
+}
+
+static int styling_load_builtin(Styling *styling, const char *name)
+{
+	const struct embedded_styling *e = styling_builtin_lookup(name);
+	fy_generic_sized_string source;
+
+	if (!e)
+		return 0;
+	source.data = (const char *)e->data;
+	source.size = e->len;
+	return styling_parse(styling, source);
+}
+
 char *fyts_list_languages(size_t *lenp)
 {
 	Catalogue catalogue;
@@ -555,6 +584,48 @@ char *fyts_output_styling(size_t *lenp)
 
 done:
 	styling_cleanup(&styling);
+	return output;
+}
+
+char *fyts_list_stylings(size_t *lenp)
+{
+	Buffer out = {0};
+	char *result = NULL;
+	size_t i;
+
+	for (i = 0; i < EMBEDDED_STYLINGS_COUNT; i++)
+		if (buffer_write(&out, EMBEDDED_STYLINGS[i].name,
+				 strlen(EMBEDDED_STYLINGS[i].name)) ||
+		    buffer_write(&out, "\n", 1))
+			goto done;
+
+	if (!buffer_reserve(&out, 1))
+		goto done;
+	out.data[out.len] = '\0';
+	if (lenp)
+		*lenp = out.len;
+	result = out.data;
+	out.data = NULL;
+
+done:
+	buffer_cleanup(&out);
+	return result;
+}
+
+char *fyts_builtin_styling(const char *name, size_t *lenp)
+{
+	const struct embedded_styling *e = styling_builtin_lookup(name);
+	char *output;
+
+	if (!e)
+		return NULL;
+	output = (char *)malloc(e->len + 1);
+	if (!output)
+		return NULL;
+	memcpy(output, e->data, e->len);
+	output[e->len] = '\0';
+	if (lenp)
+		*lenp = e->len;
 	return output;
 }
 
@@ -1591,6 +1662,10 @@ struct fyts_ctx *fyts_ctx_create(const struct fyts_config *config)
 				goto fail;
 		} else if (ctx->config.styling_path) {
 			if (!styling_load_file(&ctx->styling, ctx->config.styling_path))
+				goto fail;
+		} else if (ctx->config.styling_name && *ctx->config.styling_name) {
+			if (!styling_load_builtin(&ctx->styling,
+						  ctx->config.styling_name))
 				goto fail;
 		} else if (!styling_load_embedded(&ctx->styling)) {
 			goto fail;
