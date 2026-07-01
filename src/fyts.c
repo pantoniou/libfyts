@@ -101,12 +101,19 @@ static int buffer_reserve(Buffer *buffer, size_t extra)
 	char *data;
 	size_t cap;
 
+	if (extra > SIZE_MAX - buffer->len)
+		return 0;
 	if (extra <= buffer->cap - buffer->len)
 		return 1;
 
 	cap = buffer->cap ? buffer->cap * 2 : 4096;
-	while (extra > cap - buffer->len)
+	if (cap < buffer->cap)
+		return 0;
+	while (extra > cap - buffer->len) {
+		if (cap > SIZE_MAX / 2)
+			return 0;
 		cap *= 2;
+	}
 
 	data = (char *)realloc(buffer->data, cap);
 	if (!data)
@@ -283,12 +290,13 @@ static int apply_frame(struct fyts_ctx *ctx, Buffer *in, Buffer *out)
 	return buffer_write_string(out, config->epilog);
 }
 
-static char *read_file(const char *path, uint32_t *len_out)
+static char *read_file(const char *path, size_t *len_out)
 {
-	FILE *file = fopen(path, "rb");
+	FILE *file;
 	long len;
 	char *data;
 
+	file = fopen(path, "rb");
 	if (!file) {
 		perror(path);
 		return NULL;
@@ -319,7 +327,7 @@ static char *read_file(const char *path, uint32_t *len_out)
 	}
 	data[len] = '\0';
 	fclose(file);
-	*len_out = (uint32_t)len;
+	*len_out = (size_t)len;
 	return data;
 }
 
@@ -436,7 +444,7 @@ static int styling_load_embedded(Styling *styling)
 static int styling_load_file(Styling *styling, const char *path)
 {
 	fy_generic_sized_string source;
-	uint32_t len;
+	size_t len;
 	char *data;
 
 	data = read_file(path, &len);
@@ -1345,7 +1353,9 @@ static int render_source(struct fyts_ctx *ctx, const char *source, size_t source
 	const LanguageSpec *spec;
 	char *query_source = NULL;
 	char *query_path = NULL;
-	uint32_t query_len = 0;
+	size_t query_len = 0;
+	uint32_t ts_source_len;
+	uint32_t ts_query_len;
 	TSParser *parser = NULL;
 	TSTree *tree = NULL;
 	TSQuery *query = NULL;
@@ -1377,6 +1387,11 @@ static int render_source(struct fyts_ctx *ctx, const char *source, size_t source
 		fprintf(stderr, "unknown language: %s\n", ctx->config.lang);
 		goto done;
 	}
+	if (source_len > UINT32_MAX) {
+		fprintf(stderr, "source is too large for tree-sitter\n");
+		goto done;
+	}
+	ts_source_len = (uint32_t)source_len;
 
 	parser = ts_parser_new();
 	if (!parser || !ts_parser_set_language(parser, spec->language())) {
@@ -1384,7 +1399,7 @@ static int render_source(struct fyts_ctx *ctx, const char *source, size_t source
 		goto done;
 	}
 
-	tree = ts_parser_parse_string(parser, NULL, source, (uint32_t)source_len);
+	tree = ts_parser_parse_string(parser, NULL, source, ts_source_len);
 	if (!tree) {
 		fprintf(stderr, "failed to parse source\n");
 		goto done;
@@ -1403,14 +1418,24 @@ static int render_source(struct fyts_ctx *ctx, const char *source, size_t source
 	query_source = read_file(query_path, &query_len);
 	if (!query_source)
 		goto done;
+	if (query_len > UINT32_MAX) {
+		fprintf(stderr, "query %s is too large for tree-sitter\n", query_path);
+		goto done;
+	}
+	ts_query_len = (uint32_t)query_len;
 
-	query = ts_query_new(spec->language(), query_source, query_len, &error_offset, &error_type);
+	query =
+	    ts_query_new(spec->language(), query_source, ts_query_len, &error_offset, &error_type);
 	if (!query) {
 		fprintf(stderr, "invalid query %s at byte %u\n", query_path, error_offset);
 		goto done;
 	}
 
 	cursor = ts_query_cursor_new();
+	if (!cursor) {
+		fprintf(stderr, "failed to initialize query cursor\n");
+		goto done;
+	}
 	root = ts_tree_root_node(tree);
 	ts_query_cursor_exec(cursor, query, root);
 	use_color = config_color_enabled(&ctx->config);
@@ -1464,7 +1489,7 @@ static int render_source(struct fyts_ctx *ctx, const char *source, size_t source
 	if (use_unmatched_report)
 		ok = string_set_emit(&unmatched, out);
 	else
-		ok = emit_highlighted(out, source, (uint32_t)source_len, spans, span_count,
+		ok = emit_highlighted(out, source, ts_source_len, spans, span_count,
 				      render_content_width(&ctx->config), ctx->span_reset, ctx);
 
 done:
@@ -1671,6 +1696,7 @@ int fyts_ctx_feed(struct fyts_ctx *ctx, const char *data, size_t len, char **out
 {
 	char *source;
 	const void *newline;
+	size_t cap;
 
 	if (out)
 		*out = NULL;
@@ -1678,10 +1704,17 @@ int fyts_ctx_feed(struct fyts_ctx *ctx, const char *data, size_t len, char **out
 		*out_len = 0;
 	if (!ctx || (!data && len))
 		return -1;
+	if (len > SIZE_MAX - ctx->source_len)
+		return -1;
 	if (len > ctx->source_cap - ctx->source_len) {
-		size_t cap = ctx->source_cap ? ctx->source_cap * 2 : 4096;
-		while (len > cap - ctx->source_len)
+		cap = ctx->source_cap ? ctx->source_cap * 2 : 4096;
+		if (cap < ctx->source_cap)
+			return -1;
+		while (len > cap - ctx->source_len) {
+			if (cap > SIZE_MAX / 2)
+				return -1;
 			cap *= 2;
+		}
 		source = (char *)realloc(ctx->source, cap);
 		if (!source)
 			return -1;

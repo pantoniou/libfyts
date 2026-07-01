@@ -331,14 +331,20 @@ int main(int argc, char **argv)
 
 	if (should_list_languages) {
 		output = fyts_list_languages(&output_len);
+		if (!output)
+			return 1;
 		return output_buffer(output, output_len);
 	}
 	if (should_output_catalogue) {
 		output = fyts_output_catalogue(&output_len);
+		if (!output)
+			return 1;
 		return output_buffer(output, output_len);
 	}
 	if (should_output_styling) {
 		output = fyts_output_styling(&output_len);
+		if (!output)
+			return 1;
 		return output_buffer(output, output_len);
 	}
 
