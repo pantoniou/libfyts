@@ -189,7 +189,7 @@ source layout overrides:
 Built-in catalogues:
 
 - `minimal.yaml`: small smoke-test set
-- `default.yaml`: upstream `tree-sitter` GitHub grammars plus diff/patch
+- `default.yaml`: popular languages plus common source/config formats
 - `full.yaml`: usable full language-pack set
 - `full-broken.yaml`: full catalogue including known-broken entries
 

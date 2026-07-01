@@ -81,7 +81,7 @@ changes. The repository `.clang-format` is configured for this style.
 Language metadata lives in `catalogues/*.yaml`:
 
 - `minimal.yaml`: small smoke-test set
-- `default.yaml`: upstream `github.com/tree-sitter/*` grammars plus `diff`
+- `default.yaml`: curated popular languages plus common source/config formats
 - `full.yaml`: usable full tree-sitter-language-pack definition set
 - `full-broken.yaml`: all full catalogue entries, with known-broken languages
   moved to the end
