@@ -42,10 +42,11 @@ cmake --build build
 ctest --test-dir build --output-on-failure
 ```
 
-The default catalogue is `minimal`, which keeps first builds small. Select a
-larger catalogue at configure time:
+The default catalogue is `default`, a curated popular-language set. Select a
+smaller or larger catalogue at configure time:
 
 ```sh
+cmake -S . -B build -DTS_LANGUAGE_CATALOGUE_SET=minimal
 cmake -S . -B build -DTS_LANGUAGE_CATALOGUE_SET=default
 cmake -S . -B build -DTS_LANGUAGE_CATALOGUE_SET=full
 ```

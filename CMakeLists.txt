@@ -30,7 +30,7 @@ if(NOT TS_GRAMMAR_SOURCE_MODE MATCHES "^(auto|archive|vendor|sparse|fetch)$")
   message(FATAL_ERROR "TS_GRAMMAR_SOURCE_MODE must be one of: auto, archive, vendor, sparse, fetch")
 endif()
 
-set(TS_LANGUAGE_CATALOGUE_SET "minimal" CACHE STRING "Tree-sitter language catalogue set: minimal, default, full, or full-broken")
+set(TS_LANGUAGE_CATALOGUE_SET "default" CACHE STRING "Tree-sitter language catalogue set: minimal, default, full, or full-broken")
 set_property(CACHE TS_LANGUAGE_CATALOGUE_SET PROPERTY STRINGS minimal default full full-broken)
 if(NOT TS_LANGUAGE_CATALOGUE_SET MATCHES "^(minimal|default|full|full-broken)$")
   message(FATAL_ERROR "TS_LANGUAGE_CATALOGUE_SET must be one of: minimal, default, full, full-broken")
