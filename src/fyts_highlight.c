@@ -11,10 +11,10 @@ static void usage(FILE *out)
 {
 	fprintf(out, "usage: fyts-highlight [-b auto|dark|light] [-c auto|off|on] [-l language] "
 		     "[--list-languages] [--output-catalog] [--output-styling] [-q file.scm] "
-		     "[-s file.yaml] [-w auto|0|columns] [--prolog text] [--epilog text] "
-		     "[--line-prefix text] [--line-suffix text] [--debug-captures] "
-		     "[--report-unmatched-captures] [--reverse] [--stream] "
-		     "<source>\n");
+		     "[-s|--styling file.yaml] [-w auto|0|columns] [--prolog text] "
+		     "[--epilog text] [--line-prefix text] [--line-suffix text] "
+		     "[--debug-captures] [--report-unmatched-captures] [--reverse] "
+		     "[--stream] <source>\n");
 }
 
 static int parse_color_mode(const char *arg, enum fyts_color_mode *mode)
@@ -214,6 +214,7 @@ int main(int argc, char **argv)
 	    {"query", required_argument, NULL, 'q'},
 	    {"width", required_argument, NULL, 'w'},
 	    {"style", required_argument, NULL, 's'},
+	    {"styling", required_argument, NULL, 's'},
 	    {"list-languages", no_argument, NULL, 'L'},
 	    {"output-catalog", no_argument, NULL, 'o'},
 	    {"output-styling", no_argument, NULL, OPT_OUTPUT_STYLING},

@@ -106,7 +106,7 @@ build/fyts-highlight --color auto|off|on file.c
 build/fyts-highlight --background auto|dark|light file.c
 build/fyts-highlight --width auto file.c
 build/fyts-highlight --width 100 file.c
-build/fyts-highlight --style stylings/tokyonight.yaml file.c
+build/fyts-highlight --styling stylings/tokyonight.yaml file.c
 build/fyts-highlight --reverse file.c
 build/fyts-highlight --stream file.c
 build/fyts-highlight --debug-captures file.c

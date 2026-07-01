@@ -782,6 +782,13 @@ set_tests_properties(custom-style PROPERTIES
   PASS_REGULAR_EXPRESSION "\\[31m"
 )
 
+add_test(NAME custom-styling-long-option
+  COMMAND "$<TARGET_FILE:fyts-highlight>" --color on --styling "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/string-red-style.yaml" --lang c "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/sample.c"
+)
+set_tests_properties(custom-styling-long-option PROPERTIES
+  PASS_REGULAR_EXPRESSION "\\[31m"
+)
+
 add_test(NAME solarized-dark-style
   COMMAND "$<TARGET_FILE:fyts-highlight>" --background dark --color on --style "${CMAKE_CURRENT_SOURCE_DIR}/stylings/solarized.yaml" --lang c "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/sample.c"
 )
