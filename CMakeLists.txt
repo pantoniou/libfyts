@@ -834,6 +834,22 @@ set_tests_properties(width-framed PROPERTIES
   FAIL_REGULAR_EXPRESSION "#in"
 )
 
+add_test(NAME width-wide-cjk
+  COMMAND "$<TARGET_FILE:fyts-highlight>" --color off --width 5 --lang c "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/sample-wide.c"
+)
+set_tests_properties(width-wide-cjk PROPERTIES
+  PASS_REGULAR_EXPRESSION "// 日"
+  FAIL_REGULAR_EXPRESSION "本|�"
+)
+
+add_test(NAME width-wide-emoji
+  COMMAND "$<TARGET_FILE:fyts-highlight>" --color off --width 7 --lang c "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/sample-wide.c"
+)
+set_tests_properties(width-wide-emoji PROPERTIES
+  PASS_REGULAR_EXPRESSION "// 日本"
+  FAIL_REGULAR_EXPRESSION "🙂|�"
+)
+
 add_test(NAME parse-only-fallback
   COMMAND "$<TARGET_FILE:fyts-highlight>" --lang c --query "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/no-captures.scm" "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/sample.c"
 )
