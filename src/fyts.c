@@ -16,6 +16,7 @@ typedef struct {
 	const char *name;
 	const TSLanguage *(*language)(void);
 	const char *query_path;
+	int progressive_safe;
 } LanguageSpec;
 
 typedef struct {
@@ -360,6 +361,14 @@ static const LanguageSpec *find_language(const char *name)
 int fyts_language_supported(const char *lang)
 {
 	return find_language(lang) != NULL;
+}
+
+int fyts_language_progressive_safe(const char *lang)
+{
+	const LanguageSpec *spec;
+
+	spec = find_language(lang);
+	return spec ? spec->progressive_safe : 0;
 }
 
 static void catalogue_cleanup(Catalogue *catalogue)

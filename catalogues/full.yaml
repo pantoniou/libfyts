@@ -5,6 +5,7 @@
   repo: https://github.com/usagi-coffee/tree-sitter-abl.git
   tag: 5b31862c9b56cc0c79d37bf15670bec4a3bc9b86
   entrypoint: tree_sitter_abl
+  progressive-safe: true
   extensions: [ ".p", ".cls", ".w" ]
 
 - name: ada
@@ -12,6 +13,7 @@
   repo: https://github.com/briot/tree-sitter-ada.git
   tag: 6b58259a08b1a22ba0247a7ce30be384db618da6
   entrypoint: tree_sitter_ada
+  progressive-safe: true
   extensions: [ ".ada", ".adb", ".ads" ]
 
 - name: agda
@@ -19,6 +21,7 @@
   repo: https://github.com/tree-sitter/tree-sitter-agda.git
   tag: e8d47a6987effe34d5595baf321d82d3519a8527
   entrypoint: tree_sitter_agda
+  progressive-safe: true
   extensions: [ ".agda" ]
 
 - name: al
@@ -26,6 +29,7 @@
   repo: https://github.com/SShadowS/tree-sitter-al.git
   tag: eeb2839070135e4b319e7a0aa0146e6a0c45086a
   entrypoint: tree_sitter_al
+  progressive-safe: true
   extensions: [ ".al" ]
 
 - name: angular
@@ -33,6 +37,7 @@
   repo: https://github.com/dlvandenberg/tree-sitter-angular.git
   tag: 38a8014ed5452cd6b7cf1399c00177a1f5374256
   entrypoint: tree_sitter_angular
+  progressive-safe: true
   extensions: [  ]
 
 - name: apex
@@ -40,6 +45,7 @@
   repo: https://github.com/aheber/tree-sitter-sfapex.git
   tag: 27a3091a1a444ce19d6099e00cd3788f019d0c2b
   entrypoint: tree_sitter_apex
+  progressive-safe: true
   directory: apex
   extensions: [ ".trigger" ]
 
@@ -48,6 +54,7 @@
   repo: https://github.com/ObserverOfTime/tree-sitter-arduino.git
   tag: 11dd46c9ae25135c473c0003a133bb06a484af0c
   entrypoint: tree_sitter_arduino
+  progressive-safe: true
   extensions: [ ".ino" ]
 
 - name: asciidoc
@@ -55,6 +62,7 @@
   repo: https://github.com/cathaysia/tree-sitter-asciidoc.git
   tag: 6bfd7b291565a7b31e7524f6a563ac4a396e72ed
   entrypoint: tree_sitter_asciidoc
+  progressive-safe: false
   directory: tree-sitter-asciidoc
   extensions: [ ".adoc", ".asciidoc" ]
 
@@ -63,6 +71,7 @@
   repo: https://github.com/rush-rs/tree-sitter-asm.git
   tag: 839741fef4dab5128952334624905c82b40c7133
   entrypoint: tree_sitter_asm
+  progressive-safe: true
   extensions: [ ".s", ".asm" ]
 
 - name: astro
@@ -70,6 +79,7 @@
   repo: https://github.com/virchau13/tree-sitter-astro.git
   tag: 213f6e6973d9b456c6e50e86f19f66877e7ef0ee
   entrypoint: tree_sitter_astro
+  progressive-safe: true
   extensions: [ ".astro" ]
 
 - name: awk
@@ -77,6 +87,7 @@
   repo: https://github.com/Beaglefoot/tree-sitter-awk.git
   tag: 34bbdc7cce8e803096f47b625979e34c1be38127
   entrypoint: tree_sitter_awk
+  progressive-safe: true
   extensions: [ ".awk" ]
 
 - name: bash
@@ -84,6 +95,7 @@
   repo: https://github.com/tree-sitter/tree-sitter-bash.git
   tag: a06c2e4415e9bc0346c6b86d401879ffb44058f7
   entrypoint: tree_sitter_bash
+  progressive-safe: true
   extensions: [ ".sh", ".bash" ]
 
 - name: beancount
@@ -91,6 +103,7 @@
   repo: https://github.com/polarmutex/tree-sitter-beancount.git
   tag: c5e6cdf260629f76035a0c0de830947f385ae622
   entrypoint: tree_sitter_beancount
+  progressive-safe: true
   extensions: [ ".beancount" ]
 
 - name: bibtex
@@ -98,6 +111,7 @@
   repo: https://github.com/latex-lsp/tree-sitter-bibtex.git
   tag: 8d04ed27b3bc7929f14b7df9236797dab9f3fa66
   entrypoint: tree_sitter_bibtex
+  progressive-safe: true
   extensions: [ ".bib" ]
 
 - name: bicep
@@ -105,6 +119,7 @@
   repo: https://github.com/tree-sitter-grammars/tree-sitter-bicep.git
   tag: bff59884307c0ab009bd5e81afd9324b46a6c0f9
   entrypoint: tree_sitter_bicep
+  progressive-safe: true
   extensions: [ ".bicep" ]
 
 - name: bitbake
@@ -112,6 +127,7 @@
   repo: https://github.com/tree-sitter-grammars/tree-sitter-bitbake.git
   tag: a5d04fdb5a69a02b8fa8eb5525a60dfb5309b73b
   entrypoint: tree_sitter_bitbake
+  progressive-safe: true
   extensions: [ ".bb", ".bbappend", ".bbclass" ]
 
 - name: blade
@@ -119,6 +135,7 @@
   repo: https://github.com/EmranMR/tree-sitter-blade.git
   tag: 5dbdcb0ccbe91e64b038b41545d3acc26c74907a
   entrypoint: tree_sitter_blade
+  progressive-safe: true
   extensions: [ ".blade" ]
 
 - name: brightscript
@@ -126,6 +143,7 @@
   repo: https://github.com/ajdelcimmuto/tree-sitter-brightscript.git
   tag: 253fdfaa23814cb46c2d5fc19049fa0f2f62c6da
   entrypoint: tree_sitter_brightscript
+  progressive-safe: true
   extensions: [ ".brs" ]
 
 - name: bsl
@@ -133,6 +151,7 @@
   repo: https://github.com/alkoleft/tree-sitter-bsl.git
   tag: 5752667f4d40879a533c4ffe3005da10ff0b5e29
   entrypoint: tree_sitter_bsl
+  progressive-safe: true
   directory: grammars/bsl
   extensions: [ ".bsl" ]
 
@@ -141,6 +160,7 @@
   repo: https://github.com/tree-sitter/tree-sitter-c.git
   tag: b780e47fc780ddc8da13afa35a3f4ed5c157823d
   entrypoint: tree_sitter_c
+  progressive-safe: true
   extensions: [ ".c", ".h" ]
 
 - name: c3
@@ -148,6 +168,7 @@
   repo: https://github.com/c3lang/tree-sitter-c3.git
   tag: 1c6a95234c62130763ed1c479f958b74fdbfdb2a
   entrypoint: tree_sitter_c3
+  progressive-safe: true
   extensions: [ ".c3", ".c3i", ".c3t" ]
 
 - name: caddy
@@ -155,6 +176,7 @@
   repo: https://github.com/Samonitari/tree-sitter-caddy.git
   tag: 65b60437983933d00809c8927e7d8a29ca26dfa3
   entrypoint: tree_sitter_caddy
+  progressive-safe: true
   extensions: [ ".caddyfile" ]
 
 - name: cairo
@@ -162,6 +184,7 @@
   repo: https://github.com/tree-sitter-grammars/tree-sitter-cairo.git
   tag: 6238f609bea233040fe927858156dee5515a0745
   entrypoint: tree_sitter_cairo
+  progressive-safe: true
   extensions: [ ".cairo" ]
 
 - name: capnp
@@ -169,6 +192,7 @@
   repo: https://github.com/tree-sitter-grammars/tree-sitter-capnp.git
   tag: 7b0883c03e5edd34ef7bcf703194204299d7099f
   entrypoint: tree_sitter_capnp
+  progressive-safe: true
   extensions: [ ".capnp" ]
 
 - name: cedar
@@ -176,6 +200,7 @@
   repo: https://github.com/DuskSystems/tree-sitter-cedar.git
   tag: ac1fe619df3d4af9f797903d4b8852f12082a0d5
   entrypoint: tree_sitter_cedar
+  progressive-safe: true
   directory: cedar
   extensions: [ ".cedar" ]
 
@@ -184,6 +209,7 @@
   repo: https://github.com/DuskSystems/tree-sitter-cedar.git
   tag: ac1fe619df3d4af9f797903d4b8852f12082a0d5
   entrypoint: tree_sitter_cedarschema
+  progressive-safe: true
   directory: cedarschema
   extensions: [ ".cedarschema" ]
 
@@ -192,6 +218,7 @@
   repo: https://github.com/bufbuild/tree-sitter-cel.git
   tag: fd2e8efaa07e71e46dcc1d5c4c85556a742d8c36
   entrypoint: tree_sitter_cel
+  progressive-safe: true
   extensions: [ ".cel" ]
 
 - name: cfml
@@ -199,6 +226,7 @@
   repo: https://github.com/cfmleditor/tree-sitter-cfml.git
   tag: 824dd8d32d7d5142c557fb23f67f6c843475f993
   entrypoint: tree_sitter_cfml
+  progressive-safe: true
   directory: cfml
   extensions: [ ".cfc" ]
 
@@ -207,6 +235,7 @@
   repo: https://github.com/tree-sitter-grammars/tree-sitter-chatito.git
   tag: c0ed82c665b732395073f635c74c300f09530a7f
   entrypoint: tree_sitter_chatito
+  progressive-safe: true
   extensions: [ ".chatito" ]
 
 - name: chuck
@@ -214,6 +243,7 @@
   repo: https://github.com/tymbalodeon/tree-sitter-chuck.git
   tag: 68fb7bdba480915d87177feaa5593a666c0bb602
   entrypoint: tree_sitter_chuck
+  progressive-safe: true
   extensions: [ ".ck" ]
 
 - name: circom
@@ -221,6 +251,7 @@
   repo: https://github.com/Decurity/tree-sitter-circom.git
   tag: 02150524228b1e6afef96949f2d6b7cc0aaf999e
   entrypoint: tree_sitter_circom
+  progressive-safe: true
   extensions: [ ".circom" ]
 
 - name: clarity
@@ -228,6 +259,7 @@
   repo: https://github.com/xlittlerag/tree-sitter-clarity.git
   tag: 1436da3946359fcd7ac2d81917aaa78ef1e01755
   entrypoint: tree_sitter_clarity
+  progressive-safe: true
   extensions: [ ".clar" ]
 
 - name: clojure
@@ -235,6 +267,7 @@
   repo: https://github.com/sogaiu/tree-sitter-clojure.git
   tag: e43eff80d17cf34852dcd92ca5e6986d23a7040f
   entrypoint: tree_sitter_clojure
+  progressive-safe: true
   extensions: [ ".clj", ".cljs", ".cljc" ]
 
 - name: cmake
@@ -242,6 +275,7 @@
   repo: https://github.com/uyha/tree-sitter-cmake.git
   tag: c7b2a71e7f8ecb167fad4c97227c838439280175
   entrypoint: tree_sitter_cmake
+  progressive-safe: true
   extensions: [ ".cmake" ]
 
 - name: corn
@@ -249,6 +283,7 @@
   repo: https://github.com/jakestanger/tree-sitter-corn.git
   tag: 464654742cbfd3a3de560aba120998f1d5dfa844
   entrypoint: tree_sitter_corn
+  progressive-safe: true
   extensions: [ ".corn" ]
 
 - name: cpon
@@ -256,6 +291,7 @@
   repo: https://github.com/tree-sitter-grammars/tree-sitter-cpon.git
   tag: 594289eadfec719198e560f9d7fd243c4db678d5
   entrypoint: tree_sitter_cpon
+  progressive-safe: true
   extensions: [ ".cpon" ]
 
 - name: cpp
@@ -263,6 +299,7 @@
   repo: https://github.com/tree-sitter/tree-sitter-cpp.git
   tag: 8b5b49eb196bec7040441bee33b2c9a4838d6967
   entrypoint: tree_sitter_cpp
+  progressive-safe: true
   extensions: [ ".cpp", ".cxx", ".cc", ".hpp", ".hxx" ]
 
 - name: csharp
@@ -270,6 +307,7 @@
   repo: https://github.com/tree-sitter/tree-sitter-c-sharp.git
   tag: af29416d729b7a6603101b513604392d8f675e3b
   entrypoint: tree_sitter_c_sharp
+  progressive-safe: true
   extensions: [ ".cs" ]
 
 - name: css
@@ -277,6 +315,7 @@
   repo: https://github.com/tree-sitter/tree-sitter-css.git
   tag: dda5cfc5722c429eaba1c910ca32c2c0c5bb1a3f
   entrypoint: tree_sitter_css
+  progressive-safe: true
   extensions: [ ".css" ]
 
 - name: cst
@@ -284,6 +323,7 @@
   repo: https://github.com/tree-sitter-grammars/tree-sitter-cst.git
   tag: d58f8a6a4fb60789fab750e86b1976cffc1528e1
   entrypoint: tree_sitter_cst
+  progressive-safe: true
   extensions: [ ".cst" ]
 
 - name: csv
@@ -291,6 +331,7 @@
   repo: https://github.com/amaanq/tree-sitter-csv.git
   tag: f6bf6e35eb0b95fbadea4bb39cb9709507fcb181
   entrypoint: tree_sitter_csv
+  progressive-safe: true
   directory: csv
   extensions: [ ".csv" ]
 
@@ -299,6 +340,7 @@
   repo: https://github.com/tree-sitter-grammars/tree-sitter-cuda.git
   tag: 48b066f334f4cf2174e05a50218ce2ed98b6fd01
   entrypoint: tree_sitter_cuda
+  progressive-safe: true
   extensions: [ ".cu", ".cuda" ]
 
 - name: cue
@@ -306,6 +348,7 @@
   repo: https://github.com/eonpatapon/tree-sitter-cue.git
   tag: dd7b90e0770ff18070c515937ba3c3d6d93db00e
   entrypoint: tree_sitter_cue
+  progressive-safe: true
   extensions: [ ".cue" ]
 
 - name: cylc
@@ -313,6 +356,7 @@
   repo: https://github.com/elliotfontaine/tree-sitter-cylc.git
   tag: 6d1d81137112299324b526477ce1db989ab58fb8
   entrypoint: tree_sitter_cylc
+  progressive-safe: true
   extensions: [ ".cylc" ]
 
 - name: d
@@ -320,6 +364,7 @@
   repo: https://github.com/gdamore/tree-sitter-d.git
   tag: 64f27931b4e6fdd75af1102c79bacbca68a8dacc
   entrypoint: tree_sitter_d
+  progressive-safe: true
   extensions: [ ".d" ]
 
 - name: dart
@@ -327,6 +372,7 @@
   repo: https://github.com/UserNobody14/tree-sitter-dart.git
   tag: a9bdfa3db2fbc9b9f12c93450d04a671f33a5102
   entrypoint: tree_sitter_dart
+  progressive-safe: true
   extensions: [ ".dart" ]
 
 - name: desktop
@@ -334,6 +380,7 @@
   repo: https://github.com/ValdezFOmar/tree-sitter-desktop.git
   tag: 954da7259e0f6c3bb4f811fddce11eb5ac94d9f6
   entrypoint: tree_sitter_desktop
+  progressive-safe: true
   extensions: [ ".desktop" ]
 
 - name: devicetree
@@ -341,6 +388,7 @@
   repo: https://github.com/joelspadin/tree-sitter-devicetree.git
   tag: e78bf56f206cb47bee28a217423acb651e076848
   entrypoint: tree_sitter_devicetree
+  progressive-safe: true
   extensions: [ ".dts", ".dtsi" ]
 
 - name: dhall
@@ -348,6 +396,7 @@
   repo: https://github.com/jbellerb/tree-sitter-dhall.git
   tag: 62013259b26ac210d5de1abf64cf1b047ef88000
   entrypoint: tree_sitter_dhall
+  progressive-safe: true
   extensions: [ ".dhall" ]
 
 - name: diff
@@ -355,6 +404,7 @@
   repo: https://github.com/tree-sitter-grammars/tree-sitter-diff.git
   tag: 2520c3f934b3179bb540d23e0ef45f75304b5fed
   entrypoint: tree_sitter_diff
+  progressive-safe: true
   extensions: [ ".diff", ".patch" ]
 
 - name: djot
@@ -362,6 +412,7 @@
   repo: https://github.com/treeman/tree-sitter-djot.git
   tag: 759a61896ccb2200a4becec4443e768638a21d58
   entrypoint: tree_sitter_djot
+  progressive-safe: false
   extensions: [ ".dj" ]
 
 - name: dockerfile
@@ -369,6 +420,7 @@
   repo: https://github.com/camdencheek/tree-sitter-dockerfile.git
   tag: 971acdd908568b4531b0ba28a445bf0bb720aba5
   entrypoint: tree_sitter_dockerfile
+  progressive-safe: true
   extensions: [ ".dockerfile" ]
 
 - name: dot
@@ -376,6 +428,7 @@
   repo: https://github.com/rydesun/tree-sitter-dot.git
   tag: 80327abbba6f47530edeb0df9f11bd5d5c93c14d
   entrypoint: tree_sitter_dot
+  progressive-safe: true
   extensions: [ ".dot", ".gv" ]
 
 - name: doxygen
@@ -383,6 +436,7 @@
   repo: https://github.com/tree-sitter-grammars/tree-sitter-doxygen.git
   tag: ccd998f378c3f9345ea4eeb223f56d7b84d16687
   entrypoint: tree_sitter_doxygen
+  progressive-safe: true
   extensions: [  ]
 
 - name: dtd
@@ -390,6 +444,7 @@
   repo: https://github.com/tree-sitter-grammars/tree-sitter-xml.git
   tag: 5000ae8f22d11fbe93939b05c1e37cf21117162d
   entrypoint: tree_sitter_dtd
+  progressive-safe: true
   directory: dtd
   extensions: [ ".dtd" ]
 
@@ -398,6 +453,7 @@
   repo: https://github.com/glehmann/tree-sitter-earthfile.git
   tag: 5baef88717ad0156fd29a8b12d0d8245bb1096a8
   entrypoint: tree_sitter_earthfile
+  progressive-safe: true
   extensions: [  ]
 
 - name: ebnf
@@ -405,6 +461,7 @@
   repo: https://github.com/RubixDev/ebnf.git
   tag: 8e635b0b723c620774dfb8abf382a7f531894b40
   entrypoint: tree_sitter_ebnf
+  progressive-safe: true
   directory: crates/tree-sitter-ebnf
   extensions: [ ".ebnf" ]
 
@@ -413,6 +470,7 @@
   repo: https://github.com/ValdezFOmar/tree-sitter-editorconfig.git
   tag: 9d843ad4cf118e007792de26d7f173c670a4fbd6
   entrypoint: tree_sitter_editorconfig
+  progressive-safe: true
   extensions: [  ]
 
 - name: eex
@@ -420,6 +478,7 @@
   repo: https://github.com/connorlay/tree-sitter-eex.git
   tag: f742f2fe327463335e8671a87c0b9b396905d1d1
   entrypoint: tree_sitter_eex
+  progressive-safe: true
   extensions: [ ".eex", ".leex" ]
 
 - name: elisp
@@ -427,6 +486,7 @@
   repo: https://github.com/Wilfred/tree-sitter-elisp.git
   tag: 29b4e49275f4a947ce17c8533bc20a1f97768c70
   entrypoint: tree_sitter_elisp
+  progressive-safe: true
   extensions: [ ".el" ]
 
 - name: elixir
@@ -434,6 +494,7 @@
   repo: https://github.com/elixir-lang/tree-sitter-elixir.git
   tag: 7937d3b4d65fa574163cfa59394515d3c1cf16f4
   entrypoint: tree_sitter_elixir
+  progressive-safe: true
   extensions: [ ".ex", ".exs" ]
 
 - name: elm
@@ -441,6 +502,7 @@
   repo: https://github.com/razzeee/tree-sitter-elm.git
   tag: 6d9511c28181db66daee4e883f811f6251220943
   entrypoint: tree_sitter_elm
+  progressive-safe: true
   extensions: [ ".elm" ]
 
 - name: elsa
@@ -448,6 +510,7 @@
   repo: https://github.com/glapa-grossklag/tree-sitter-elsa.git
   tag: 0a66b2b3f3c1915e67ad2ef9f7dbd2a84820d9d7
   entrypoint: tree_sitter_elsa
+  progressive-safe: true
   extensions: [ ".lc" ]
 
 - name: elvish
@@ -455,6 +518,7 @@
   repo: https://github.com/elves/tree-sitter-elvish.git
   tag: 5e7210d945425b77f82cbaebc5af4dd3e1ad40f5
   entrypoint: tree_sitter_elvish
+  progressive-safe: true
   extensions: [ ".elv" ]
 
 - name: embeddedtemplate
@@ -462,6 +526,7 @@
   repo: https://github.com/tree-sitter/tree-sitter-embedded-template.git
   tag: 3499d85f0a0d937c507a4a65368f2f63772786e1
   entrypoint: tree_sitter_embedded_template
+  progressive-safe: true
   extensions: [ ".erb" ]
 
 - name: enforce
@@ -469,6 +534,7 @@
   repo: https://github.com/simonvic/tree-sitter-enforce.git
   tag: cb42835385ac6d4fc64fd7b3f962591b928ccc7d
   entrypoint: tree_sitter_enforce
+  progressive-safe: true
   extensions: [ ".enforce" ]
 
 - name: erlang
@@ -476,6 +542,7 @@
   repo: https://github.com/WhatsApp/tree-sitter-erlang.git
   tag: 836aa2b6c3af2c7cef3f84049b0ed6d44485a870
   entrypoint: tree_sitter_erlang
+  progressive-safe: true
   extensions: [ ".erl", ".hrl" ]
 
 - name: facility
@@ -483,6 +550,7 @@
   repo: https://github.com/FacilityApi/tree-sitter-facility.git
   tag: e4bfd3e960de9f4b4648acb1c92e9b95b47d8cfb
   entrypoint: tree_sitter_facility
+  progressive-safe: true
   extensions: [ ".fsd" ]
 
 - name: faust
@@ -490,6 +558,7 @@
   repo: https://github.com/khiner/tree-sitter-faust.git
   tag: 2bd027f18927d13afdfdfc3f1e7088aaa515691f
   entrypoint: tree_sitter_faust
+  progressive-safe: true
   extensions: [ ".dsp" ]
 
 - name: fidl
@@ -497,6 +566,7 @@
   repo: https://github.com/google/tree-sitter-fidl.git
   tag: 0a8910f293268e27ff554357c229ba172b0eaed2
   entrypoint: tree_sitter_fidl
+  progressive-safe: true
   extensions: [ ".fidl" ]
 
 - name: firrtl
@@ -504,6 +574,7 @@
   repo: https://github.com/tree-sitter-grammars/tree-sitter-firrtl.git
   tag: 8503d3a0fe0f9e427863cb0055699ff2d29ae5f5
   entrypoint: tree_sitter_firrtl
+  progressive-safe: true
   extensions: [ ".fir" ]
 
 - name: fish
@@ -511,6 +582,7 @@
   repo: https://github.com/ram02z/tree-sitter-fish.git
   tag: f435b0bd772578c70e5d158b85267bb886316f88
   entrypoint: tree_sitter_fish
+  progressive-safe: true
   extensions: [ ".fish" ]
 
 - name: foam
@@ -518,6 +590,7 @@
   repo: https://github.com/FoamScience/tree-sitter-foam.git
   tag: 472c24f11a547820327fb1be565bcfff98ea96a4
   entrypoint: tree_sitter_foam
+  progressive-safe: true
   extensions: [  ]
 
 - name: forth
@@ -525,6 +598,7 @@
   repo: https://github.com/AlexanderBrevig/tree-sitter-forth.git
   tag: 7190f2173060d19a2174c96bfb5b7c6f9745512b
   entrypoint: tree_sitter_forth
+  progressive-safe: true
   extensions: [ ".fth", ".4th" ]
 
 - name: fortran
@@ -532,6 +606,7 @@
   repo: https://github.com/stadelmanma/tree-sitter-fortran.git
   tag: 7edacd2b21aa80057d9725384a1304a1c758e0f8
   entrypoint: tree_sitter_fortran
+  progressive-safe: true
   extensions: [ ".f90", ".f95", ".f03", ".f08", ".f" ]
 
 - name: fsharp
@@ -539,6 +614,7 @@
   repo: https://github.com/ionide/tree-sitter-fsharp.git
   tag: 5480cb95c6028608bf4e8953e100b8416d1641dc
   entrypoint: tree_sitter_fsharp
+  progressive-safe: true
   directory: fsharp
   extensions: [ ".fs", ".fsx" ]
 
@@ -547,6 +623,7 @@
   repo: https://github.com/ionide/tree-sitter-fsharp.git
   tag: 5480cb95c6028608bf4e8953e100b8416d1641dc
   entrypoint: tree_sitter_fsharp_signature
+  progressive-safe: true
   directory: fsharp_signature
   extensions: [ ".fsi" ]
 
@@ -555,6 +632,7 @@
   repo: https://github.com/tree-sitter-grammars/tree-sitter-func.git
   tag: f780ca55e65e7d7360d0229331763e16c452fc98
   entrypoint: tree_sitter_func
+  progressive-safe: true
   extensions: [ ".fc" ]
 
 - name: gap
@@ -562,6 +640,7 @@
   repo: https://github.com/gap-system/tree-sitter-gap.git
   tag: 96fe2e49745ecd62b80cd19dca01fb52b83f93a1
   entrypoint: tree_sitter_gap
+  progressive-safe: true
   extensions: [ ".g", ".gi" ]
 
 - name: gdshader
@@ -569,6 +648,7 @@
   repo: https://github.com/airblast-dev/tree-sitter-gdshader.git
   tag: 68268631c8b6dc093985f1246b099f81b30ea7d1
   entrypoint: tree_sitter_gdshader
+  progressive-safe: true
   extensions: [ ".gdshader" ]
 
 - name: git_config
@@ -576,6 +656,7 @@
   repo: https://github.com/the-mikedavis/tree-sitter-git-config.git
   tag: 0fbc9f99d5a28865f9de8427fb0672d66f9d83a5
   entrypoint: tree_sitter_git_config
+  progressive-safe: true
   extensions: [  ]
 
 - name: git_rebase
@@ -583,6 +664,7 @@
   repo: https://github.com/the-mikedavis/tree-sitter-git-rebase.git
   tag: 32686d6b72980b36f876ae2d07719c9c3ed154e2
   entrypoint: tree_sitter_git_rebase
+  progressive-safe: true
   extensions: [  ]
 
 - name: gitattributes
@@ -590,6 +672,7 @@
   repo: https://github.com/ObserverOfTime/tree-sitter-gitattributes.git
   tag: 1b7af09d45b579f9f288453b95ad555f1f431645
   entrypoint: tree_sitter_gitattributes
+  progressive-safe: true
   extensions: [ ".gitattributes" ]
 
 - name: gitcommit
@@ -597,6 +680,7 @@
   repo: https://github.com/gbprod/tree-sitter-gitcommit.git
   tag: 49715a9e6f19ce3d33b875aacdd6ad8ddaee0ffe
   entrypoint: tree_sitter_gitcommit
+  progressive-safe: true
   extensions: [  ]
 
 - name: gitignore
@@ -604,6 +688,7 @@
   repo: https://github.com/shunsambongi/tree-sitter-gitignore.git
   tag: f4685bf11ac466dd278449bcfe5fd014e94aa504
   entrypoint: tree_sitter_gitignore
+  progressive-safe: true
   highlight-query-repo: https://github.com/nvim-treesitter/nvim-treesitter.git
   highlight-query-tag: cf12346a3414fa1b06af75c79faebe7f76df080a
   highlight-query-path: queries/gitignore/highlights.scm
@@ -614,6 +699,7 @@
   repo: https://github.com/SamyAB/tree-sitter-gherkin.git
   tag: 43873ee8de16476635b48d52c46f5b6407cb5c09
   entrypoint: tree_sitter_gherkin
+  progressive-safe: true
   extensions: [ ".feature" ]
 
 - name: gleam
@@ -621,6 +707,7 @@
   repo: https://github.com/gleam-lang/tree-sitter-gleam.git
   tag: c610c282ef73f830d80c1f0999dce8e83f024ef5
   entrypoint: tree_sitter_gleam
+  progressive-safe: true
   extensions: [ ".gleam" ]
 
 - name: glimmer
@@ -628,6 +715,7 @@
   repo: https://github.com/ember-tooling/tree-sitter-glimmer.git
   tag: 88af85568bde3b91acb5d4c352ed094d0c1f9d84
   entrypoint: tree_sitter_glimmer
+  progressive-safe: true
   extensions: [ ".hbs" ]
 
 - name: glsl
@@ -635,6 +723,7 @@
   repo: https://github.com/theHamsta/tree-sitter-glsl.git
   tag: 24a6c8ef698e4480fecf8340d771fbcb5de8fbb4
   entrypoint: tree_sitter_glsl
+  progressive-safe: true
   extensions: [ ".glsl" ]
 
 - name: gn
@@ -642,6 +731,7 @@
   repo: https://github.com/tree-sitter-grammars/tree-sitter-gn.git
   tag: bc06955bc1e3c9ff8e9b2b2a55b38b94da923c05
   entrypoint: tree_sitter_gn
+  progressive-safe: true
   extensions: [ ".gn", ".gni" ]
 
 - name: gnuplot
@@ -649,6 +739,7 @@
   repo: https://github.com/dpezto/tree-sitter-gnuplot.git
   tag: 072c737e981729e0e6f53fcf3ec9b1612f98fca0
   entrypoint: tree_sitter_gnuplot
+  progressive-safe: true
   extensions: [ ".gp", ".gnuplot", ".plt" ]
 
 - name: go
@@ -656,6 +747,7 @@
   repo: https://github.com/tree-sitter/tree-sitter-go.git
   tag: 2346a3ab1bb3857b48b29d779a1ef9799a248cd7
   entrypoint: tree_sitter_go
+  progressive-safe: true
   extensions: [ ".go" ]
 
 - name: gomod
@@ -663,6 +755,7 @@
   repo: https://github.com/camdencheek/tree-sitter-go-mod.git
   tag: 2e886870578eeba1927a2dc4bd2e2b3f598c5f9a
   entrypoint: tree_sitter_gomod
+  progressive-safe: true
   extensions: [ ".mod" ]
 
 - name: gosum
@@ -670,6 +763,7 @@
   repo: https://github.com/tree-sitter-grammars/tree-sitter-go-sum.git
   tag: 27816eb6b7315746ae9fcf711e4e1396dc1cf237
   entrypoint: tree_sitter_gosum
+  progressive-safe: true
   extensions: [  ]
 
 - name: gotmpl
@@ -677,6 +771,7 @@
   repo: https://github.com/ngalaiko/tree-sitter-go-template.git
   tag: aa71f63de226c5592dfbfc1f29949522d7c95fac
   entrypoint: tree_sitter_gotmpl
+  progressive-safe: true
   extensions: [ ".gotmpl" ]
 
 - name: gowork
@@ -684,6 +779,7 @@
   repo: https://github.com/omertuc/tree-sitter-go-work.git
   tag: 949a8a470559543857a62102c84700d291fc984c
   entrypoint: tree_sitter_gowork
+  progressive-safe: true
   extensions: [  ]
 
 - name: gpg
@@ -691,6 +787,7 @@
   repo: https://github.com/tree-sitter-grammars/tree-sitter-gpg-config.git
   tag: 4024eb268c59204280f8ac71ef146b8ff5e737f6
   entrypoint: tree_sitter_gpg
+  progressive-safe: true
   extensions: [  ]
 
 - name: graphql
@@ -698,6 +795,7 @@
   repo: https://github.com/bkegley/tree-sitter-graphql.git
   tag: 5e66e961eee421786bdda8495ed1db045e06b5fe
   entrypoint: tree_sitter_graphql
+  progressive-safe: true
   highlight-query: queries/graphql/highlights.scm
   extensions: [ ".graphql", ".gql" ]
 
@@ -706,6 +804,7 @@
   repo: https://github.com/gren-lang/tree-sitter-gren.git
   tag: cecd8ce9b18f1803d37682f33b6224978fd04d31
   entrypoint: tree_sitter_gren
+  progressive-safe: true
   extensions: [ ".gren" ]
 
 - name: groovy
@@ -713,6 +812,7 @@
   repo: https://github.com/Decodetalkers/tree-sitter-groovy.git
   tag: a6cf8f80dd3d5246398ad4011c2e2caf995ee17f
   entrypoint: tree_sitter_groovy
+  progressive-safe: true
   highlight-query-repo: https://github.com/nvim-treesitter/nvim-treesitter.git
   highlight-query-tag: cf12346a3414fa1b06af75c79faebe7f76df080a
   highlight-query-path: queries/groovy/highlights.scm
@@ -723,6 +823,7 @@
   repo: https://github.com/slackhq/tree-sitter-hack.git
   tag: 1a7ded90288189746c54861ac144ede97df95081
   entrypoint: tree_sitter_hack
+  progressive-safe: true
   extensions: [ ".hack" ]
 
 - name: hare
@@ -730,6 +831,7 @@
   repo: https://github.com/tree-sitter-grammars/tree-sitter-hare.git
   tag: eed7ddf6a66b596906aa8ca3d40521b8278adc6f
   entrypoint: tree_sitter_hare
+  progressive-safe: true
   extensions: [ ".hare" ]
 
 - name: haskell
@@ -737,6 +839,7 @@
   repo: https://github.com/tree-sitter/tree-sitter-haskell.git
   tag: 0975ef72fc3c47b530309ca93937d7d143523628
   entrypoint: tree_sitter_haskell
+  progressive-safe: true
   extensions: [ ".hs" ]
 
 - name: haxe
@@ -744,6 +847,7 @@
   repo: https://github.com/vantreeseba/tree-sitter-haxe.git
   tag: f2a2394d9ca7a6099f78d8b0d178530e7c9a8e26
   entrypoint: tree_sitter_haxe
+  progressive-safe: true
   extensions: [ ".hx" ]
 
 - name: hcl
@@ -751,6 +855,7 @@
   repo: https://github.com/MichaHoffmann/tree-sitter-hcl.git
   tag: 64ad62785d442eb4d45df3a1764962dafd5bc98b
   entrypoint: tree_sitter_hcl
+  progressive-safe: true
   highlight-query-repo: https://github.com/nvim-treesitter/nvim-treesitter.git
   highlight-query-tag: cf12346a3414fa1b06af75c79faebe7f76df080a
   highlight-query-path: queries/hcl/highlights.scm
@@ -761,6 +866,7 @@
   repo: https://github.com/phoenixframework/tree-sitter-heex.git
   tag: 5842537f734d7c12685bf27d6005313e3e5a47a0
   entrypoint: tree_sitter_heex
+  progressive-safe: true
   extensions: [ ".heex" ]
 
 - name: hjson
@@ -768,6 +874,7 @@
   repo: https://github.com/winston0410/tree-sitter-hjson.git
   tag: 02fa3b79b3ff9a296066da6277adfc3f26cbc9e0
   entrypoint: tree_sitter_hjson
+  progressive-safe: true
   extensions: [ ".hjson" ]
 
 - name: hlsl
@@ -775,6 +882,7 @@
   repo: https://github.com/theHamsta/tree-sitter-hlsl.git
   tag: bab9111922d53d43668fabb61869bec51bbcb915
   entrypoint: tree_sitter_hlsl
+  progressive-safe: true
   highlight-query-repo: https://github.com/nvim-treesitter/nvim-treesitter.git
   highlight-query-tag: cf12346a3414fa1b06af75c79faebe7f76df080a
   highlight-query-path: queries/hlsl/highlights.scm
@@ -785,6 +893,7 @@
   repo: https://github.com/antosha417/tree-sitter-hocon.git
   tag: c390f10519ae69fdb03b3e5764f5592fb6924bcc
   entrypoint: tree_sitter_hocon
+  progressive-safe: true
   extensions: [ ".hocon" ]
 
 - name: hoon
@@ -792,6 +901,7 @@
   repo: https://github.com/urbit-pilled/tree-sitter-hoon.git
   tag: 1545137aadcc63660c47db9ad98d02fa602655d0
   entrypoint: tree_sitter_hoon
+  progressive-safe: true
   extensions: [ ".hoon" ]
 
 - name: html
@@ -799,6 +909,7 @@
   repo: https://github.com/tree-sitter/tree-sitter-html.git
   tag: 73a3947324f6efddf9e17c0ea58d454843590cc0
   entrypoint: tree_sitter_html
+  progressive-safe: true
   extensions: [ ".html", ".htm" ]
 
 - name: htmldjango
@@ -806,6 +917,7 @@
   repo: https://github.com/interdependence/tree-sitter-htmldjango.git
   tag: a10318892603d9a0b925df7cc7771a840304b997
   entrypoint: tree_sitter_htmldjango
+  progressive-safe: true
   extensions: [  ]
 
 - name: http
@@ -813,6 +925,7 @@
   repo: https://github.com/rest-nvim/tree-sitter-http.git
   tag: db8b4398de90b6d0b6c780aba96aaa2cd8e9202c
   entrypoint: tree_sitter_http
+  progressive-safe: true
   extensions: [ ".http" ]
 
 - name: hurl
@@ -820,6 +933,7 @@
   repo: https://github.com/pfeiferj/tree-sitter-hurl.git
   tag: 597efbd7ce9a814bb058f48eabd055b1d1e12145
   entrypoint: tree_sitter_hurl
+  progressive-safe: true
   extensions: [ ".hurl" ]
 
 - name: hyprlang
@@ -827,6 +941,7 @@
   repo: https://github.com/tree-sitter-grammars/tree-sitter-hyprlang.git
   tag: cecd6b748107d9da1f7b4ca03ef95f1f71d93b8f
   entrypoint: tree_sitter_hyprlang
+  progressive-safe: true
   extensions: [  ]
 
 - name: idris
@@ -834,6 +949,7 @@
   repo: https://github.com/kayhide/tree-sitter-idris.git
   tag: c56a25cf57c68ff929356db25505c1cc4c7820f6
   entrypoint: tree_sitter_idris
+  progressive-safe: true
   extensions: [ ".idr" ]
 
 - name: ini
@@ -841,6 +957,7 @@
   repo: https://github.com/justinmk/tree-sitter-ini.git
   tag: e4018b5176132b4f3c5d6e61cea383f42288d0f5
   entrypoint: tree_sitter_ini
+  progressive-safe: true
   extensions: [ ".ini", ".cfg" ]
 
 - name: ispc
@@ -848,6 +965,7 @@
   repo: https://github.com/tree-sitter-grammars/tree-sitter-ispc.git
   tag: ba1bb38ac8ddfa6aa7571cbfe9b4d029f7f77447
   entrypoint: tree_sitter_ispc
+  progressive-safe: true
   extensions: [ ".ispc" ]
 
 - name: jai
@@ -855,6 +973,7 @@
   repo: https://github.com/constantitus/tree-sitter-jai.git
   tag: c61176d276761e6ee44a86b018446a1608b47b99
   entrypoint: tree_sitter_jai
+  progressive-safe: true
   extensions: [ ".jai" ]
 
 - name: janet
@@ -862,6 +981,7 @@
   repo: https://github.com/GrayJack/tree-sitter-janet.git
   tag: 64db751b233ba44ce06fa6c729701bdf87779011
   entrypoint: tree_sitter_janet
+  progressive-safe: true
   extensions: [ ".janet" ]
 
 - name: java
@@ -869,6 +989,7 @@
   repo: https://github.com/tree-sitter/tree-sitter-java.git
   tag: e10607b45ff745f5f876bfa3e94fbcc6b44bdc11
   entrypoint: tree_sitter_java
+  progressive-safe: true
   extensions: [ ".java" ]
 
 - name: javadoc
@@ -876,6 +997,7 @@
   repo: https://github.com/rmuir/tree-sitter-javadoc.git
   tag: ec2814bb4c6b7f532f03f247b11caf42f29dea40
   entrypoint: tree_sitter_javadoc
+  progressive-safe: true
   extensions: [  ]
 
 - name: javascript
@@ -883,6 +1005,7 @@
   repo: https://github.com/tree-sitter/tree-sitter-javascript.git
   tag: 58404d8cf191d69f2674a8fd507bd5776f46cb11
   entrypoint: tree_sitter_javascript
+  progressive-safe: true
   extensions: [ ".js", ".jsx", ".mjs", ".cjs" ]
 
 - name: jq
@@ -890,6 +1013,7 @@
   repo: https://github.com/flurie/tree-sitter-jq.git
   tag: c204e36d2c3c6fce1f57950b12cabcc24e5cc4d9
   entrypoint: tree_sitter_jq
+  progressive-safe: true
   highlight-query-repo: https://github.com/nvim-treesitter/nvim-treesitter.git
   highlight-query-tag: cf12346a3414fa1b06af75c79faebe7f76df080a
   highlight-query-path: queries/jq/highlights.scm
@@ -900,6 +1024,7 @@
   repo: https://github.com/tree-sitter/tree-sitter-jsdoc.git
   tag: 658d18dcdddb75c760363faa4963427a7c6b52db
   entrypoint: tree_sitter_jsdoc
+  progressive-safe: true
   extensions: [  ]
 
 - name: json
@@ -907,6 +1032,7 @@
   repo: https://github.com/tree-sitter/tree-sitter-json.git
   tag: 001c28d7a29832b06b0e831ec77845553c89b56d
   entrypoint: tree_sitter_json
+  progressive-safe: true
   extensions: [ ".json" ]
 
 - name: json5
@@ -914,6 +1040,7 @@
   repo: https://github.com/Joakker/tree-sitter-json5.git
   tag: 248b8564567087d7866be76569b182f6dd7e14e9
   entrypoint: tree_sitter_json5
+  progressive-safe: true
   extensions: [ ".json5" ]
 
 - name: jsonnet
@@ -921,6 +1048,7 @@
   repo: https://github.com/sourcegraph/tree-sitter-jsonnet.git
   tag: ddd075f1939aed8147b7aa67f042eda3fce22790
   entrypoint: tree_sitter_jsonnet
+  progressive-safe: true
   extensions: [ ".jsonnet", ".libsonnet" ]
 
 - name: julia
@@ -928,6 +1056,7 @@
   repo: https://github.com/tree-sitter/tree-sitter-julia.git
   tag: e0f9dcd180fdcfcfa8d79a3531e11d99e79321d3
   entrypoint: tree_sitter_julia
+  progressive-safe: true
   extensions: [ ".jl" ]
 
 - name: just
@@ -935,6 +1064,7 @@
   repo: https://github.com/IndianBoy42/tree-sitter-just.git
   tag: 5685543a6e64f66335e25518c9ae8ffa1dae3d01
   entrypoint: tree_sitter_just
+  progressive-safe: true
   highlight-query: queries-src/highlights.scm
   extensions: [ ".just" ]
 
@@ -943,6 +1073,7 @@
   repo: https://github.com/kcl-lang/tree-sitter-kcl.git
   tag: 026f40fb0a59a35da75b9c8801d52f6c14feda24
   entrypoint: tree_sitter_kcl
+  progressive-safe: true
   extensions: [ ".k" ]
 
 - name: kconfig
@@ -950,6 +1081,7 @@
   repo: https://github.com/tree-sitter-grammars/tree-sitter-kconfig.git
   tag: 9ac99fe4c0c27a35dc6f757cef534c646e944881
   entrypoint: tree_sitter_kconfig
+  progressive-safe: true
   extensions: [  ]
 
 - name: kdl
@@ -957,6 +1089,7 @@
   repo: https://github.com/tree-sitter-grammars/tree-sitter-kdl.git
   tag: b37e3d58e5c5cf8d739b315d6114e02d42e66664
   entrypoint: tree_sitter_kdl
+  progressive-safe: true
   extensions: [ ".kdl" ]
 
 - name: kotlin
@@ -964,6 +1097,7 @@
   repo: https://github.com/fwcd/tree-sitter-kotlin.git
   tag: c8ac3d2627240160b999a2c100de3babbdb8f419
   entrypoint: tree_sitter_kotlin
+  progressive-safe: true
   extensions: [ ".kt", ".kts" ]
 
 - name: lean
@@ -971,6 +1105,7 @@
   repo: https://github.com/Julian/tree-sitter-lean.git
   tag: 463a9d8a509c935f4e10854b5078bbe2839b274c
   entrypoint: tree_sitter_lean
+  progressive-safe: true
   extensions: [ ".lean" ]
 
 - name: less
@@ -978,6 +1113,7 @@
   repo: https://github.com/rhino1998/tree-sitter-less.git
   tag: 2bd739e106a3485bca210cf7b6d25ba09fd10dff
   entrypoint: tree_sitter_less
+  progressive-safe: true
   extensions: [ ".less" ]
 
 - name: linkerscript
@@ -985,6 +1121,7 @@
   repo: https://github.com/tree-sitter-grammars/tree-sitter-linkerscript.git
   tag: f99011a3554213b654985a4b0a65b3b032ec4621
   entrypoint: tree_sitter_linkerscript
+  progressive-safe: true
   extensions: [ ".lds" ]
 
 - name: liquid
@@ -992,6 +1129,7 @@
   repo: https://github.com/hankthetank27/tree-sitter-liquid.git
   tag: e45dbac8c5fa95b1f0e00e7e0c04bc8855823391
   entrypoint: tree_sitter_liquid
+  progressive-safe: true
   extensions: [ ".liquid" ]
 
 - name: llvm
@@ -999,6 +1137,7 @@
   repo: https://github.com/benwilliamgraham/tree-sitter-llvm.git
   tag: 2914786ae6774d4c4e25a230f4afe16aa68fe1c1
   entrypoint: tree_sitter_llvm
+  progressive-safe: true
   extensions: [ ".ll" ]
 
 - name: lua
@@ -1006,6 +1145,7 @@
   repo: https://github.com/MunifTanjim/tree-sitter-lua.git
   tag: 4fbec840c34149b7d5fe10097c93a320ee4af053
   entrypoint: tree_sitter_lua
+  progressive-safe: true
   extensions: [ ".lua" ]
 
 - name: luadoc
@@ -1013,6 +1153,7 @@
   repo: https://github.com/tree-sitter-grammars/tree-sitter-luadoc.git
   tag: 873612aadd3f684dd4e631bdf42ea8990c57634e
   entrypoint: tree_sitter_luadoc
+  progressive-safe: true
   extensions: [  ]
 
 - name: luap
@@ -1020,6 +1161,7 @@
   repo: https://github.com/tree-sitter-grammars/tree-sitter-luap.git
   tag: c134aaec6acf4fa95fe4aa0dc9aba3eacdbbe55a
   entrypoint: tree_sitter_luap
+  progressive-safe: true
   extensions: [  ]
 
 - name: luau
@@ -1027,6 +1169,7 @@
   repo: https://github.com/tree-sitter-grammars/tree-sitter-luau.git
   tag: a8914d6c1fc5131f8e1c13f769fa704c9f5eb02f
   entrypoint: tree_sitter_luau
+  progressive-safe: true
   extensions: [ ".luau" ]
 
 - name: magik
@@ -1034,6 +1177,7 @@
   repo: https://github.com/krn-robin/tree-sitter-magik.git
   tag: 75a3dec65cd864210718a784c4069b24dadbc2bb
   entrypoint: tree_sitter_magik
+  progressive-safe: true
   extensions: [ ".magik" ]
 
 - name: make
@@ -1041,6 +1185,7 @@
   repo: https://github.com/alemuller/tree-sitter-make.git
   tag: a4b9187417d6be349ee5fd4b6e77b4172c6827dd
   entrypoint: tree_sitter_make
+  progressive-safe: true
   extensions: [ ".mk", ".makefile" ]
 
 - name: markdown
@@ -1048,6 +1193,7 @@
   repo: https://github.com/tree-sitter-grammars/tree-sitter-markdown.git
   tag: c3570720f7f7bbad22fe96603f106276618e0cf5
   entrypoint: tree_sitter_markdown
+  progressive-safe: false
   directory: tree-sitter-markdown
   extensions: [ ".md", ".markdown" ]
 
@@ -1056,6 +1202,7 @@
   repo: https://github.com/tree-sitter-grammars/tree-sitter-markdown.git
   tag: c3570720f7f7bbad22fe96603f106276618e0cf5
   entrypoint: tree_sitter_markdown_inline
+  progressive-safe: false
   directory: tree-sitter-markdown-inline
   extensions: [  ]
 
@@ -1064,6 +1211,7 @@
   repo: https://github.com/acristoffers/tree-sitter-matlab.git
   tag: c9ef947ec67fb6b500d5def4f5e09b56990a9f91
   entrypoint: tree_sitter_matlab
+  progressive-safe: true
   extensions: [ ".matlab" ]
 
 - name: mermaid
@@ -1071,6 +1219,7 @@
   repo: https://github.com/monaqa/tree-sitter-mermaid.git
   tag: 90ae195b31933ceb9d079abfa8a3ad0a36fee4cc
   entrypoint: tree_sitter_mermaid
+  progressive-safe: true
   extensions: [ ".mmd", ".mermaid" ]
 
 - name: meson
@@ -1078,6 +1227,7 @@
   repo: https://github.com/Decodetalkers/tree-sitter-meson.git
   tag: c84f3540624b81fc44067030afce2ff78d6ede05
   entrypoint: tree_sitter_meson
+  progressive-safe: true
   extensions: [ ".meson" ]
 
 - name: mlir
@@ -1085,6 +1235,7 @@
   repo: https://github.com/artagnon/tree-sitter-mlir.git
   tag: 5bf289cc975f3bc1a8f9e2a19602f6e40df4f571
   entrypoint: tree_sitter_mlir
+  progressive-safe: true
   extensions: [ ".mlir" ]
 
 - name: mojo
@@ -1092,6 +1243,7 @@
   repo: https://github.com/HerringtonDarkholme/tree-sitter-mojo.git
   tag: 99fe918e69f087f910ef3b11eba31eb0d7e54edf
   entrypoint: tree_sitter_mojo
+  progressive-safe: true
   extensions: [ ".mojo" ]
 
 - name: nasm
@@ -1099,6 +1251,7 @@
   repo: https://github.com/naclsn/tree-sitter-nasm.git
   tag: d1b3638d017f2a8585e26dcfc66fe1df94185e30
   entrypoint: tree_sitter_nasm
+  progressive-safe: true
   extensions: [ ".nasm" ]
 
 - name: netlinx
@@ -1106,6 +1259,7 @@
   repo: https://github.com/Norgate-AV/tree-sitter-netlinx.git
   tag: 1c166a97a3481f385136394b950d9556d28af7b8
   entrypoint: tree_sitter_netlinx
+  progressive-safe: true
   extensions: [ ".axs", ".axi" ]
 
 - name: nginx
@@ -1113,6 +1267,7 @@
   repo: https://github.com/opa-oz/tree-sitter-nginx.git
   tag: 47ade644d754cce57974aac44d2c9450e823d4f4
   entrypoint: tree_sitter_nginx
+  progressive-safe: true
   extensions: [ ".conf", ".nginx" ]
 
 - name: nickel
@@ -1120,6 +1275,7 @@
   repo: https://github.com/nickel-lang/tree-sitter-nickel.git
   tag: 3252ec6a65c7e4c3ca6ef3e3be0160111b93fbd7
   entrypoint: tree_sitter_nickel
+  progressive-safe: true
   extensions: [ ".ncl" ]
 
 - name: ninja
@@ -1127,6 +1283,7 @@
   repo: https://github.com/alemuller/tree-sitter-ninja.git
   tag: 0a95cfdc0745b6ae82f60d3a339b37f19b7b9267
   entrypoint: tree_sitter_ninja
+  progressive-safe: true
   extensions: [ ".ninja" ]
 
 - name: nix
@@ -1134,6 +1291,7 @@
   repo: https://github.com/nix-community/tree-sitter-nix.git
   tag: 3d0173d903e630b6e14d17f1cf79488791379ded
   entrypoint: tree_sitter_nix
+  progressive-safe: true
   extensions: [ ".nix" ]
 
 - name: norg_meta
@@ -1141,6 +1299,7 @@
   repo: https://github.com/nvim-neorg/tree-sitter-norg-meta.git
   tag: 729d4e54fb881ba0ddf0f925ec78401354c7c6db
   entrypoint: tree_sitter_norg_meta
+  progressive-safe: true
   extensions: [  ]
 
 - name: nqc
@@ -1148,6 +1307,7 @@
   repo: https://github.com/tree-sitter-grammars/tree-sitter-nqc.git
   tag: 14e6da1627aaef21d2b2aa0c37d04269766dcc1d
   entrypoint: tree_sitter_nqc
+  progressive-safe: true
   extensions: [ ".nqc" ]
 
 - name: objc
@@ -1155,6 +1315,7 @@
   repo: https://github.com/tree-sitter-grammars/tree-sitter-objc.git
   tag: 181a81b8f23a2d593e7ab4259981f50122909fda
   entrypoint: tree_sitter_objc
+  progressive-safe: true
   extensions: [ ".m" ]
 
 - name: ocaml
@@ -1162,6 +1323,7 @@
   repo: https://github.com/tree-sitter/tree-sitter-ocaml.git
   tag: 527d62ef0f24ce0d97fbedf004921d75d0a7e086
   entrypoint: tree_sitter_ocaml
+  progressive-safe: true
   directory: grammars/ocaml
   extensions: [ ".ml" ]
 
@@ -1170,6 +1332,7 @@
   repo: https://github.com/tree-sitter/tree-sitter-ocaml.git
   tag: 527d62ef0f24ce0d97fbedf004921d75d0a7e086
   entrypoint: tree_sitter_ocaml_interface
+  progressive-safe: true
   directory: grammars/interface
   extensions: [ ".mli" ]
 
@@ -1178,6 +1341,7 @@
   repo: https://github.com/atom-ocaml/tree-sitter-ocamllex.git
   tag: 33722b8be73079946a7c6dd9598e3f57956ed36d
   entrypoint: tree_sitter_ocamllex
+  progressive-safe: true
   extensions: [ ".mll" ]
 
 - name: odin
@@ -1185,6 +1349,7 @@
   repo: https://github.com/tree-sitter-grammars/tree-sitter-odin.git
   tag: d2ca8efb4487e156a60d5bd6db2598b872629403
   entrypoint: tree_sitter_odin
+  progressive-safe: true
   extensions: [ ".odin" ]
 
 - name: openscad
@@ -1192,6 +1357,7 @@
   repo: https://github.com/bollian/tree-sitter-openscad.git
   tag: bb1e12023e59489c0892af0c0c9a5b323af69df6
   entrypoint: tree_sitter_openscad
+  progressive-safe: true
   extensions: [ ".scad" ]
 
 - name: org
@@ -1199,6 +1365,7 @@
   repo: https://github.com/milisims/tree-sitter-org.git
   tag: 64cfbc213f5a83da17632c95382a5a0a2f3357c1
   entrypoint: tree_sitter_org
+  progressive-safe: false
   extensions: [ ".org" ]
 
 - name: pascal
@@ -1206,6 +1373,7 @@
   repo: https://github.com/Isopod/tree-sitter-pascal.git
   tag: 042119eca2e18a60e56317fb06ee3ba5c32cb447
   entrypoint: tree_sitter_pascal
+  progressive-safe: true
   extensions: [ ".pas" ]
 
 - name: pem
@@ -1213,6 +1381,7 @@
   repo: https://github.com/tree-sitter-grammars/tree-sitter-pem.git
   tag: e525b177a229b1154fd81bc0691f943028d9e685
   entrypoint: tree_sitter_pem
+  progressive-safe: true
   extensions: [ ".pem" ]
 
 - name: perl
@@ -1220,6 +1389,7 @@
   repo: https://github.com/tree-sitter-perl/tree-sitter-perl.git
   tag: 87c197b783b031a4e0fa48785ff4b9fc29c0dd42
   entrypoint: tree_sitter_perl
+  progressive-safe: true
   extensions: [ ".pl", ".pm" ]
 
 - name: pgn
@@ -1227,6 +1397,7 @@
   repo: https://github.com/rolandwalker/tree-sitter-pgn.git
   tag: c8c218e41dc3cee978482e70156cc6f3d06f9fec
   entrypoint: tree_sitter_pgn
+  progressive-safe: true
   extensions: [ ".pgn" ]
 
 - name: php
@@ -1234,6 +1405,7 @@
   repo: https://github.com/tree-sitter/tree-sitter-php.git
   tag: 38216983c07bf9e1b56e16acde53b25adaeab61c
   entrypoint: tree_sitter_php
+  progressive-safe: true
   directory: php
   extensions: [ ".php" ]
 
@@ -1242,6 +1414,7 @@
   repo: https://github.com/apple/tree-sitter-pkl.git
   tag: 90b64cb6e563bcc96552490ccd40667418c65cdc
   entrypoint: tree_sitter_pkl
+  progressive-safe: true
   extensions: [ ".pkl" ]
 
 - name: po
@@ -1249,6 +1422,7 @@
   repo: https://github.com/tree-sitter-grammars/tree-sitter-po.git
   tag: bd860a0f57f697162bf28e576674be9c1500db5e
   entrypoint: tree_sitter_po
+  progressive-safe: true
   extensions: [ ".po", ".pot" ]
 
 - name: poe_filter
@@ -1256,6 +1430,7 @@
   repo: https://github.com/tree-sitter-grammars/tree-sitter-poe-filter.git
   tag: 205a7d576984feb38a9fc2d8cfe729617f9e0548
   entrypoint: tree_sitter_poe_filter
+  progressive-safe: true
   extensions: [ ".filter" ]
 
 - name: pony
@@ -1263,6 +1438,7 @@
   repo: https://github.com/tree-sitter-grammars/tree-sitter-pony.git
   tag: 73ff874ae4c9e9b45462673cbc0a1e350e2522a7
   entrypoint: tree_sitter_pony
+  progressive-safe: true
   extensions: [ ".pony" ]
 
 - name: powershell
@@ -1270,6 +1446,7 @@
   repo: https://github.com/airbus-cert/tree-sitter-powershell.git
   tag: d398441825243b00e317e87e1829b9d6a3e54ce0
   entrypoint: tree_sitter_powershell
+  progressive-safe: true
   extensions: [ ".ps1", ".psm1", ".psd1" ]
 
 - name: printf
@@ -1277,6 +1454,7 @@
   repo: https://github.com/tree-sitter-grammars/tree-sitter-printf.git
   tag: ec4e5674573d5554fccb87a887c97d4aec489da7
   entrypoint: tree_sitter_printf
+  progressive-safe: true
   extensions: [  ]
 
 - name: prisma
@@ -1284,6 +1462,7 @@
   repo: https://github.com/LumaKernel/tree-sitter-prisma.git
   tag: f1c30d82a5bf0b70ce33ef431f4acd7fd69968a3
   entrypoint: tree_sitter_prisma
+  progressive-safe: true
   extensions: [ ".prisma" ]
 
 - name: properties
@@ -1291,6 +1470,7 @@
   repo: https://github.com/tree-sitter-grammars/tree-sitter-properties.git
   tag: 6310671b24d4e04b803577b1c675d765cbd5773b
   entrypoint: tree_sitter_properties
+  progressive-safe: true
   extensions: [ ".properties" ]
 
 - name: proto
@@ -1298,6 +1478,7 @@
   repo: https://github.com/coder3101/tree-sitter-proto.git
   tag: cf8e4eba6e5b4afb9eb16c9178bba3d2504b46c2
   entrypoint: tree_sitter_proto
+  progressive-safe: true
   extensions: [ ".proto" ]
 
 - name: prql
@@ -1305,6 +1486,7 @@
   repo: https://github.com/PRQL/tree-sitter-prql.git
   tag: 09e158cd3650581c0af4c49c2e5b10c4834c8646
   entrypoint: tree_sitter_prql
+  progressive-safe: true
   extensions: [ ".prql" ]
 
 - name: psv
@@ -1312,6 +1494,7 @@
   repo: https://github.com/amaanq/tree-sitter-csv.git
   tag: f6bf6e35eb0b95fbadea4bb39cb9709507fcb181
   entrypoint: tree_sitter_psv
+  progressive-safe: true
   directory: psv
   extensions: [ ".psv" ]
 
@@ -1320,6 +1503,7 @@
   repo: https://github.com/zealot128/tree-sitter-pug.git
   tag: 13e9195370172c86a8b88184cc358b23b677cc46
   entrypoint: tree_sitter_pug
+  progressive-safe: true
   extensions: [ ".pug" ]
 
 - name: puppet
@@ -1327,6 +1511,7 @@
   repo: https://github.com/tree-sitter-grammars/tree-sitter-puppet.git
   tag: 15f192929b7d317f5914de2b4accd37b349182a6
   entrypoint: tree_sitter_puppet
+  progressive-safe: true
   extensions: [ ".pp" ]
 
 - name: purescript
@@ -1334,6 +1519,7 @@
   repo: https://github.com/postsolar/tree-sitter-purescript.git
   tag: f541f95ffd6852fbbe88636317c613285bc105af
   entrypoint: tree_sitter_purescript
+  progressive-safe: true
   extensions: [ ".purs" ]
 
 - name: pymanifest
@@ -1341,6 +1527,7 @@
   repo: https://github.com/tree-sitter-grammars/tree-sitter-pymanifest.git
   tag: debbdb83fe6356adc7261c41c69b45ba49c97294
   entrypoint: tree_sitter_pymanifest
+  progressive-safe: true
   extensions: [  ]
 
 - name: python
@@ -1348,6 +1535,7 @@
   repo: https://github.com/tree-sitter/tree-sitter-python.git
   tag: 26855eabccb19c6abf499fbc5b8dc7cc9ab8bc64
   entrypoint: tree_sitter_python
+  progressive-safe: true
   extensions: [ ".py", ".pyi", ".pyw" ]
 
 - name: ql
@@ -1355,6 +1543,7 @@
   repo: https://github.com/tree-sitter/tree-sitter-ql.git
   tag: 1fd627a4e8bff8c24c11987474bd33112bead857
   entrypoint: tree_sitter_ql
+  progressive-safe: true
   extensions: [ ".ql" ]
 
 - name: qmldir
@@ -1362,6 +1551,7 @@
   repo: https://github.com/tree-sitter-grammars/tree-sitter-qmldir.git
   tag: 0935b681e7f60e497f9b4d2eff19254cf1ecaa51
   entrypoint: tree_sitter_qmldir
+  progressive-safe: true
   extensions: [  ]
 
 - name: qmljs
@@ -1369,6 +1559,7 @@
   repo: https://github.com/yuja/tree-sitter-qmljs.git
   tag: 606a66b96a13ef30ed5c7ec7e5adc20a9a40157a
   entrypoint: tree_sitter_qmljs
+  progressive-safe: true
   extensions: [ ".qml" ]
 
 - name: query
@@ -1376,6 +1567,7 @@
   repo: https://github.com/tree-sitter-grammars/tree-sitter-query.git
   tag: 15e00db655cf1708cf8e4b172b2f321d9b7b98c1
   entrypoint: tree_sitter_query
+  progressive-safe: true
   extensions: [  ]
 
 - name: r
@@ -1383,6 +1575,7 @@
   repo: https://github.com/r-lib/tree-sitter-r.git
   tag: 58a22794466c0fc15b0d3b40531db751593721e8
   entrypoint: tree_sitter_r
+  progressive-safe: true
   extensions: [ ".r" ]
 
 - name: racket
@@ -1390,6 +1583,7 @@
   repo: https://github.com/6cdh/tree-sitter-racket.git
   tag: 54649be8b939341d2d5410b594ab954fe8814bd0
   entrypoint: tree_sitter_racket
+  progressive-safe: true
   extensions: [ ".rkt" ]
 
 - name: rasi
@@ -1397,6 +1591,7 @@
   repo: https://github.com/Fymyte/tree-sitter-rasi.git
   tag: e735c6881d8b475aaa4ef8f0a2bdfd825b438143
   entrypoint: tree_sitter_rasi
+  progressive-safe: true
   extensions: [ ".rasi" ]
 
 - name: razor
@@ -1404,6 +1599,7 @@
   repo: https://github.com/tris203/tree-sitter-razor.git
   tag: 900f53dc6cc592f6e616adc2f732cb0f66fc9147
   entrypoint: tree_sitter_razor
+  progressive-safe: true
   extensions: [ ".razor", ".cshtml" ]
 
 - name: rbs
@@ -1411,6 +1607,7 @@
   repo: https://github.com/joker1007/tree-sitter-rbs.git
   tag: 5282e2f36d4109f5315c1d9486b5b0c2044622bb
   entrypoint: tree_sitter_rbs
+  progressive-safe: true
   extensions: [ ".rbs" ]
 
 - name: re2c
@@ -1418,6 +1615,7 @@
   repo: https://github.com/tree-sitter-grammars/tree-sitter-re2c.git
   tag: c18a3c2f4b6665e35b7e50d6048ea3cff770c572
   entrypoint: tree_sitter_re2c
+  progressive-safe: true
   extensions: [ ".re" ]
 
 - name: readline
@@ -1425,6 +1623,7 @@
   repo: https://github.com/tree-sitter-grammars/tree-sitter-readline.git
   tag: 6b744c527aebd12e46a5ecb3aebdb8d621a8e83e
   entrypoint: tree_sitter_readline
+  progressive-safe: true
   extensions: [  ]
 
 - name: regex
@@ -1432,6 +1631,7 @@
   repo: https://github.com/tree-sitter/tree-sitter-regex.git
   tag: b2ac15e27fce703d2f37a79ccd94a5c0cbe9720b
   entrypoint: tree_sitter_regex
+  progressive-safe: true
   extensions: [  ]
 
 - name: rego
@@ -1439,6 +1639,7 @@
   repo: https://github.com/FallenAngel97/tree-sitter-rego.git
   tag: ddd39af81fe8b0288102a7cb97959dfce723e0f3
   entrypoint: tree_sitter_rego
+  progressive-safe: true
   extensions: [ ".rego" ]
 
 - name: requirements
@@ -1446,6 +1647,7 @@
   repo: https://github.com/tree-sitter-grammars/tree-sitter-requirements.git
   tag: 2c3bb291f497258ba417d052faa14a2dfee6d401
   entrypoint: tree_sitter_requirements
+  progressive-safe: true
   extensions: [  ]
 
 - name: rescript
@@ -1453,6 +1655,7 @@
   repo: https://github.com/rescript-lang/tree-sitter-rescript.git
   tag: 990214a83f25801dfe0226bd7e92bb71bba1970f
   entrypoint: tree_sitter_rescript
+  progressive-safe: true
   extensions: [ ".res", ".resi" ]
 
 - name: robot
@@ -1460,6 +1663,7 @@
   repo: https://github.com/Hubro/tree-sitter-robot.git
   tag: 3de13dcc7559223c97e6b703217bbf728e20e169
   entrypoint: tree_sitter_robot
+  progressive-safe: true
   extensions: [ ".robot" ]
 
 - name: roc
@@ -1467,6 +1671,7 @@
   repo: https://github.com/faldor20/tree-sitter-roc.git
   tag: edc18052a9d7382ac9f9f5bf413db3a78d5ea12c
   entrypoint: tree_sitter_roc
+  progressive-safe: true
   extensions: [ ".roc" ]
 
 - name: ron
@@ -1474,6 +1679,7 @@
   repo: https://github.com/tree-sitter-grammars/tree-sitter-ron.git
   tag: 78938553b93075e638035f624973083451b29055
   entrypoint: tree_sitter_ron
+  progressive-safe: true
   extensions: [ ".ron" ]
 
 - name: ruby
@@ -1481,6 +1687,7 @@
   repo: https://github.com/tree-sitter/tree-sitter-ruby.git
   tag: ad907a69da0c8a4f7a943a7fe012712208da6dee
   entrypoint: tree_sitter_ruby
+  progressive-safe: true
   extensions: [ ".rb" ]
 
 - name: rust
@@ -1488,6 +1695,7 @@
   repo: https://github.com/tree-sitter/tree-sitter-rust.git
   tag: 77a3747266f4d621d0757825e6b11edcbf991ca5
   entrypoint: tree_sitter_rust
+  progressive-safe: true
   extensions: [ ".rs" ]
 
 - name: scala
@@ -1495,6 +1703,7 @@
   repo: https://github.com/tree-sitter/tree-sitter-scala.git
   tag: 4d081d98670ff6e98ca42c085294fc75eec15e1d
   entrypoint: tree_sitter_scala
+  progressive-safe: true
   extensions: [ ".scala" ]
 
 - name: scheme
@@ -1502,6 +1711,7 @@
   repo: https://github.com/6cdh/tree-sitter-scheme.git
   tag: c6cb7c7d7a04b3f5d999c28e2e9c0c31b2d50ece
   entrypoint: tree_sitter_scheme
+  progressive-safe: true
   extensions: [ ".scm" ]
 
 - name: scss
@@ -1509,6 +1719,7 @@
   repo: https://github.com/tree-sitter-grammars/tree-sitter-scss.git
   tag: 2ef6d42e3ad7a8208900f9346f4529806ae0f9f9
   entrypoint: tree_sitter_scss
+  progressive-safe: true
   extensions: [ ".scss" ]
 
 - name: smali
@@ -1516,6 +1727,7 @@
   repo: https://github.com/tree-sitter-grammars/tree-sitter-smali.git
   tag: fdfa6a1febc43c7467aa7e937b87b607956f2346
   entrypoint: tree_sitter_smali
+  progressive-safe: true
   extensions: [ ".smali" ]
 
 - name: smalltalk
@@ -1523,6 +1735,7 @@
   repo: https://github.com/tom95/tree-sitter-smalltalk.git
   tag: f5d63d37ebb135fd0eb0441a51d5ccdf933c6537
   entrypoint: tree_sitter_smalltalk
+  progressive-safe: true
   extensions: [ ".st" ]
 
 - name: smithy
@@ -1530,6 +1743,7 @@
   repo: https://github.com/indoorvivants/tree-sitter-smithy.git
   tag: ec4fe14586f2b0a1bc65d6db17f8d8acd8a90433
   entrypoint: tree_sitter_smithy
+  progressive-safe: true
   extensions: [ ".smithy" ]
 
 - name: sml
@@ -1537,6 +1751,7 @@
   repo: https://github.com/MatthewFluet/tree-sitter-sml.git
   tag: fd4b4955bb998262840ab8119885b3edf20ea75a
   entrypoint: tree_sitter_sml
+  progressive-safe: true
   extensions: [ ".sml", ".sig", ".fun" ]
 
 - name: snakemake
@@ -1544,6 +1759,7 @@
   repo: https://github.com/osthomas/tree-sitter-snakemake.git
   tag: 68010430c3e51c0e84c1ce21c6551df0e2469f51
   entrypoint: tree_sitter_snakemake
+  progressive-safe: true
   extensions: [ ".smk" ]
 
 - name: solidity
@@ -1551,6 +1767,7 @@
   repo: https://github.com/JoranHonig/tree-sitter-solidity.git
   tag: 048fe686cb1fde267243739b8bdbec8fc3a55272
   entrypoint: tree_sitter_solidity
+  progressive-safe: true
   extensions: [ ".sol" ]
 
 - name: sourcepawn
@@ -1558,6 +1775,7 @@
   repo: https://github.com/nilshelmig/tree-sitter-sourcepawn.git
   tag: 5a8fdd446b516c81e218245c12129c6ad4bccfa2
   entrypoint: tree_sitter_sourcepawn
+  progressive-safe: true
   extensions: [ ".sp", ".inc" ]
 
 - name: sql
@@ -1565,6 +1783,7 @@
   repo: https://github.com/DerekStride/tree-sitter-sql.git
   tag: 851e9cb257ba7c66cc8c14214a31c44d2f1e954e
   entrypoint: tree_sitter_sql
+  progressive-safe: true
   extensions: [ ".sql" ]
 
 - name: sql_bigquery
@@ -1572,6 +1791,7 @@
   repo: https://github.com/takegue/tree-sitter-sql-bigquery.git
   tag: c0c4f0ed7b87846cb1be19df5d638ca227a9fe41
   entrypoint: tree_sitter_sql_bigquery
+  progressive-safe: true
   extensions: [ ".bq" ]
 
 - name: squirrel
@@ -1579,6 +1799,7 @@
   repo: https://github.com/tree-sitter-grammars/tree-sitter-squirrel.git
   tag: 072c969749e66f000dba35a33c387650e203e96e
   entrypoint: tree_sitter_squirrel
+  progressive-safe: true
   extensions: [ ".squirrel", ".nut" ]
 
 - name: ssh_config
@@ -1586,6 +1807,7 @@
   repo: https://github.com/ObserverOfTime/tree-sitter-ssh-config.git
   tag: 71d2693deadaca8cdc09e38ba41d2f6042da1616
   entrypoint: tree_sitter_ssh_config
+  progressive-safe: true
   extensions: [  ]
 
 - name: stan
@@ -1593,6 +1815,7 @@
   repo: https://github.com/WardBrian/tree-sitter-stan.git
   tag: a92d6a59f724ca2b0d5db87c8042563158e9b4e6
   entrypoint: tree_sitter_stan
+  progressive-safe: true
   directory: grammars/stan
   extensions: [ ".stan" ]
 
@@ -1601,6 +1824,7 @@
   repo: https://github.com/tree-sitter-grammars/tree-sitter-starlark.git
   tag: a453dbf3ba433db0e5ec621a38a7e59d72e4dc69
   entrypoint: tree_sitter_starlark
+  progressive-safe: true
   extensions: [ ".star", ".bzl" ]
 
 - name: superhtml
@@ -1608,6 +1832,7 @@
   repo: https://github.com/kristoff-it/superhtml.git
   tag: 3e37d8b00b211ac1591766cfb0ea3efd2845bff2
   entrypoint: tree_sitter_superhtml
+  progressive-safe: true
   directory: tree-sitter-superhtml
   extensions: [ ".shtml" ]
 
@@ -1616,6 +1841,7 @@
   repo: https://github.com/Himujjal/tree-sitter-svelte.git
   tag: 60ea1d673a1a3eeeb597e098d9ada9ed0c79ef4b
   entrypoint: tree_sitter_svelte
+  progressive-safe: true
   extensions: [ ".svelte" ]
 
 - name: sway
@@ -1623,6 +1849,7 @@
   repo: https://github.com/FuelLabs/tree-sitter-sway.git
   tag: 9b7845ce06ecb38b040c3940970b4fd0adc331d1
   entrypoint: tree_sitter_sway
+  progressive-safe: true
   extensions: [ ".sw" ]
 
 - name: swift
@@ -1630,6 +1857,7 @@
   repo: https://github.com/alex-pinkus/tree-sitter-swift.git
   tag: 31d17fe7e818a2048c808b5c6fdc2dc792f4f5b5
   entrypoint: tree_sitter_swift
+  progressive-safe: true
   extensions: [ ".swift" ]
 
 - name: systemverilog
@@ -1637,6 +1865,7 @@
   repo: https://github.com/gmlarumbe/tree-sitter-systemverilog.git
   tag: 5f7a4121ef40e8d38317833968fe861fd6913d28
   entrypoint: tree_sitter_systemverilog
+  progressive-safe: true
   extensions: [ ".sv", ".svh" ]
 
 - name: tablegen
@@ -1644,6 +1873,7 @@
   repo: https://github.com/Flakebi/tree-sitter-tablegen.git
   tag: 3e9c4822ab5cdcccf4f8aa9dcd42117f736d51d9
   entrypoint: tree_sitter_tablegen
+  progressive-safe: true
   extensions: [ ".td" ]
 
 - name: tact
@@ -1651,6 +1881,7 @@
   repo: https://github.com/tact-lang/tree-sitter-tact.git
   tag: a6267c2091ed432c248780cec9f8d42c8766d9ad
   entrypoint: tree_sitter_tact
+  progressive-safe: true
   extensions: [ ".tact" ]
 
 - name: tcl
@@ -1658,6 +1889,7 @@
   repo: https://github.com/lewis6991/tree-sitter-tcl.git
   tag: 8f11ac7206a54ed11210491cee1e0657e2962c47
   entrypoint: tree_sitter_tcl
+  progressive-safe: true
   extensions: [ ".tcl" ]
 
 - name: teal
@@ -1665,6 +1897,7 @@
   repo: https://github.com/euclidianAce/tree-sitter-teal.git
   tag: 05d276e737055e6f77a21335b7573c9d3c091e2f
   entrypoint: tree_sitter_teal
+  progressive-safe: true
   extensions: [ ".tl" ]
 
 - name: templ
@@ -1672,6 +1905,7 @@
   repo: https://github.com/vrischmann/tree-sitter-templ.git
   tag: 04bae7c82de2fcfec94254fef50f5f1c5924f5f5
   entrypoint: tree_sitter_templ
+  progressive-safe: true
   extensions: [ ".templ" ]
 
 - name: tera
@@ -1679,6 +1913,7 @@
   repo: https://github.com/uncenter/tree-sitter-tera.git
   tag: 3a38c368e806268daac9923a27e72bcafbbc16bb
   entrypoint: tree_sitter_tera
+  progressive-safe: true
   extensions: [ ".tera" ]
 
 - name: terraform
@@ -1686,6 +1921,7 @@
   repo: https://github.com/tree-sitter-grammars/tree-sitter-hcl.git
   tag: 64ad62785d442eb4d45df3a1764962dafd5bc98b
   entrypoint: tree_sitter_terraform
+  progressive-safe: true
   highlight-query-repo: https://github.com/nvim-treesitter/nvim-treesitter.git
   highlight-query-tag: cf12346a3414fa1b06af75c79faebe7f76df080a
   highlight-query-path: queries/terraform/highlights.scm
@@ -1697,6 +1933,7 @@
   repo: https://github.com/tree-sitter-grammars/tree-sitter-test.git
   tag: 76b419f178da018c29d3004fcbf14f755649eb58
   entrypoint: tree_sitter_test
+  progressive-safe: true
   extensions: [  ]
 
 - name: textproto
@@ -1704,6 +1941,7 @@
   repo: https://github.com/PorterAtGoogle/tree-sitter-textproto.git
   tag: 568471b80fd8793d37ed01865d8c2208a9fefd1b
   entrypoint: tree_sitter_textproto
+  progressive-safe: true
   extensions: [ ".textproto", ".pbtxt" ]
 
 - name: thrift
@@ -1711,6 +1949,7 @@
   repo: https://github.com/tree-sitter-grammars/tree-sitter-thrift.git
   tag: 68fd0d80943a828d9e6f49c58a74be1e9ca142cf
   entrypoint: tree_sitter_thrift
+  progressive-safe: true
   extensions: [ ".thrift" ]
 
 - name: tlaplus
@@ -1718,6 +1957,7 @@
   repo: https://github.com/tlaplus-community/tree-sitter-tlaplus.git
   tag: add40814fda369f6efd989977b2c498aaddde984
   entrypoint: tree_sitter_tlaplus
+  progressive-safe: true
   extensions: [ ".tla" ]
 
 - name: todotxt
@@ -1725,6 +1965,7 @@
   repo: https://github.com/arnarg/tree-sitter-todotxt.git
   tag: 3937c5cd105ec4127448651a21aef45f52d19609
   entrypoint: tree_sitter_todotxt
+  progressive-safe: true
   extensions: [ ".todotxt" ]
 
 - name: toml
@@ -1732,6 +1973,7 @@
   repo: https://github.com/tree-sitter-grammars/tree-sitter-toml.git
   tag: 64b56832c2cffe41758f28e05c756a3a98d16f41
   entrypoint: tree_sitter_toml
+  progressive-safe: true
   extensions: [ ".toml" ]
 
 - name: tsv
@@ -1739,6 +1981,7 @@
   repo: https://github.com/amaanq/tree-sitter-csv.git
   tag: f6bf6e35eb0b95fbadea4bb39cb9709507fcb181
   entrypoint: tree_sitter_tsv
+  progressive-safe: true
   directory: tsv
   extensions: [ ".tsv" ]
 
@@ -1747,6 +1990,7 @@
   repo: https://github.com/tree-sitter/tree-sitter-typescript.git
   tag: 75b3874edb2dc714fb1fd77a32013d0f8699989f
   entrypoint: tree_sitter_tsx
+  progressive-safe: true
   directory: tsx
   extensions: [ ".tsx" ]
 
@@ -1755,6 +1999,7 @@
   repo: https://github.com/gbprod/tree-sitter-twig.git
   tag: 0afd9a6d808944e65a7be393e31868b85345735f
   entrypoint: tree_sitter_twig
+  progressive-safe: true
   extensions: [ ".twig" ]
 
 - name: typescript
@@ -1762,6 +2007,7 @@
   repo: https://github.com/tree-sitter/tree-sitter-typescript.git
   tag: 75b3874edb2dc714fb1fd77a32013d0f8699989f
   entrypoint: tree_sitter_typescript
+  progressive-safe: true
   directory: typescript
   extensions: [ ".ts", ".mts", ".cts" ]
 
@@ -1770,6 +2016,7 @@
   repo: https://github.com/happenslol/tree-sitter-typespec.git
   tag: 395bef1e1eb4dd18365401642beb534e8a244056
   entrypoint: tree_sitter_typespec
+  progressive-safe: true
   extensions: [ ".tsp" ]
 
 - name: typoscript
@@ -1777,6 +2024,7 @@
   repo: https://github.com/Teddytrombone/tree-sitter-typoscript.git
   tag: b5d0162b328ec52cf300054a8a23d47f84f55cb4
   entrypoint: tree_sitter_typoscript
+  progressive-safe: true
   extensions: [ ".typoscript", ".tsconfig" ]
 
 - name: typst
@@ -1784,6 +2032,7 @@
   repo: https://github.com/uben0/tree-sitter-typst.git
   tag: 46cf4ded12ee974a70bf8457263b67ad7ee0379d
   entrypoint: tree_sitter_typst
+  progressive-safe: true
   highlight-query: queries/typst/highlights.scm
   extensions: [ ".typst" ]
 
@@ -1792,6 +2041,7 @@
   repo: https://github.com/tree-sitter-grammars/tree-sitter-udev.git
   tag: 2fcb563a4d56a6b8e8c129252325fc6335e4acbf
   entrypoint: tree_sitter_udev
+  progressive-safe: true
   extensions: [  ]
 
 - name: ungrammar
@@ -1799,6 +2049,7 @@
   repo: https://github.com/tree-sitter-grammars/tree-sitter-ungrammar.git
   tag: debd26fed283d80456ebafa33a06957b0c52e451
   entrypoint: tree_sitter_ungrammar
+  progressive-safe: true
   extensions: [  ]
 
 - name: uxntal
@@ -1806,6 +2057,7 @@
   repo: https://github.com/tree-sitter-grammars/tree-sitter-uxntal.git
   tag: ad9b638b914095320de85d59c49ab271603af048
   entrypoint: tree_sitter_uxntal
+  progressive-safe: true
   extensions: [ ".tal" ]
 
 - name: v
@@ -1813,6 +2065,7 @@
   repo: https://github.com/nedpals/tree-sitter-v.git
   tag: fee18d64a51127b32a221a56509f77c942d9923f
   entrypoint: tree_sitter_v
+  progressive-safe: true
   extensions: [ ".v" ]
 
 - name: verilog
@@ -1820,6 +2073,7 @@
   repo: https://github.com/tree-sitter/tree-sitter-verilog.git
   tag: 227d277b6a1a5e2bf818d6206935722a7503de08
   entrypoint: tree_sitter_verilog
+  progressive-safe: true
   highlight-query-repo: https://github.com/nvim-treesitter/nvim-treesitter.git
   highlight-query-tag: cf12346a3414fa1b06af75c79faebe7f76df080a
   highlight-query-path: queries/verilog/highlights.scm
@@ -1830,6 +2084,7 @@
   repo: https://github.com/alemuller/tree-sitter-vhdl.git
   tag: a3b2d84990527c7f8f4ae219c332c00c33d2d8e5
   entrypoint: tree_sitter_vhdl
+  progressive-safe: true
   extensions: [ ".vhdl", ".vhd" ]
 
 - name: vhs
@@ -1837,6 +2092,7 @@
   repo: https://github.com/charmbracelet/tree-sitter-vhs.git
   tag: 0c6fae9d2cfc5b217bfd1fe84a7678f5917116db
   entrypoint: tree_sitter_vhs
+  progressive-safe: true
   extensions: [ ".tape" ]
 
 - name: vim
@@ -1844,6 +2100,7 @@
   repo: https://github.com/tree-sitter-grammars/tree-sitter-vim.git
   tag: 3092fcd99eb87bbd0fc434aa03650ba58bd5b43b
   entrypoint: tree_sitter_vim
+  progressive-safe: true
   extensions: [ ".vim" ]
 
 - name: vimdoc
@@ -1851,6 +2108,7 @@
   repo: https://github.com/neovim/tree-sitter-vimdoc.git
   tag: 23daa416c1ff5d15f59a1aa648f031d6e3ee15c5
   entrypoint: tree_sitter_vimdoc
+  progressive-safe: true
   extensions: [ ".txt" ]
 
 - name: vrl
@@ -1858,6 +2116,7 @@
   repo: https://github.com/belltoy/tree-sitter-vrl.git
   tag: 274b3ce63f72aa8ffea18e7fc280d3062d28f0ba
   entrypoint: tree_sitter_vrl
+  progressive-safe: true
   extensions: [ ".vrl" ]
 
 - name: vue
@@ -1865,6 +2124,7 @@
   repo: https://github.com/tree-sitter-grammars/tree-sitter-vue.git
   tag: ce8011a414fdf8091f4e4071752efc376f4afb08
   entrypoint: tree_sitter_vue
+  progressive-safe: true
   highlight-query: queries/vue/highlights.scm
   extensions: [ ".vue" ]
 
@@ -1873,6 +2133,7 @@
   repo: https://github.com/szebniok/tree-sitter-wgsl.git
   tag: 40259f3c77ea856841a4e0c4c807705f3e4a2b65
   entrypoint: tree_sitter_wgsl
+  progressive-safe: true
   extensions: [ ".wgsl" ]
 
 - name: wit
@@ -1880,6 +2141,7 @@
   repo: https://github.com/bytecodealliance/tree-sitter-wit.git
   tag: ae17db1678681a8e75c1ac48107d6efb95343cb3
   entrypoint: tree_sitter_wit
+  progressive-safe: true
   extensions: [ ".wit" ]
 
 - name: x86asm
@@ -1887,6 +2149,7 @@
   repo: https://github.com/bearcove/tree-sitter-x86asm.git
   tag: 9d028294a5f34188cd2cfcd290a2ec0ad31107e0
   entrypoint: tree_sitter_x86asm
+  progressive-safe: true
   extensions: [  ]
 
 - name: xcompose
@@ -1894,6 +2157,7 @@
   repo: https://github.com/tree-sitter-grammars/tree-sitter-xcompose.git
   tag: a51d6366f041dbefec4da39a7eb3168a9b1cbc0e
   entrypoint: tree_sitter_xcompose
+  progressive-safe: true
   extensions: [  ]
 
 - name: xml
@@ -1901,6 +2165,7 @@
   repo: https://github.com/tree-sitter-grammars/tree-sitter-xml.git
   tag: 5000ae8f22d11fbe93939b05c1e37cf21117162d
   entrypoint: tree_sitter_xml
+  progressive-safe: true
   directory: xml
   extensions: [ ".xml", ".xsl", ".xslt" ]
 
@@ -1909,6 +2174,7 @@
   repo: https://github.com/tree-sitter-grammars/tree-sitter-yaml.git
   tag: a1c4812a73ec5e089de8e441fdea3a921e8d5079
   entrypoint: tree_sitter_yaml
+  progressive-safe: true
   extensions: [ ".yaml", ".yml" ]
 
 - name: yuck
@@ -1916,6 +2182,7 @@
   repo: https://github.com/tree-sitter-grammars/tree-sitter-yuck.git
   tag: 6c60112b3b3e739fb1ca4a8ea4bea2b6ffe11318
   entrypoint: tree_sitter_yuck
+  progressive-safe: true
   extensions: [ ".yuck" ]
 
 - name: zig
@@ -1923,6 +2190,7 @@
   repo: https://github.com/maxxnino/tree-sitter-zig.git
   tag: a80a6e9be81b33b182ce6305ae4ea28e29211bd5
   entrypoint: tree_sitter_zig
+  progressive-safe: true
   extensions: [ ".zig" ]
 
 - name: ziggy
@@ -1930,6 +2198,7 @@
   repo: https://github.com/kristoff-it/ziggy.git
   tag: 190240052eb099682b0c9dc3f533acd03673359e
   entrypoint: tree_sitter_ziggy
+  progressive-safe: true
   directory: tree-sitter-ziggy
   extensions: [ ".ziggy" ]
 
@@ -1938,6 +2207,7 @@
   repo: https://github.com/kristoff-it/ziggy.git
   tag: 190240052eb099682b0c9dc3f533acd03673359e
   entrypoint: tree_sitter_ziggy_schema
+  progressive-safe: true
   directory: tree-sitter-ziggy-schema
   extensions: [  ]
 
@@ -1946,4 +2216,5 @@
   repo: https://github.com/georgeharker/tree-sitter-zsh.git
   tag: 7a593401efb5418ffdedbe3c0e4c61c6d240166d
   entrypoint: tree_sitter_zsh
+  progressive-safe: true
   extensions: [ ".zsh" ]

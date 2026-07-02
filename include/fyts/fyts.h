@@ -64,6 +64,7 @@ FYTS_EXPORT int fyts_ctx_finish(struct fyts_ctx *ctx, char **out, size_t *out_le
 
 FYTS_EXPORT char *fyts_list_languages(size_t *lenp);
 FYTS_EXPORT int fyts_language_supported(const char *lang);
+FYTS_EXPORT int fyts_language_progressive_safe(const char *lang);
 FYTS_EXPORT char *fyts_output_catalogue(size_t *lenp);
 FYTS_EXPORT char *fyts_output_styling(size_t *lenp);
 /* Newline-separated names of the built-in stylings (heap, free with free()). */

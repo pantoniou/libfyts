@@ -94,8 +94,13 @@ Each entry should include:
   repo: https://github.com/tree-sitter/tree-sitter-c.git
   tag: b780e47fc780ddc8da13afa35a3f4ed5c157823d
   entrypoint: tree_sitter_c
+  progressive-safe: true
   extensions: [ ".c", ".C" ]
 ```
+
+`progressive-safe` means appending more input cannot force already emitted
+lines to be re-rendered. Mark markup languages such as Markdown false when
+later lines can change earlier highlighting.
 
 CMake parses the catalogue with `yq`, fetches each grammar, and generates the
 language table plus the embedded catalogue.

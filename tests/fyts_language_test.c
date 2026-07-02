@@ -12,5 +12,11 @@ int main(void)
 		return 1;
 	if (fyts_language_supported(NULL))
 		return 1;
+	if (!fyts_language_progressive_safe("c"))
+		return 1;
+	if (fyts_language_progressive_safe("markdown"))
+		return 1;
+	if (fyts_language_progressive_safe("not-a-language"))
+		return 1;
 	return 0;
 }

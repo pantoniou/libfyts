@@ -4,6 +4,7 @@
   repo: https://github.com/tree-sitter/tree-sitter-python.git
   tag: 26855eabccb19c6abf499fbc5b8dc7cc9ab8bc64
   entrypoint: tree_sitter_python
+  progressive-safe: true
   extensions: [ ".py", ".pyi", ".pyw" ]
 
 - name: c
@@ -11,6 +12,7 @@
   repo: https://github.com/tree-sitter/tree-sitter-c.git
   tag: b780e47fc780ddc8da13afa35a3f4ed5c157823d
   entrypoint: tree_sitter_c
+  progressive-safe: true
   extensions: [ ".c", ".h" ]
 
 - name: cpp
@@ -18,6 +20,7 @@
   repo: https://github.com/tree-sitter/tree-sitter-cpp.git
   tag: 8b5b49eb196bec7040441bee33b2c9a4838d6967
   entrypoint: tree_sitter_cpp
+  progressive-safe: true
   extensions: [ ".cpp", ".cxx", ".cc", ".hpp", ".hxx" ]
 
 - name: java
@@ -25,6 +28,7 @@
   repo: https://github.com/tree-sitter/tree-sitter-java.git
   tag: e10607b45ff745f5f876bfa3e94fbcc6b44bdc11
   entrypoint: tree_sitter_java
+  progressive-safe: true
   extensions: [ ".java" ]
 
 - name: csharp
@@ -32,6 +36,7 @@
   repo: https://github.com/tree-sitter/tree-sitter-c-sharp.git
   tag: af29416d729b7a6603101b513604392d8f675e3b
   entrypoint: tree_sitter_c_sharp
+  progressive-safe: true
   extensions: [ ".cs" ]
 
 - name: javascript
@@ -39,6 +44,7 @@
   repo: https://github.com/tree-sitter/tree-sitter-javascript.git
   tag: 58404d8cf191d69f2674a8fd507bd5776f46cb11
   entrypoint: tree_sitter_javascript
+  progressive-safe: true
   extensions: [ ".js", ".jsx", ".mjs", ".cjs" ]
 
 - name: typescript
@@ -46,6 +52,7 @@
   repo: https://github.com/tree-sitter/tree-sitter-typescript.git
   tag: 75b3874edb2dc714fb1fd77a32013d0f8699989f
   entrypoint: tree_sitter_typescript
+  progressive-safe: true
   directory: typescript
   extensions: [ ".ts", ".mts", ".cts" ]
 
@@ -54,6 +61,7 @@
   repo: https://github.com/tree-sitter/tree-sitter-typescript.git
   tag: 75b3874edb2dc714fb1fd77a32013d0f8699989f
   entrypoint: tree_sitter_tsx
+  progressive-safe: true
   directory: tsx
   extensions: [ ".tsx" ]
 
@@ -62,6 +70,7 @@
   repo: https://github.com/DerekStride/tree-sitter-sql.git
   tag: 851e9cb257ba7c66cc8c14214a31c44d2f1e954e
   entrypoint: tree_sitter_sql
+  progressive-safe: true
   extensions: [ ".sql" ]
 
 - name: r
@@ -69,6 +78,7 @@
   repo: https://github.com/r-lib/tree-sitter-r.git
   tag: 58a22794466c0fc15b0d3b40531db751593721e8
   entrypoint: tree_sitter_r
+  progressive-safe: true
   extensions: [ ".r" ]
 
 - name: php
@@ -76,6 +86,7 @@
   repo: https://github.com/tree-sitter/tree-sitter-php.git
   tag: 38216983c07bf9e1b56e16acde53b25adaeab61c
   entrypoint: tree_sitter_php
+  progressive-safe: true
   directory: php
   extensions: [ ".php" ]
 
@@ -84,6 +95,7 @@
   repo: https://github.com/tree-sitter/tree-sitter-rust.git
   tag: 77a3747266f4d621d0757825e6b11edcbf991ca5
   entrypoint: tree_sitter_rust
+  progressive-safe: true
   extensions: [ ".rs" ]
 
 - name: go
@@ -91,6 +103,7 @@
   repo: https://github.com/tree-sitter/tree-sitter-go.git
   tag: 2346a3ab1bb3857b48b29d779a1ef9799a248cd7
   entrypoint: tree_sitter_go
+  progressive-safe: true
   extensions: [ ".go" ]
 
 - name: swift
@@ -98,6 +111,7 @@
   repo: https://github.com/alex-pinkus/tree-sitter-swift.git
   tag: 31d17fe7e818a2048c808b5c6fdc2dc792f4f5b5
   entrypoint: tree_sitter_swift
+  progressive-safe: true
   extensions: [ ".swift" ]
 
 - name: ada
@@ -105,6 +119,7 @@
   repo: https://github.com/briot/tree-sitter-ada.git
   tag: 6b58259a08b1a22ba0247a7ce30be384db618da6
   entrypoint: tree_sitter_ada
+  progressive-safe: true
   extensions: [ ".ada", ".adb", ".ads" ]
 
 - name: fortran
@@ -112,6 +127,7 @@
   repo: https://github.com/stadelmanma/tree-sitter-fortran.git
   tag: 7edacd2b21aa80057d9725384a1304a1c758e0f8
   entrypoint: tree_sitter_fortran
+  progressive-safe: true
   extensions: [ ".f90", ".f95", ".f03", ".f08", ".f" ]
 
 - name: perl
@@ -119,6 +135,7 @@
   repo: https://github.com/tree-sitter-perl/tree-sitter-perl.git
   tag: 87c197b783b031a4e0fa48785ff4b9fc29c0dd42
   entrypoint: tree_sitter_perl
+  progressive-safe: true
   extensions: [ ".pl", ".pm" ]
 
 - name: asm
@@ -126,6 +143,7 @@
   repo: https://github.com/rush-rs/tree-sitter-asm.git
   tag: 839741fef4dab5128952334624905c82b40c7133
   entrypoint: tree_sitter_asm
+  progressive-safe: true
   extensions: [ ".s", ".asm" ]
 
 - name: matlab
@@ -133,6 +151,7 @@
   repo: https://github.com/acristoffers/tree-sitter-matlab.git
   tag: c9ef947ec67fb6b500d5def4f5e09b56990a9f91
   entrypoint: tree_sitter_matlab
+  progressive-safe: true
   extensions: [ ".matlab" ]
 
 - name: kotlin
@@ -140,6 +159,7 @@
   repo: https://github.com/fwcd/tree-sitter-kotlin.git
   tag: c8ac3d2627240160b999a2c100de3babbdb8f419
   entrypoint: tree_sitter_kotlin
+  progressive-safe: true
   extensions: [ ".kt", ".kts" ]
 
 - name: ruby
@@ -147,6 +167,7 @@
   repo: https://github.com/tree-sitter/tree-sitter-ruby.git
   tag: ad907a69da0c8a4f7a943a7fe012712208da6dee
   entrypoint: tree_sitter_ruby
+  progressive-safe: true
   extensions: [ ".rb" ]
 
 - name: lua
@@ -154,6 +175,7 @@
   repo: https://github.com/MunifTanjim/tree-sitter-lua.git
   tag: 4fbec840c34149b7d5fe10097c93a320ee4af053
   entrypoint: tree_sitter_lua
+  progressive-safe: true
   extensions: [ ".lua" ]
 
 - name: dart
@@ -161,6 +183,7 @@
   repo: https://github.com/UserNobody14/tree-sitter-dart.git
   tag: a9bdfa3db2fbc9b9f12c93450d04a671f33a5102
   entrypoint: tree_sitter_dart
+  progressive-safe: true
   extensions: [ ".dart" ]
 
 - name: zig
@@ -168,6 +191,7 @@
   repo: https://github.com/maxxnino/tree-sitter-zig.git
   tag: a80a6e9be81b33b182ce6305ae4ea28e29211bd5
   entrypoint: tree_sitter_zig
+  progressive-safe: true
   extensions: [ ".zig" ]
 
 - name: scala
@@ -175,6 +199,7 @@
   repo: https://github.com/tree-sitter/tree-sitter-scala.git
   tag: 4d081d98670ff6e98ca42c085294fc75eec15e1d
   entrypoint: tree_sitter_scala
+  progressive-safe: true
   extensions: [ ".scala" ]
 
 - name: haskell
@@ -182,6 +207,7 @@
   repo: https://github.com/tree-sitter/tree-sitter-haskell.git
   tag: 0975ef72fc3c47b530309ca93937d7d143523628
   entrypoint: tree_sitter_haskell
+  progressive-safe: true
   extensions: [ ".hs" ]
 
 - name: julia
@@ -189,6 +215,7 @@
   repo: https://github.com/tree-sitter/tree-sitter-julia.git
   tag: e0f9dcd180fdcfcfa8d79a3531e11d99e79321d3
   entrypoint: tree_sitter_julia
+  progressive-safe: true
   extensions: [ ".jl" ]
 
 - name: bash
@@ -196,6 +223,7 @@
   repo: https://github.com/tree-sitter/tree-sitter-bash.git
   tag: a06c2e4415e9bc0346c6b86d401879ffb44058f7
   entrypoint: tree_sitter_bash
+  progressive-safe: true
   extensions: [ ".sh", ".bash" ]
 
 - name: powershell
@@ -203,6 +231,7 @@
   repo: https://github.com/airbus-cert/tree-sitter-powershell.git
   tag: d398441825243b00e317e87e1829b9d6a3e54ce0
   entrypoint: tree_sitter_powershell
+  progressive-safe: true
   extensions: [ ".ps1", ".psm1", ".psd1" ]
 
 - name: html
@@ -210,6 +239,7 @@
   repo: https://github.com/tree-sitter/tree-sitter-html.git
   tag: 73a3947324f6efddf9e17c0ea58d454843590cc0
   entrypoint: tree_sitter_html
+  progressive-safe: true
   extensions: [ ".html", ".htm" ]
 
 - name: css
@@ -217,6 +247,7 @@
   repo: https://github.com/tree-sitter/tree-sitter-css.git
   tag: dda5cfc5722c429eaba1c910ca32c2c0c5bb1a3f
   entrypoint: tree_sitter_css
+  progressive-safe: true
   extensions: [ ".css" ]
 
 - name: json
@@ -224,6 +255,7 @@
   repo: https://github.com/tree-sitter/tree-sitter-json.git
   tag: 001c28d7a29832b06b0e831ec77845553c89b56d
   entrypoint: tree_sitter_json
+  progressive-safe: true
   extensions: [ ".json" ]
 
 - name: yaml
@@ -231,6 +263,7 @@
   repo: https://github.com/tree-sitter-grammars/tree-sitter-yaml.git
   tag: a1c4812a73ec5e089de8e441fdea3a921e8d5079
   entrypoint: tree_sitter_yaml
+  progressive-safe: true
   extensions: [ ".yaml", ".yml" ]
 
 - name: xml
@@ -238,6 +271,7 @@
   repo: https://github.com/tree-sitter-grammars/tree-sitter-xml.git
   tag: 5000ae8f22d11fbe93939b05c1e37cf21117162d
   entrypoint: tree_sitter_xml
+  progressive-safe: true
   directory: xml
   extensions: [ ".xml", ".xsl", ".xslt" ]
 
@@ -246,6 +280,7 @@
   repo: https://github.com/tree-sitter-grammars/tree-sitter-markdown.git
   tag: c3570720f7f7bbad22fe96603f106276618e0cf5
   entrypoint: tree_sitter_markdown
+  progressive-safe: false
   directory: tree-sitter-markdown
   extensions: [ ".md", ".markdown" ]
 
@@ -254,6 +289,7 @@
   repo: https://github.com/tree-sitter-grammars/tree-sitter-toml.git
   tag: 64b56832c2cffe41758f28e05c756a3a98d16f41
   entrypoint: tree_sitter_toml
+  progressive-safe: true
   extensions: [ ".toml" ]
 
 - name: ini
@@ -261,6 +297,7 @@
   repo: https://github.com/justinmk/tree-sitter-ini.git
   tag: e4018b5176132b4f3c5d6e61cea383f42288d0f5
   entrypoint: tree_sitter_ini
+  progressive-safe: true
   extensions: [ ".ini", ".cfg" ]
 
 - name: csv
@@ -268,6 +305,7 @@
   repo: https://github.com/amaanq/tree-sitter-csv.git
   tag: f6bf6e35eb0b95fbadea4bb39cb9709507fcb181
   entrypoint: tree_sitter_csv
+  progressive-safe: true
   directory: csv
   extensions: [ ".csv" ]
 
@@ -276,6 +314,7 @@
   repo: https://github.com/camdencheek/tree-sitter-dockerfile.git
   tag: 971acdd908568b4531b0ba28a445bf0bb720aba5
   entrypoint: tree_sitter_dockerfile
+  progressive-safe: true
   extensions: [ ".dockerfile" ]
 
 - name: make
@@ -283,6 +322,7 @@
   repo: https://github.com/alemuller/tree-sitter-make.git
   tag: a4b9187417d6be349ee5fd4b6e77b4172c6827dd
   entrypoint: tree_sitter_make
+  progressive-safe: true
   extensions: [ ".mk", ".makefile" ]
 
 - name: cmake
@@ -290,6 +330,7 @@
   repo: https://github.com/uyha/tree-sitter-cmake.git
   tag: c7b2a71e7f8ecb167fad4c97227c838439280175
   entrypoint: tree_sitter_cmake
+  progressive-safe: true
   extensions: [ ".cmake" ]
 
 - name: nix
@@ -297,6 +338,7 @@
   repo: https://github.com/nix-community/tree-sitter-nix.git
   tag: 3d0173d903e630b6e14d17f1cf79488791379ded
   entrypoint: tree_sitter_nix
+  progressive-safe: true
   extensions: [ ".nix" ]
 
 - name: regex
@@ -304,6 +346,7 @@
   repo: https://github.com/tree-sitter/tree-sitter-regex.git
   tag: b2ac15e27fce703d2f37a79ccd94a5c0cbe9720b
   entrypoint: tree_sitter_regex
+  progressive-safe: true
   extensions: [  ]
 
 - name: diff
@@ -311,4 +354,5 @@
   repo: https://github.com/tree-sitter-grammars/tree-sitter-diff.git
   tag: 2520c3f934b3179bb540d23e0ef45f75304b5fed
   entrypoint: tree_sitter_diff
+  progressive-safe: true
   extensions: [ ".diff", ".patch" ]

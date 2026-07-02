@@ -348,6 +348,7 @@ def write_catalogue(path, entries):
         lines.append("  repo: %s" % yaml_scalar(entry["repo"]))
         lines.append("  tag: %s" % yaml_scalar(entry["tag"]))
         lines.append("  entrypoint: %s" % yaml_scalar(entry["entrypoint"]))
+        lines.append("  progressive-safe: %s" % str(entry.get("progressive-safe", True)).lower())
         if entry.get("highlight-query"):
             lines.append("  highlight-query: %s" % yaml_scalar(entry["highlight-query"]))
         if entry.get("highlight-query-repo"):

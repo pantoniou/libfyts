@@ -4,6 +4,7 @@
   repo: https://github.com/tree-sitter/tree-sitter-c.git
   tag: b780e47fc780ddc8da13afa35a3f4ed5c157823d
   entrypoint: tree_sitter_c
+  progressive-safe: true
   extensions: [ ".c", ".C" ]
 
 - name: cpp
@@ -11,6 +12,7 @@
   repo: https://github.com/tree-sitter/tree-sitter-cpp.git
   tag: 8b5b49eb196bec7040441bee33b2c9a4838d6967
   entrypoint: tree_sitter_cpp
+  progressive-safe: true
   extensions: [ ".cc", ".cpp", ".cxx", ".hh", ".hpp", ".hxx" ]
 
 - name: bash
@@ -18,6 +20,7 @@
   repo: https://github.com/tree-sitter/tree-sitter-bash.git
   tag: a06c2e4415e9bc0346c6b86d401879ffb44058f7
   entrypoint: tree_sitter_bash
+  progressive-safe: true
   extensions: [ ".bash", ".sh" ]
 
 - name: python
@@ -25,6 +28,7 @@
   repo: https://github.com/tree-sitter/tree-sitter-python.git
   tag: 26855eabccb19c6abf499fbc5b8dc7cc9ab8bc64
   entrypoint: tree_sitter_python
+  progressive-safe: true
   extensions: [ ".py", ".pyi" ]
 
 - name: diff
@@ -32,6 +36,7 @@
   repo: https://github.com/tree-sitter-grammars/tree-sitter-diff.git
   tag: 2520c3f934b3179bb540d23e0ef45f75304b5fed
   entrypoint: tree_sitter_diff
+  progressive-safe: true
   extensions: [ ".diff", ".patch" ]
 
 - name: json
@@ -39,6 +44,7 @@
   repo: https://github.com/tree-sitter/tree-sitter-json.git
   tag: 001c28d7a29832b06b0e831ec77845553c89b56d
   entrypoint: tree_sitter_json
+  progressive-safe: true
   extensions: [ ".json" ]
 
 - name: yaml
@@ -46,4 +52,5 @@
   repo: https://github.com/tree-sitter-grammars/tree-sitter-yaml.git
   tag: a1c4812a73ec5e089de8e441fdea3a921e8d5079
   entrypoint: tree_sitter_yaml
+  progressive-safe: true
   extensions: [ ".yaml", ".yml" ]

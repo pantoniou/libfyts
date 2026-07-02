@@ -129,7 +129,7 @@ if(NOT tree-sitter_POPULATED)
 endif()
 
 execute_process(
-  COMMAND "${YQ_EXECUTABLE}" -r ".[] | [.name, .[\"display-name\"], .repo, .tag, .entrypoint, (.directory // \"-\"), (.[\"highlight-query\"] // \"-\")] | @tsv" "${TS_LANGUAGE_CATALOGUE}"
+  COMMAND "${YQ_EXECUTABLE}" -r ".[] | [.name, .[\"display-name\"], .repo, .tag, .entrypoint, (.directory // \"-\"), (.[\"highlight-query\"] // \"-\"), (if has(\"progressive-safe\") then .[\"progressive-safe\"] else true end)] | @tsv" "${TS_LANGUAGE_CATALOGUE}"
   OUTPUT_VARIABLE TS_LANGUAGE_ROWS
   RESULT_VARIABLE TS_LANGUAGE_ROWS_RESULT
   OUTPUT_STRIP_TRAILING_WHITESPACE
@@ -343,7 +343,7 @@ string(REPLACE "\n" ";" TS_LANGUAGE_ROWS "${TS_LANGUAGE_ROWS}")
 foreach(row IN LISTS TS_LANGUAGE_ROWS)
   string(REPLACE "\t" ";" fields "${row}")
   list(LENGTH fields field_count)
-  if(NOT field_count EQUAL 7)
+  if(NOT field_count EQUAL 8)
     message(FATAL_ERROR "invalid language catalogue row: ${row}")
   endif()
   list(GET fields 0 language_name)
@@ -353,6 +353,7 @@ foreach(row IN LISTS TS_LANGUAGE_ROWS)
   list(GET fields 4 language_entrypoint)
   list(GET fields 5 language_directory)
   list(GET fields 6 language_highlight_query)
+  list(GET fields 7 language_progressive_safe)
   if(GITHUB_USE_SSH)
     string(REGEX REPLACE "^https?://github\\.com/" "ssh://git@github.com/" language_repo "${language_repo}")
   endif()
@@ -361,6 +362,15 @@ foreach(row IN LISTS TS_LANGUAGE_ROWS)
   string(REGEX REPLACE "[^A-Za-z0-9_]" "_" fetch_name "tree_sitter_grammar_${language_symbol}")
   if(NOT language_entrypoint MATCHES "^tree_sitter_[A-Za-z0-9_]+$")
     message(FATAL_ERROR "${language_name}: invalid entrypoint '${language_entrypoint}'")
+  endif()
+  if(NOT language_progressive_safe MATCHES "^(true|false)$")
+    message(FATAL_ERROR "${language_name}: invalid progressive-safe '${language_progressive_safe}'")
+  endif()
+  string(COMPARE EQUAL "${language_progressive_safe}" "true" language_progressive_safe_is_true)
+  if(language_progressive_safe_is_true)
+    set(language_progressive_safe_c 1)
+  else()
+    set(language_progressive_safe_c 0)
   endif()
 
   set(grammar_dir "")
@@ -471,7 +481,7 @@ foreach(row IN LISTS TS_LANGUAGE_ROWS)
   endif()
 
   string(APPEND TS_LANGUAGE_DECLS "const TSLanguage *${language_entrypoint}(void);\n")
-  string(APPEND TS_LANGUAGE_ENTRIES "    {\"${language_name}\", ${language_entrypoint}, \"${query_path}\"},\n")
+  string(APPEND TS_LANGUAGE_ENTRIES "    {\"${language_name}\", ${language_entrypoint}, \"${query_path}\", ${language_progressive_safe_c}},\n")
 endforeach()
 
 set(TS_LANGUAGE_TABLE "${CMAKE_CURRENT_BINARY_DIR}/generated/language_catalogue.inc")
