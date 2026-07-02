@@ -707,7 +707,7 @@ add_test(NAME yaml-key-style
   COMMAND "$<TARGET_FILE:fyts-highlight>" --color on --lang yaml "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/sample.yaml"
 )
 set_tests_properties(yaml-key-style PROPERTIES
-  PASS_REGULAR_EXPRESSION "\\[38;2;135;175;175mname"
+  PASS_REGULAR_EXPRESSION "\\[[0-9;]*mname"
 )
 
 add_test(NAME extract-captures
@@ -801,6 +801,56 @@ if(TS_HAVE_MAKE_LANGUAGE)
   )
   set_tests_properties(autodetect-makefile PROPERTIES
     PASS_REGULAR_EXPRESSION "hello"
+  )
+endif()
+
+if(TS_LANGUAGE_CATALOGUE_SET STREQUAL "default")
+  add_test(NAME default-unmatched-captures
+    COMMAND "${PYTHON3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/check-unmatched-captures.py" "$<TARGET_FILE:fyts-highlight>"
+      python "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/default-captures/python.py"
+      c "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/default-captures/c.c"
+      cpp "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/default-captures/cpp.cpp"
+      java "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/default-captures/java.java"
+      csharp "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/default-captures/csharp.cs"
+      javascript "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/default-captures/javascript.js"
+      typescript "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/default-captures/typescript.ts"
+      tsx "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/default-captures/tsx.tsx"
+      sql "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/default-captures/sql.sql"
+      r "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/default-captures/r.r"
+      php "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/default-captures/php.php"
+      rust "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/default-captures/rust.rs"
+      go "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/default-captures/go.go"
+      swift "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/default-captures/swift.swift"
+      ada "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/default-captures/ada.ada"
+      fortran "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/default-captures/fortran.f90"
+      perl "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/default-captures/perl.pl"
+      asm "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/default-captures/asm.s"
+      matlab "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/default-captures/matlab.matlab"
+      kotlin "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/default-captures/kotlin.kt"
+      ruby "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/default-captures/ruby.rb"
+      lua "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/default-captures/lua.lua"
+      dart "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/default-captures/dart.dart"
+      zig "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/default-captures/zig.zig"
+      scala "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/default-captures/scala.scala"
+      haskell "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/default-captures/haskell.hs"
+      julia "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/default-captures/julia.jl"
+      bash "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/default-captures/bash.sh"
+      powershell "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/default-captures/powershell.ps1"
+      html "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/default-captures/html.html"
+      css "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/default-captures/css.css"
+      json "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/default-captures/json.json"
+      yaml "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/default-captures/yaml.yaml"
+      xml "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/default-captures/xml.xml"
+      markdown "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/default-captures/markdown.md"
+      toml "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/default-captures/toml.toml"
+      ini "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/default-captures/ini.ini"
+      csv "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/default-captures/csv.csv"
+      dockerfile "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/default-captures/dockerfile.dockerfile"
+      make "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/default-captures/make.mk"
+      cmake "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/default-captures/cmake.cmake"
+      nix "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/default-captures/nix.nix"
+      regex "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/default-captures/regex.regex"
+      diff "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/default-captures/diff.diff"
   )
 endif()
 

@@ -27,6 +27,40 @@ captures:
     attribute: path
   - capture: ^string\.special\.key$
     attribute: key
+  - capture: ^string\.escape$
+    attribute: escape
+  - capture: ^string(\..*)?$
+    attribute: string
+  - capture: ^number(\..*)?$
+    attribute: constant
+  - capture: ^float$
+    attribute: constant
+  - capture: ^type(\..*)?$
+    attribute: type
+  - capture: ^keyword(\..*)?$
+    attribute: keyword
+  - capture: ^method(\..*)?$
+    attribute: function
+  - capture: ^field$
+    attribute: property
+  - capture: ^include$
+    attribute: module
+  - capture: ^namespace$
+    attribute: module
+  - capture: ^tag$
+    attribute: label
+  - capture: ^markup$
+    attribute: label
+  - capture: ^identifier\.parameter$
+    attribute: text
+  - capture: ^assignvalue$
+    attribute: operator
+  - capture: ^_function$
+    attribute: function
+  - capture: ^_name$
+    attribute: text
+  - capture: ^_type$
+    attribute: type
   - capture: ^escape$
     attribute: escape
   - capture: ^embedded$
