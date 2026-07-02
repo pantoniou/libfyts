@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(c_tree_sitter_highlighter VERSION 0.1.0 LANGUAGES C CXX)
+project(libfyts VERSION 0.1.0 LANGUAGES C CXX)
 
 include(GNUInstallDirs)
 include(FetchContent)
