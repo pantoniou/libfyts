@@ -1,0 +1,126 @@
+name: CMake CI
+
+run-name: >-
+  ${{ github.event_name == 'pull_request' && format('CMake CI · PR #{0}', github.event.pull_request.number) ||
+      github.event_name == 'workflow_dispatch' && 'CMake CI · manual' ||
+      format('CMake CI · {0}', github.ref_name) }}
+
+env:
+  CMAKE_BUILD_PARALLEL_LEVEL: ${{ vars.NUMBER_OF_PROCESSORS || 2 }}
+  CTEST_PARALLEL_LEVEL: ${{ vars.NUMBER_OF_PROCESSORS || 2 }}
+  CTEST_OUTPUT_ON_FAILURE: 1
+
+on:
+  push:
+    branches: [ master, stable, devel ]
+  pull_request:
+    branches: [ master, stable, devel ]
+  workflow_dispatch:
+    inputs:
+      ctest_args:
+        description: "Extra ctest arguments (e.g. -R foo, -E bar, -V)"
+        required: false
+        default: ""
+        type: string
+
+jobs:
+  build:
+    name: >-
+      ubuntu-latest · ${{ matrix.compiler }} · ${{ matrix.build_type }}
+      ${{ matrix.asan == 'ON' && ' · ASAN' || '' }}
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - compiler: gcc
+            cc: gcc
+            cxx: g++
+            build_type: Debug
+            asan: OFF
+          - compiler: gcc
+            cc: gcc
+            cxx: g++
+            build_type: Release
+            asan: OFF
+          - compiler: clang
+            cc: clang
+            cxx: clang++
+            build_type: Debug
+            asan: OFF
+          - compiler: clang
+            cc: clang
+            cxx: clang++
+            build_type: Release
+            asan: OFF
+          - compiler: gcc
+            cc: gcc
+            cxx: g++
+            build_type: Debug
+            asan: ON
+
+    steps:
+    - name: Git Sane LF
+      run: |
+        git config --global core.autocrlf false
+        git config --global core.eol lf
+
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Install CMake/Ninja
+      uses: lukka/get-cmake@latest
+
+    - name: Install dependencies
+      run: |
+        sudo apt-get update -qq
+        sudo apt-get install --no-install-recommends -y \
+          build-essential \
+          clang \
+          git \
+          libubsan1 \
+          ninja-build \
+          python3 \
+          tar \
+          yq \
+          zstd
+
+    - name: Build libfyaml
+      run: |
+        git clone --depth 1 https://github.com/pantoniou/libfyaml.git "${RUNNER_TEMP}/libfyaml"
+        cmake -S "${RUNNER_TEMP}/libfyaml" -B "${RUNNER_TEMP}/libfyaml-build" \
+          -G Ninja \
+          -DCMAKE_BUILD_TYPE=Release \
+          -DBUILD_TESTING=OFF \
+          -DCMAKE_INSTALL_PREFIX="${RUNNER_TEMP}/fyts-deps"
+        cmake --build "${RUNNER_TEMP}/libfyaml-build"
+        cmake --install "${RUNNER_TEMP}/libfyaml-build"
+
+    - name: Configure
+      run: |
+        cmake -S . -B build -G Ninja \
+          -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
+          -DCMAKE_C_COMPILER=${{ matrix.cc }} \
+          -DCMAKE_CXX_COMPILER=${{ matrix.cxx }} \
+          -DCMAKE_PREFIX_PATH="${RUNNER_TEMP}/fyts-deps" \
+          -DENABLE_ASAN=${{ matrix.asan }} \
+          -DTS_GRAMMAR_SOURCE_MODE=archive
+
+    - name: Build
+      run: cmake --build build
+
+    - name: Test
+      env:
+        LD_LIBRARY_PATH: ${{ runner.temp }}/fyts-deps/lib:${{ runner.temp }}/fyts-deps/lib64
+      working-directory: build
+      run: ctest -C ${{ matrix.build_type }} ${{ inputs.ctest_args }}
+
+    - name: Upload test logs on failure
+      if: failure()
+      uses: actions/upload-artifact@v4
+      with:
+        name: test-logs-${{ matrix.compiler }}-${{ matrix.build_type }}-${{ matrix.asan }}-${{ github.run_id }}
+        path: |
+          **/Testing/Temporary/
+          build/**/*.log
