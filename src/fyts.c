@@ -1343,6 +1343,10 @@ static int query_match_predicates_ok(TSQuery *query, const TSQueryMatch *match, 
 
 	*ok_out = 0;
 	steps = ts_query_predicates_for_pattern(query, match->pattern_index, &step_count);
+	if (!steps || step_count == 0) {
+		*ok_out = 1;
+		return 1;
+	}
 	step = steps;
 	end = steps + step_count;
 	while (step < end) {
