@@ -709,11 +709,6 @@ static fy_generic styling_escape_for_style(Styling *styling, const char *style)
 	return fy_get(styles, style, fy_invalid);
 }
 
-static const char *styling_escape_string_for_style(Styling *styling, const char *style)
-{
-	return fy_cast(styling_escape_for_style(styling, style), "");
-}
-
 static const char *styling_background_key(enum fyts_background_mode background)
 {
 	return background == FYTS_BACKGROUND_LIGHT ? "light" : "dark";
@@ -739,9 +734,11 @@ static fy_generic styling_frame_background(Styling *styling, enum fyts_backgroun
 
 static int styling_style_matches_ansi(Styling *styling, const char *style, const char *ansi)
 {
+	fy_generic style_ansi_g;
 	const char *style_ansi;
 
-	style_ansi = styling_escape_string_for_style(styling, style);
+	style_ansi_g = styling_escape_for_style(styling, style);
+	style_ansi = fy_cast(style_ansi_g, "");
 	return *style_ansi && strcmp(style_ansi, ansi) == 0;
 }
 
