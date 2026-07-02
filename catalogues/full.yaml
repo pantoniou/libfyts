@@ -96,6 +96,7 @@
   tag: a06c2e4415e9bc0346c6b86d401879ffb44058f7
   entrypoint: tree_sitter_bash
   progressive-safe: true
+  filenames: [ "PKGBUILD", "APKBUILD" ]
   extensions: [ ".sh", ".bash" ]
 
 - name: beancount
@@ -276,6 +277,7 @@
   tag: c7b2a71e7f8ecb167fad4c97227c838439280175
   entrypoint: tree_sitter_cmake
   progressive-safe: true
+  filenames: [ "CMakeLists.txt" ]
   extensions: [ ".cmake" ]
 
 - name: corn
@@ -421,6 +423,7 @@
   tag: 971acdd908568b4531b0ba28a445bf0bb720aba5
   entrypoint: tree_sitter_dockerfile
   progressive-safe: true
+  filenames: [ "Dockerfile", "Containerfile" ]
   extensions: [ ".dockerfile" ]
 
 - name: dot
@@ -437,6 +440,7 @@
   tag: ccd998f378c3f9345ea4eeb223f56d7b84d16687
   entrypoint: tree_sitter_doxygen
   progressive-safe: true
+  filenames: [ "Doxyfile" ]
   extensions: [  ]
 
 - name: dtd
@@ -673,6 +677,7 @@
   tag: 1b7af09d45b579f9f288453b95ad555f1f431645
   entrypoint: tree_sitter_gitattributes
   progressive-safe: true
+  filenames: [ ".gitattributes" ]
   extensions: [ ".gitattributes" ]
 
 - name: gitcommit
@@ -692,6 +697,7 @@
   highlight-query-repo: https://github.com/nvim-treesitter/nvim-treesitter.git
   highlight-query-tag: cf12346a3414fa1b06af75c79faebe7f76df080a
   highlight-query-path: queries/gitignore/highlights.scm
+  filenames: [ ".gitignore", ".dockerignore", ".npmignore" ]
   extensions: [ ".gitignore" ]
 
 - name: gherkin
@@ -756,6 +762,7 @@
   tag: 2e886870578eeba1927a2dc4bd2e2b3f598c5f9a
   entrypoint: tree_sitter_gomod
   progressive-safe: true
+  filenames: [ "go.mod", "go.work" ]
   extensions: [ ".mod" ]
 
 - name: gosum
@@ -764,6 +771,7 @@
   tag: 27816eb6b7315746ae9fcf711e4e1396dc1cf237
   entrypoint: tree_sitter_gosum
   progressive-safe: true
+  filenames: [ "go.sum" ]
   extensions: [  ]
 
 - name: gotmpl
@@ -816,6 +824,7 @@
   highlight-query-repo: https://github.com/nvim-treesitter/nvim-treesitter.git
   highlight-query-tag: cf12346a3414fa1b06af75c79faebe7f76df080a
   highlight-query-path: queries/groovy/highlights.scm
+  filenames: [ "Jenkinsfile" ]
   extensions: [ ".groovy", ".gradle" ]
 
 - name: hack
@@ -958,6 +967,7 @@
   tag: e4018b5176132b4f3c5d6e61cea383f42288d0f5
   entrypoint: tree_sitter_ini
   progressive-safe: true
+  filenames: [ ".editorconfig", ".gitmodules" ]
   extensions: [ ".ini", ".cfg" ]
 
 - name: ispc
@@ -1033,6 +1043,7 @@
   tag: 001c28d7a29832b06b0e831ec77845553c89b56d
   entrypoint: tree_sitter_json
   progressive-safe: true
+  filenames: [ "package.json", "tsconfig.json", "jsconfig.json", "composer.json" ]
   extensions: [ ".json" ]
 
 - name: json5
@@ -1066,6 +1077,7 @@
   entrypoint: tree_sitter_just
   progressive-safe: true
   highlight-query: queries-src/highlights.scm
+  filenames: [ "Justfile", "justfile" ]
   extensions: [ ".just" ]
 
 - name: kcl
@@ -1082,6 +1094,7 @@
   tag: 9ac99fe4c0c27a35dc6f757cef534c646e944881
   entrypoint: tree_sitter_kconfig
   progressive-safe: true
+  filenames: [ "Kconfig" ]
   extensions: [  ]
 
 - name: kdl
@@ -1186,6 +1199,7 @@
   tag: a4b9187417d6be349ee5fd4b6e77b4172c6827dd
   entrypoint: tree_sitter_make
   progressive-safe: true
+  filenames: [ "Makefile", "makefile", "GNUmakefile" ]
   extensions: [ ".mk", ".makefile" ]
 
 - name: markdown
@@ -1228,6 +1242,7 @@
   tag: c84f3540624b81fc44067030afce2ff78d6ede05
   entrypoint: tree_sitter_meson
   progressive-safe: true
+  filenames: [ "meson.build", "meson_options.txt" ]
   extensions: [ ".meson" ]
 
 - name: mlir
@@ -1536,6 +1551,7 @@
   tag: 26855eabccb19c6abf499fbc5b8dc7cc9ab8bc64
   entrypoint: tree_sitter_python
   progressive-safe: true
+  filenames: [ "SConstruct", "SConscript" ]
   extensions: [ ".py", ".pyi", ".pyw" ]
 
 - name: ql
@@ -1648,6 +1664,7 @@
   tag: 2c3bb291f497258ba417d052faa14a2dfee6d401
   entrypoint: tree_sitter_requirements
   progressive-safe: true
+  filenames: [ "requirements.txt" ]
   extensions: [  ]
 
 - name: rescript
@@ -1688,6 +1705,7 @@
   tag: ad907a69da0c8a4f7a943a7fe012712208da6dee
   entrypoint: tree_sitter_ruby
   progressive-safe: true
+  filenames: [ "Rakefile", "Gemfile", "Podfile", "Vagrantfile", "Brewfile", "Fastfile", "Appfile", "Deliverfile", "Matchfile", "Snapfile" ]
   extensions: [ ".rb" ]
 
 - name: rust
@@ -1760,6 +1778,7 @@
   tag: 68010430c3e51c0e84c1ce21c6551df0e2469f51
   entrypoint: tree_sitter_snakemake
   progressive-safe: true
+  filenames: [ "Snakefile" ]
   extensions: [ ".smk" ]
 
 - name: solidity
@@ -1825,6 +1844,7 @@
   tag: a453dbf3ba433db0e5ec621a38a7e59d72e4dc69
   entrypoint: tree_sitter_starlark
   progressive-safe: true
+  filenames: [ "BUILD", "BUILD.bazel", "WORKSPACE", "WORKSPACE.bazel", "MODULE.bazel", "Tiltfile" ]
   extensions: [ ".star", ".bzl" ]
 
 - name: superhtml
@@ -1974,6 +1994,7 @@
   tag: 64b56832c2cffe41758f28e05c756a3a98d16f41
   entrypoint: tree_sitter_toml
   progressive-safe: true
+  filenames: [ "Cargo.toml", "pyproject.toml", "Pipfile" ]
   extensions: [ ".toml" ]
 
 - name: tsv

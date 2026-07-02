@@ -359,6 +359,8 @@ def write_catalogue(path, entries):
             lines.append("  highlight-query-path: %s" % yaml_scalar(entry["highlight-query-path"]))
         if entry.get("directory") not in (None, "", "-"):
             lines.append("  directory: %s" % yaml_scalar(entry["directory"]))
+        if entry.get("filenames"):
+            lines.append("  filenames: %s" % entry["filenames"])
         if entry.get("extensions"):
             lines.append("  extensions: %s" % entry["extensions"])
         lines.append("")

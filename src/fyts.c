@@ -648,17 +648,28 @@ static const char *path_extension(const char *path)
 	return dot;
 }
 
+static const char *path_basename(const char *path)
+{
+	const char *slash;
+
+	slash = strrchr(path, '/');
+	return slash ? slash + 1 : path;
+}
+
 char *fyts_detect_language_for_path(const char *path)
 {
-	const char *wanted_ext = path_extension(path);
+	const char *wanted_name;
+	const char *wanted_ext;
 	Catalogue catalogue;
-	fy_generic language, extension;
+	fy_generic language, filename, extension;
 	const char *name;
 	char *detected = NULL;
 
-	if (!wanted_ext)
+	if (!path || !*path)
 		return NULL;
 
+	wanted_name = path_basename(path);
+	wanted_ext = path_extension(path);
 	if (!catalogue_load(&catalogue))
 		return NULL;
 
@@ -667,6 +678,15 @@ char *fyts_detect_language_for_path(const char *path)
 	{
 		name = fy_generic_get_default(language, "name", "");
 		if (!*name)
+			continue;
+		fy_foreach(filename, fy_get(language, "filenames", fy_invalid))
+		{
+			if (strcmp(fy_cast(filename, ""), wanted_name) == 0) {
+				detected = find_language(name) ? copy_string(name) : NULL;
+				goto out;
+			}
+		}
+		if (!wanted_ext)
 			continue;
 		fy_foreach(extension, fy_get(language, "extensions", fy_invalid))
 		{

@@ -145,6 +145,7 @@ set(TS_GRAMMAR_SOURCES)
 set(TS_GRAMMAR_QUERY_ROOT_ARGS)
 set(TS_LANGUAGE_DECLS)
 set(TS_LANGUAGE_ENTRIES)
+set(TS_HAVE_MAKE_LANGUAGE OFF)
 set(FYTS_C_FLAGS)
 set(ASAN_C_FLAGS)
 set(HAVE_ASAN 0)
@@ -354,6 +355,9 @@ foreach(row IN LISTS TS_LANGUAGE_ROWS)
   list(GET fields 5 language_directory)
   list(GET fields 6 language_highlight_query)
   list(GET fields 7 language_progressive_safe)
+  if(language_name STREQUAL "make")
+    set(TS_HAVE_MAKE_LANGUAGE ON)
+  endif()
   if(GITHUB_USE_SSH)
     string(REGEX REPLACE "^https?://github\\.com/" "ssh://git@github.com/" language_repo "${language_repo}")
   endif()
@@ -790,6 +794,15 @@ add_test(NAME autodetect-python
 set_tests_properties(autodetect-python PROPERTIES
   PASS_REGULAR_EXPRESSION "\\[[0-9;]*m"
 )
+
+if(TS_HAVE_MAKE_LANGUAGE)
+  add_test(NAME autodetect-makefile
+    COMMAND "$<TARGET_FILE:fyts-highlight>" --color on "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/Makefile"
+  )
+  set_tests_properties(autodetect-makefile PROPERTIES
+    PASS_REGULAR_EXPRESSION "hello"
+  )
+endif()
 
 add_test(NAME color-off
   COMMAND "$<TARGET_FILE:fyts-highlight>" --color off --lang c "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/sample.c"

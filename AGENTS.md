@@ -98,6 +98,9 @@ Each entry should include:
   extensions: [ ".c", ".C" ]
 ```
 
+Use `filenames: [ "Makefile" ]` for exact basename matches that have no
+useful extension or whose full filename should override extension matching.
+
 `progressive-safe` means appending more input cannot force already emitted
 lines to be re-rendered. Mark markup languages such as Markdown false when
 later lines can change earlier highlighting.

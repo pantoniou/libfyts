@@ -5,6 +5,7 @@
   tag: 26855eabccb19c6abf499fbc5b8dc7cc9ab8bc64
   entrypoint: tree_sitter_python
   progressive-safe: true
+  filenames: [ "SConstruct", "SConscript", "Snakefile" ]
   extensions: [ ".py", ".pyi", ".pyw" ]
 
 - name: c
@@ -168,6 +169,7 @@
   tag: ad907a69da0c8a4f7a943a7fe012712208da6dee
   entrypoint: tree_sitter_ruby
   progressive-safe: true
+  filenames: [ "Rakefile", "Gemfile", "Podfile", "Vagrantfile", "Brewfile", "Fastfile", "Appfile", "Deliverfile", "Matchfile", "Snapfile" ]
   extensions: [ ".rb" ]
 
 - name: lua
@@ -224,6 +226,7 @@
   tag: a06c2e4415e9bc0346c6b86d401879ffb44058f7
   entrypoint: tree_sitter_bash
   progressive-safe: true
+  filenames: [ "PKGBUILD", "APKBUILD" ]
   extensions: [ ".sh", ".bash" ]
 
 - name: powershell
@@ -256,6 +259,7 @@
   tag: 001c28d7a29832b06b0e831ec77845553c89b56d
   entrypoint: tree_sitter_json
   progressive-safe: true
+  filenames: [ "package.json", "tsconfig.json", "jsconfig.json", "composer.json" ]
   extensions: [ ".json" ]
 
 - name: yaml
@@ -290,6 +294,7 @@
   tag: 64b56832c2cffe41758f28e05c756a3a98d16f41
   entrypoint: tree_sitter_toml
   progressive-safe: true
+  filenames: [ "Cargo.toml", "pyproject.toml", "Pipfile" ]
   extensions: [ ".toml" ]
 
 - name: ini
@@ -298,6 +303,7 @@
   tag: e4018b5176132b4f3c5d6e61cea383f42288d0f5
   entrypoint: tree_sitter_ini
   progressive-safe: true
+  filenames: [ ".editorconfig", ".gitmodules" ]
   extensions: [ ".ini", ".cfg" ]
 
 - name: csv
@@ -315,6 +321,7 @@
   tag: 971acdd908568b4531b0ba28a445bf0bb720aba5
   entrypoint: tree_sitter_dockerfile
   progressive-safe: true
+  filenames: [ "Dockerfile", "Containerfile" ]
   extensions: [ ".dockerfile" ]
 
 - name: make
@@ -323,6 +330,7 @@
   tag: a4b9187417d6be349ee5fd4b6e77b4172c6827dd
   entrypoint: tree_sitter_make
   progressive-safe: true
+  filenames: [ "Makefile", "makefile", "GNUmakefile" ]
   extensions: [ ".mk", ".makefile" ]
 
 - name: cmake
@@ -331,6 +339,7 @@
   tag: c7b2a71e7f8ecb167fad4c97227c838439280175
   entrypoint: tree_sitter_cmake
   progressive-safe: true
+  filenames: [ "CMakeLists.txt" ]
   extensions: [ ".cmake" ]
 
 - name: nix
