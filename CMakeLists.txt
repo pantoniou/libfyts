@@ -6,6 +6,7 @@ include(FetchContent)
 include(CheckCCompilerFlag)
 include(CheckCSourceCompiles)
 include(CMakePackageConfigHelpers)
+include(cmake/FindPythonYq.cmake)
 find_package(Git REQUIRED)
 
 set(CMAKE_C_STANDARD 11)
@@ -72,10 +73,10 @@ set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS
   ${TS_GRAMMAR_ARCHIVE_FILES}
 )
 
-find_program(YQ_EXECUTABLE yq REQUIRED)
 find_program(PYTHON3_EXECUTABLE python3 REQUIRED)
 find_program(TAR_EXECUTABLE tar)
 find_program(ZSTD_EXECUTABLE zstd)
+fyts_find_python_yq()
 find_path(LIBFYAML_INCLUDE_DIR NAMES libfyaml.h)
 find_library(LIBFYAML_LIBRARY NAMES fyaml)
 if(NOT LIBFYAML_INCLUDE_DIR OR NOT LIBFYAML_LIBRARY)
