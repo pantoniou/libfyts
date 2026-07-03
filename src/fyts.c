@@ -94,6 +94,8 @@ int fyts_write_file(const void *data, size_t len, void *user)
 {
 	FILE *file = (FILE *)user;
 
+	if (!len)
+		return 0;
 	return fwrite(data, 1, len, file) == len ? 0 : -1;
 }
 
