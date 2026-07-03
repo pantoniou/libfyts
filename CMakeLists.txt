@@ -307,6 +307,7 @@ function(ts_try_populate_grammar_archive out_var language_name)
   set(archive "${TS_GRAMMAR_ARCHIVE_DIR}/${language_name}.tar.zst")
   set(unpack_root "${CMAKE_BINARY_DIR}/_grammar-packs/${language_name}")
   set(source_dir "${unpack_root}/${language_name}")
+  set(unpacked_tar "${unpack_root}/${language_name}.tar")
   set(result 0)
 
   if(NOT EXISTS "${archive}")
@@ -326,9 +327,17 @@ function(ts_try_populate_grammar_archive out_var language_name)
   file(REMOVE_RECURSE "${unpack_root}")
   file(MAKE_DIRECTORY "${unpack_root}")
   execute_process(
-    COMMAND "${TAR_EXECUTABLE}" "--use-compress-program=${ZSTD_EXECUTABLE}" -xf "${archive}" -C "${unpack_root}"
+    COMMAND "${ZSTD_EXECUTABLE}" -dc "${archive}"
+    OUTPUT_FILE "${unpacked_tar}"
     RESULT_VARIABLE result
   )
+  if(result EQUAL 0)
+    execute_process(
+      COMMAND "${TAR_EXECUTABLE}" -xf "${unpacked_tar}" -C "${unpack_root}"
+      RESULT_VARIABLE result
+    )
+  endif()
+  file(REMOVE "${unpacked_tar}")
   if(NOT result EQUAL 0 OR
      NOT EXISTS "${source_dir}/src/parser.c" OR
      NOT EXISTS "${source_dir}/queries/highlights.scm")
