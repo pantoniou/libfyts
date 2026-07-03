@@ -100,7 +100,10 @@ jobs:
 
     - name: Install dependencies
       if: runner.os == 'macOS'
-      run: brew install ninja yq zstd
+      run: |
+        brew install jq ninja zstd
+        python3 -m pip install --user yq
+        echo "$HOME/Library/Python/$(python3 -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")')/bin" >> "$GITHUB_PATH"
 
     - name: Build libfyaml
       run: |
