@@ -102,8 +102,9 @@ jobs:
       if: runner.os == 'macOS'
       run: |
         brew install jq ninja zstd
-        python3 -m pip install --user yq
-        echo "$HOME/Library/Python/$(python3 -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")')/bin" >> "$GITHUB_PATH"
+        python3 -m venv "$RUNNER_TEMP/yq-venv"
+        "$RUNNER_TEMP/yq-venv/bin/pip" install yq
+        echo "$RUNNER_TEMP/yq-venv/bin" >> "$GITHUB_PATH"
 
     - name: Build libfyaml
       run: |
