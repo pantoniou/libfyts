@@ -26,39 +26,50 @@ on:
 jobs:
   build:
     name: >-
-      ubuntu-latest · ${{ matrix.compiler }} · ${{ matrix.build_type }}
+      ${{ matrix.os }} · ${{ matrix.compiler }} · ${{ matrix.build_type }}
       ${{ matrix.asan == 'ON' && ' · ASAN' || '' }}
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
 
     strategy:
       fail-fast: false
       matrix:
         include:
           - compiler: gcc
+            os: ubuntu-latest
             cc: gcc
             cxx: g++
             build_type: Debug
             asan: OFF
           - compiler: gcc
+            os: ubuntu-latest
             cc: gcc
             cxx: g++
             build_type: Release
             asan: OFF
           - compiler: clang
+            os: ubuntu-latest
             cc: clang
             cxx: clang++
             build_type: Debug
             asan: OFF
           - compiler: clang
+            os: ubuntu-latest
             cc: clang
             cxx: clang++
             build_type: Release
             asan: OFF
           - compiler: gcc
+            os: ubuntu-latest
             cc: gcc
             cxx: g++
             build_type: Debug
             asan: ON
+          - compiler: clang
+            os: macos-latest
+            cc: clang
+            cxx: clang++
+            build_type: Debug
+            asan: OFF
 
     steps:
     - name: Git Sane LF
@@ -73,6 +84,7 @@ jobs:
       uses: lukka/get-cmake@latest
 
     - name: Install dependencies
+      if: runner.os == 'Linux'
       run: |
         sudo apt-get update -qq
         sudo apt-get install --no-install-recommends -y \
@@ -85,6 +97,10 @@ jobs:
           tar \
           yq \
           zstd
+
+    - name: Install dependencies
+      if: runner.os == 'macOS'
+      run: brew install ninja yq zstd
 
     - name: Build libfyaml
       run: |
@@ -120,7 +136,7 @@ jobs:
       if: failure()
       uses: actions/upload-artifact@v4
       with:
-        name: test-logs-${{ matrix.compiler }}-${{ matrix.build_type }}-${{ matrix.asan }}-${{ github.run_id }}
+        name: test-logs-${{ matrix.os }}-${{ matrix.compiler }}-${{ matrix.build_type }}-${{ matrix.asan }}-${{ github.run_id }}
         path: |
           **/Testing/Temporary/
           build/**/*.log
