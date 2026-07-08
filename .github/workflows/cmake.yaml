@@ -70,6 +70,12 @@ jobs:
             cxx: clang++
             build_type: Debug
             asan: OFF
+          - compiler: clang
+            os: macos-latest
+            cc: clang
+            cxx: clang++
+            build_type: Debug
+            asan: ON
 
     steps:
     - name: Git Sane LF
