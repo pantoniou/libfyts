@@ -77,12 +77,21 @@ find_program(PYTHON3_EXECUTABLE python3 REQUIRED)
 find_program(TAR_EXECUTABLE tar)
 find_program(ZSTD_EXECUTABLE zstd)
 fyts_find_python_yq()
-find_path(LIBFYAML_INCLUDE_DIR NAMES libfyaml.h)
-find_library(LIBFYAML_LIBRARY NAMES fyaml)
-if(NOT LIBFYAML_INCLUDE_DIR OR NOT LIBFYAML_LIBRARY)
-  message(FATAL_ERROR "libfyaml not found")
+
+# A parent project may already provide libfyaml::libfyaml (its own
+# find_package/FetchContent, e.g. when libfyts is pulled in transitively via
+# libfymd4c). Reuse that target instead of re-resolving the library, then fall
+# back to CMake's own libfyaml package config, and only then to a raw path
+# lookup for installations without CMake package files.
+if(NOT TARGET libfyaml::libfyaml)
+  find_package(libfyaml 1.0 QUIET CONFIG)
 endif()
 if(NOT TARGET libfyaml::libfyaml)
+  find_path(LIBFYAML_INCLUDE_DIR NAMES libfyaml.h)
+  find_library(LIBFYAML_LIBRARY NAMES fyaml)
+  if(NOT LIBFYAML_INCLUDE_DIR OR NOT LIBFYAML_LIBRARY)
+    message(FATAL_ERROR "libfyaml not found")
+  endif()
   add_library(libfyaml::libfyaml UNKNOWN IMPORTED)
   set_target_properties(libfyaml::libfyaml PROPERTIES
     IMPORTED_LOCATION "${LIBFYAML_LIBRARY}"
