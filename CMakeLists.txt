@@ -1000,8 +1000,16 @@ add_test(NAME fyts-language-supported
 
 if(HAVE_ASAN)
   get_property(FYTS_TESTS DIRECTORY PROPERTY TESTS)
+  # LeakSanitizer was never ported to arm64 Darwin; requesting detect_leaks
+  # there aborts the process outright ("detect_leaks is not supported on
+  # this platform") instead of just warning.
+  if(APPLE AND CMAKE_SYSTEM_PROCESSOR MATCHES "^(arm64|aarch64)")
+    set(FYTS_ASAN_OPTIONS "detect_leaks=0:halt_on_error=1")
+  else()
+    set(FYTS_ASAN_OPTIONS "detect_leaks=1:halt_on_error=1")
+  endif()
   set_property(TEST ${FYTS_TESTS} APPEND PROPERTY ENVIRONMENT
-    "ASAN_OPTIONS=detect_leaks=1:halt_on_error=1"
+    "ASAN_OPTIONS=${FYTS_ASAN_OPTIONS}"
     "UBSAN_OPTIONS=halt_on_error=1"
   )
 endif()
