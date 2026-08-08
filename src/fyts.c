@@ -66,8 +66,30 @@ typedef struct {
 	size_t cap;
 } StringSet;
 
+typedef struct RegexCacheEntry {
+	char *pattern;
+	size_t pattern_len;
+	regex_t regex;
+	struct RegexCacheEntry *next;
+} RegexCacheEntry;
+
 struct fyts_ctx {
 	struct fyts_config config;
+	const LanguageSpec *language;
+	TSParser *parser;
+	TSTree *tree;
+	TSQuery *query;
+	char *query_path;
+	char *styling_path;
+	char *styling_name;
+	char *parsed_source;
+	size_t parsed_source_len;
+	size_t changed_start;
+	Span *spans;
+	size_t span_count;
+	size_t span_capacity;
+	size_t highlighted_source_len;
+	RegexCacheEntry *regexes;
 	Styling styling;
 	enum fyts_background_mode terminal_background;
 	enum fyts_background_mode style_background;
@@ -85,10 +107,105 @@ static const char *RESET = "\033[0m";
 
 static int config_color_enabled(const struct fyts_config *config);
 static fy_generic styling_frame_background(Styling *styling, enum fyts_background_mode background);
+static char *read_file(const char *path, size_t *len_out);
+static char *copy_string(const char *text);
 
 #include "language_catalogue.inc"
 #include "embedded_catalogue.inc"
 #include "embedded_styling.inc"
+
+static TSQuery *ctx_query(struct fyts_ctx *ctx)
+{
+	const char *path;
+	char *source = NULL;
+	size_t source_len = 0;
+	uint32_t error_offset;
+	TSQueryError error_type;
+
+	if (ctx->query)
+		return ctx->query;
+	path = ctx->query_path;
+	source = read_file(path, &source_len);
+	if (!source)
+		return NULL;
+	if (source_len > UINT32_MAX) {
+		fprintf(stderr, "query %s is too large for tree-sitter\n", path);
+		goto done;
+	}
+	ctx->query = ts_query_new(ctx->language->language(), source, (uint32_t)source_len,
+				  &error_offset, &error_type);
+	if (!ctx->query)
+		fprintf(stderr, "invalid query %s at byte %u\n", path, error_offset);
+done:
+	free(source);
+	return ctx->query;
+}
+
+static TSTree *ctx_parse(struct fyts_ctx *ctx, const char *source, uint32_t source_len)
+{
+	TSInputEdit edit;
+	TSPoint end_point;
+	TSTree *tree;
+	char *copy;
+	size_t i;
+	int same;
+
+	same = ctx->tree && ctx->parsed_source_len == source_len &&
+	       (!source_len || !memcmp(ctx->parsed_source, source, source_len));
+	if (same) {
+		ctx->changed_start = source_len;
+		return ctx->tree;
+	}
+	copy = malloc((size_t)source_len + 1);
+	if (!copy)
+		return NULL;
+	if (source_len)
+		memcpy(copy, source, source_len);
+	copy[source_len] = '\0';
+	if (ctx->tree && ctx->parsed_source_len < source_len &&
+	    !memcmp(ctx->parsed_source, source, ctx->parsed_source_len)) {
+		ctx->changed_start = ctx->parsed_source_len;
+		while (ctx->changed_start > 0 && source[ctx->changed_start - 1] != '\n')
+			ctx->changed_start--;
+		end_point = ts_node_end_point(ts_tree_root_node(ctx->tree));
+		memset(&edit, 0, sizeof(edit));
+		edit.start_byte = (uint32_t)ctx->parsed_source_len;
+		edit.old_end_byte = (uint32_t)ctx->parsed_source_len;
+		edit.new_end_byte = source_len;
+		edit.start_point = end_point;
+		edit.old_end_point = end_point;
+		edit.new_end_point = end_point;
+		for (i = ctx->parsed_source_len; i < source_len; i++) {
+			if (source[i] == '\n') {
+				edit.new_end_point.row++;
+				edit.new_end_point.column = 0;
+			} else {
+				edit.new_end_point.column++;
+			}
+		}
+		ts_tree_edit(ctx->tree, &edit);
+		tree = ts_parser_parse_string(ctx->parser, ctx->tree, source, source_len);
+	} else {
+		ctx->changed_start = 0;
+		tree = ts_parser_parse_string(ctx->parser, NULL, source, source_len);
+	}
+	if (!tree) {
+		free(copy);
+		ts_tree_delete(ctx->tree);
+		ctx->tree = NULL;
+		free(ctx->parsed_source);
+		ctx->parsed_source = NULL;
+		ctx->parsed_source_len = 0;
+		ctx->changed_start = 0;
+		return NULL;
+	}
+	ts_tree_delete(ctx->tree);
+	ctx->tree = tree;
+	free(ctx->parsed_source);
+	ctx->parsed_source = copy;
+	ctx->parsed_source_len = source_len;
+	return tree;
+}
 
 int fyts_write_file(const void *data, size_t len, void *user)
 {
@@ -1280,16 +1397,45 @@ static const TSQueryCapture *match_capture_for_id(const TSQueryMatch *match, uin
 	return NULL;
 }
 
-static int predicate_capture_matches_regex(const char *source, const TSQueryCapture *capture,
-					   const char *pattern, uint32_t pattern_len)
+static regex_t *ctx_regex(struct fyts_ctx *ctx, const char *pattern, uint32_t pattern_len)
+{
+	RegexCacheEntry *entry;
+
+	for (entry = ctx->regexes; entry; entry = entry->next) {
+		if (entry->pattern_len == pattern_len &&
+		    !memcmp(entry->pattern, pattern, pattern_len))
+			return &entry->regex;
+	}
+	entry = calloc(1, sizeof(*entry));
+	if (!entry)
+		return NULL;
+	entry->pattern = malloc((size_t)pattern_len + 1);
+	if (!entry->pattern) {
+		free(entry);
+		return NULL;
+	}
+	memcpy(entry->pattern, pattern, pattern_len);
+	entry->pattern[pattern_len] = '\0';
+	entry->pattern_len = pattern_len;
+	if (regcomp(&entry->regex, entry->pattern, REG_EXTENDED | REG_NOSUB) != 0) {
+		free(entry->pattern);
+		free(entry);
+		return NULL;
+	}
+	entry->next = ctx->regexes;
+	ctx->regexes = entry;
+	return &entry->regex;
+}
+
+static int predicate_capture_matches_regex(struct fyts_ctx *ctx, const char *source,
+					   const TSQueryCapture *capture, const char *pattern,
+					   uint32_t pattern_len)
 {
 	uint32_t start;
 	uint32_t end;
 	size_t len;
 	char *text;
-	char *regex_text;
-	regex_t regex;
-	int regex_compiled = 0;
+	regex_t *regex;
 	int matched = -1;
 
 	if (!capture)
@@ -1300,32 +1446,26 @@ static int predicate_capture_matches_regex(const char *source, const TSQueryCapt
 		return 0;
 	len = end - start;
 	text = (char *)malloc(len + 1);
-	regex_text = (char *)malloc((size_t)pattern_len + 1);
-	if (!text || !regex_text) {
+	if (!text) {
 		fprintf(stderr, "out of memory evaluating query predicate\n");
 		goto done;
 	}
 	memcpy(text, source + start, len);
 	text[len] = '\0';
-	memcpy(regex_text, pattern, pattern_len);
-	regex_text[pattern_len] = '\0';
-	if (regcomp(&regex, regex_text, REG_EXTENDED | REG_NOSUB) != 0) {
+	regex = ctx_regex(ctx, pattern, pattern_len);
+	if (!regex) {
 		fprintf(stderr, "failed to compile query predicate regex\n");
 		goto done;
 	}
-	regex_compiled = 1;
-	matched = regexec(&regex, text, 0, NULL, 0) == 0;
+	matched = regexec(regex, text, 0, NULL, 0) == 0;
 
 done:
-	if (regex_compiled)
-		regfree(&regex);
 	free(text);
-	free(regex_text);
 	return matched;
 }
 
-static int query_match_predicates_ok(TSQuery *query, const TSQueryMatch *match, const char *source,
-				     int *ok_out)
+static int query_match_predicates_ok(struct fyts_ctx *ctx, TSQuery *query,
+				     const TSQueryMatch *match, const char *source, int *ok_out)
 {
 	const TSQueryPredicateStep *steps;
 	const TSQueryPredicateStep *step;
@@ -1376,7 +1516,8 @@ static int query_match_predicates_ok(TSQuery *query, const TSQueryMatch *match, 
 			return 0;
 		pattern = ts_query_string_value_for_id(query, step->value_id, &pattern_len);
 		step++;
-		matched = predicate_capture_matches_regex(source, capture, pattern, pattern_len);
+		matched =
+		    predicate_capture_matches_regex(ctx, source, capture, pattern, pattern_len);
 		if (matched < 0)
 			return -1;
 		if (negate ? matched : !matched)
@@ -1394,22 +1535,14 @@ static int query_match_predicates_ok(TSQuery *query, const TSQueryMatch *match, 
 
 static int render_source(struct fyts_ctx *ctx, const char *source, size_t source_len, Buffer *out)
 {
-	const LanguageSpec *spec;
-	char *query_source = NULL;
-	char *query_path = NULL;
-	size_t query_len = 0;
 	uint32_t ts_source_len;
-	uint32_t ts_query_len;
-	TSParser *parser = NULL;
-	TSTree *tree = NULL;
+	TSTree *tree;
 	TSQuery *query = NULL;
 	TSQueryCursor *cursor = NULL;
 	TSNode root;
-	TSQueryError error_type;
-	uint32_t error_offset;
-	Span *spans = NULL;
-	size_t span_count = 0;
-	size_t span_capacity = 0;
+	size_t range_start;
+	size_t i;
+	size_t kept;
 	int ok = 0;
 	TSQueryMatch match;
 	uint32_t capture_index;
@@ -1428,54 +1561,21 @@ static int render_source(struct fyts_ctx *ctx, const char *source, size_t source
 	int predicates_ok;
 	int predicate_rc;
 
-	spec = find_language(ctx->config.lang);
-	if (!spec) {
-		fprintf(stderr, "unknown language: %s\n", ctx->config.lang);
-		goto done;
-	}
 	if (source_len > UINT32_MAX) {
 		fprintf(stderr, "source is too large for tree-sitter\n");
 		goto done;
 	}
 	ts_source_len = (uint32_t)source_len;
 
-	parser = ts_parser_new();
-	if (!parser || !ts_parser_set_language(parser, spec->language())) {
-		fprintf(stderr, "failed to initialize parser for %s\n", spec->name);
-		goto done;
-	}
-
-	tree = ts_parser_parse_string(parser, NULL, source, ts_source_len);
+	tree = ctx_parse(ctx, source, ts_source_len);
 	if (!tree) {
 		fprintf(stderr, "failed to parse source\n");
 		goto done;
 	}
 
-	if (ctx->config.query_path) {
-		query_path = copy_string(ctx->config.query_path);
-	} else {
-		query_path = copy_string(spec->query_path);
-	}
-	if (!query_path) {
-		fprintf(stderr, "out of memory building query path\n");
+	query = ctx_query(ctx);
+	if (!query)
 		goto done;
-	}
-
-	query_source = read_file(query_path, &query_len);
-	if (!query_source)
-		goto done;
-	if (query_len > UINT32_MAX) {
-		fprintf(stderr, "query %s is too large for tree-sitter\n", query_path);
-		goto done;
-	}
-	ts_query_len = (uint32_t)query_len;
-
-	query =
-	    ts_query_new(spec->language(), query_source, ts_query_len, &error_offset, &error_type);
-	if (!query) {
-		fprintf(stderr, "invalid query %s at byte %u\n", query_path, error_offset);
-		goto done;
-	}
 
 	cursor = ts_query_cursor_new();
 	if (!cursor) {
@@ -1487,11 +1587,28 @@ static int render_source(struct fyts_ctx *ctx, const char *source, size_t source
 	use_color = config_color_enabled(&ctx->config);
 	use_debug = ctx->config.debug_captures;
 	use_unmatched_report = ctx->config.report_unmatched_captures;
+	range_start = ctx->language->progressive_safe && !use_unmatched_report &&
+			      ctx->highlighted_source_len <= source_len &&
+			      ctx->changed_start <= ctx->highlighted_source_len
+			  ? ctx->changed_start
+			  : 0;
+	if (!range_start) {
+		ctx->span_count = 0;
+	} else {
+		for (i = 0, kept = 0; i < ctx->span_count; i++) {
+			if (ctx->spans[i].end <= range_start)
+				ctx->spans[kept++] = ctx->spans[i];
+		}
+		ctx->span_count = kept;
+	}
+	if (range_start < source_len)
+		ts_query_cursor_set_byte_range(cursor, (uint32_t)range_start, ts_source_len);
 
-	for (;;) {
+	for (; range_start < source_len;) {
 		if (!ts_query_cursor_next_capture(cursor, &match, &capture_index))
 			break;
-		predicate_rc = query_match_predicates_ok(query, &match, source, &predicates_ok);
+		predicate_rc =
+		    query_match_predicates_ok(ctx, query, &match, source, &predicates_ok);
 		if (predicate_rc < 0)
 			goto done;
 		if (!predicates_ok)
@@ -1526,7 +1643,8 @@ static int render_source(struct fyts_ctx *ctx, const char *source, size_t source
 				span.capture = use_debug ? capture_name : NULL;
 				span.capture_len = use_debug ? name_len : 0;
 				span.priority = priority;
-				if (!push_span(&spans, &span_count, &span_capacity, span)) {
+				if (!push_span(&ctx->spans, &ctx->span_count, &ctx->span_capacity,
+					       span)) {
 					fprintf(stderr,
 						"out of memory collecting highlight spans\n");
 					goto done;
@@ -1537,23 +1655,16 @@ static int render_source(struct fyts_ctx *ctx, const char *source, size_t source
 
 	if (use_unmatched_report)
 		ok = string_set_emit(&unmatched, out);
-	else
-		ok = emit_highlighted(out, source, ts_source_len, spans, span_count,
+	else {
+		ctx->highlighted_source_len = source_len;
+		ok = emit_highlighted(out, source, ts_source_len, ctx->spans, ctx->span_count,
 				      render_content_width(&ctx->config), ctx->span_reset, ctx);
+	}
 
 done:
 	string_set_cleanup(&unmatched);
-	free(spans);
 	if (cursor)
 		ts_query_cursor_delete(cursor);
-	if (query)
-		ts_query_delete(query);
-	if (tree)
-		ts_tree_delete(tree);
-	if (parser)
-		ts_parser_delete(parser);
-	free(query_path);
-	free(query_source);
 	return ok;
 }
 
@@ -1669,6 +1780,23 @@ struct fyts_ctx *fyts_ctx_create(const struct fyts_config *config)
 	if (!ctx)
 		return NULL;
 	ctx->config = *config;
+	ctx->language = find_language(config->lang);
+	if (!ctx->language) {
+		fprintf(stderr, "unknown language: %s\n", config->lang);
+		goto fail;
+	}
+	ctx->query_path =
+	    copy_string(config->query_path ? config->query_path : ctx->language->query_path);
+	ctx->styling_path = config->styling_path ? copy_string(config->styling_path) : NULL;
+	ctx->styling_name = config->styling_name ? copy_string(config->styling_name) : NULL;
+	if (!ctx->query_path || (config->styling_path && !ctx->styling_path) ||
+	    (config->styling_name && !ctx->styling_name))
+		goto fail;
+	ctx->parser = ts_parser_new();
+	if (!ctx->parser || !ts_parser_set_language(ctx->parser, ctx->language->language())) {
+		fprintf(stderr, "failed to initialize parser for %s\n", ctx->language->name);
+		goto fail;
+	}
 	if (!ctx->config.write) {
 		ctx->config.write = fyts_write_file;
 		ctx->config.write_user = stdout;
@@ -1696,8 +1824,7 @@ struct fyts_ctx *fyts_ctx_create(const struct fyts_config *config)
 			if (!styling_load_file(&ctx->styling, ctx->config.styling_path))
 				goto fail;
 		} else if (ctx->config.styling_name && *ctx->config.styling_name) {
-			if (!styling_load_builtin(&ctx->styling,
-						  ctx->config.styling_name))
+			if (!styling_load_builtin(&ctx->styling, ctx->config.styling_name))
 				goto fail;
 		} else if (!styling_load_embedded(&ctx->styling)) {
 			goto fail;
@@ -1714,34 +1841,110 @@ fail:
 
 void fyts_ctx_destroy(struct fyts_ctx *ctx)
 {
+	RegexCacheEntry *regex;
+	RegexCacheEntry *next;
+
 	if (!ctx)
 		return;
 	styling_cleanup(&ctx->styling);
+	if (ctx->query)
+		ts_query_delete(ctx->query);
+	if (ctx->tree)
+		ts_tree_delete(ctx->tree);
+	if (ctx->parser)
+		ts_parser_delete(ctx->parser);
+	free(ctx->parsed_source);
+	free(ctx->query_path);
+	free(ctx->styling_path);
+	free(ctx->styling_name);
+	free(ctx->spans);
+	for (regex = ctx->regexes; regex; regex = next) {
+		next = regex->next;
+		regfree(&regex->regex);
+		free(regex->pattern);
+		free(regex);
+	}
 	free(ctx->source);
 	free(ctx->last_output);
 	free(ctx);
 }
 
+static int same_string(const char *a, const char *b)
+{
+	if (!a || !b)
+		return a == b;
+	return !strcmp(a, b);
+}
+
+int fyts_ctx_configure(struct fyts_ctx *ctx, const struct fyts_config *config)
+{
+	const LanguageSpec *language;
+	const char *query_path;
+
+	if (!ctx || !config || !config->lang)
+		return -1;
+	language = find_language(config->lang);
+	if (!language)
+		return -1;
+	query_path = config->query_path ? config->query_path : language->query_path;
+	if (language != ctx->language || !same_string(query_path, ctx->query_path) ||
+	    !same_string(config->styling_path, ctx->styling_path) ||
+	    !same_string(config->styling_name, ctx->styling_name) ||
+	    config->styling.v != ctx->config.styling.v ||
+	    config->color_mode != ctx->config.color_mode ||
+	    config->background_mode != ctx->config.background_mode ||
+	    config->reverse != ctx->config.reverse ||
+	    config->debug_captures != ctx->config.debug_captures ||
+	    config->report_unmatched_captures != ctx->config.report_unmatched_captures)
+		return -1;
+	ctx->config = *config;
+	return 0;
+}
+
 int fyts_highlight_source(const struct fyts_config *config, const char *source, size_t len)
 {
 	struct fyts_ctx *ctx;
-	Buffer out = {0};
-	Buffer framed = {0};
+	char *out = NULL;
+	size_t out_len = 0;
 	int rc = -1;
 
 	ctx = fyts_ctx_create(config);
 	if (!ctx)
 		return -1;
-	if (!render_source(ctx, source, len, &out))
+	if (fyts_ctx_highlight_source(ctx, source, len, &out, &out_len))
 		goto done;
-	if (apply_frame(ctx, &out, &framed))
-		goto done;
-	rc = ctx->config.write(framed.data, framed.len, ctx->config.write_user);
+	rc = ctx->config.write(out, out_len, ctx->config.write_user);
 
 done:
-	buffer_cleanup(&framed);
-	buffer_cleanup(&out);
+	free(out);
 	fyts_ctx_destroy(ctx);
+	return rc;
+}
+
+int fyts_ctx_highlight_source(struct fyts_ctx *ctx, const char *source, size_t len, char **out,
+			      size_t *out_len)
+{
+	Buffer rendered = {0};
+	Buffer framed = {0};
+	int rc = -1;
+
+	if (out)
+		*out = NULL;
+	if (out_len)
+		*out_len = 0;
+	if (!ctx || (!source && len) || !out || !out_len)
+		return -1;
+	if (!render_source(ctx, source, len, &rendered))
+		goto done;
+	if (apply_frame(ctx, &rendered, &framed))
+		goto done;
+	*out = framed.data;
+	*out_len = framed.len;
+	framed.data = NULL;
+	rc = 0;
+done:
+	buffer_cleanup(&framed);
+	buffer_cleanup(&rendered);
 	return rc;
 }
 

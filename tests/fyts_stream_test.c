@@ -1,5 +1,6 @@
 #include <string.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include <fyts/fyts.h>
 
 struct output {
@@ -48,17 +49,40 @@ static int has_text(const char *data, size_t len, const char *needle)
 	return 0;
 }
 
+static int discard_output(const void *data, size_t len, void *user)
+{
+	(void)data;
+	(void)len;
+	(void)user;
+	return 0;
+}
+
 int main(void)
 {
 	struct output out = {0};
 	struct fyts_config config = {0};
-	struct fyts_ctx *ctx;
+	struct fyts_ctx *ctx = NULL;
+	char query_path[] = "/tmp/fyts-query-XXXXXX";
+	const char query[] = "(primitive_type) @type\n";
 	char *chunk = NULL;
+	char *rendered = NULL;
 	size_t chunk_len = 0;
+	size_t rendered_len = 0;
+	int query_fd = -1;
 	int rc = 1;
 
 	config.lang = "c";
 	config.color_mode = FYTS_COLOR_ON;
+	config.write = discard_output;
+	query_fd = mkstemp(query_path);
+	if (query_fd < 0)
+		goto done;
+	if (write(query_fd, query, sizeof(query) - 1) != (ssize_t)(sizeof(query) - 1))
+		goto done;
+	if (close(query_fd))
+		goto done;
+	query_fd = -1;
+	config.query_path = query_path;
 
 	ctx = fyts_ctx_create(&config);
 	if (!ctx)
@@ -74,6 +98,8 @@ int main(void)
 	if (append_output(&out, &chunk, chunk_len))
 		goto done;
 	if (!out.data || !has_text(out.data, out.len, "main"))
+		goto done;
+	if (unlink(query_path))
 		goto done;
 	if (fyts_ctx_feed(ctx, "  return 0;\n", 12, &chunk, &chunk_len))
 		goto done;
@@ -95,11 +121,19 @@ int main(void)
 		goto done;
 	if (!has_text(out.data, out.len, "\033["))
 		goto done;
+	if (fyts_ctx_highlight_source(ctx, "int cached;\n", 12, &rendered, &rendered_len))
+		goto done;
+	if (!has_text(rendered, rendered_len, "cached"))
+		goto done;
 	rc = 0;
 
 done:
+	if (query_fd >= 0)
+		close(query_fd);
+	unlink(query_path);
 	fyts_ctx_destroy(ctx);
 	free(chunk);
+	free(rendered);
 	free(out.data);
 	return rc;
 }

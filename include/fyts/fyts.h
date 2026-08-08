@@ -57,8 +57,15 @@ FYTS_EXPORT int fyts_write_file(const void *data, size_t len, void *user);
 
 FYTS_EXPORT struct fyts_ctx *fyts_ctx_create(const struct fyts_config *config);
 FYTS_EXPORT void fyts_ctx_destroy(struct fyts_ctx *ctx);
+/* Update per-render framing/output fields while retaining compatible parsed
+ * language, query and styling state. Returns -1 when a new context is needed. */
+FYTS_EXPORT int fyts_ctx_configure(struct fyts_ctx *ctx, const struct fyts_config *config);
 
 FYTS_EXPORT int fyts_highlight_source(const struct fyts_config *config, const char *source, size_t len);
+/* Render a complete source buffer through a retained context. The returned
+ * buffer is heap allocated and must be released with free(). */
+FYTS_EXPORT int fyts_ctx_highlight_source(struct fyts_ctx *ctx, const char *source, size_t len,
+					  char **out, size_t *out_len);
 FYTS_EXPORT int fyts_ctx_feed(struct fyts_ctx *ctx, const char *data, size_t len, char **out, size_t *out_len);
 FYTS_EXPORT int fyts_ctx_finish(struct fyts_ctx *ctx, char **out, size_t *out_len);
 
