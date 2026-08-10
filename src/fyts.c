@@ -14,6 +14,7 @@
 
 typedef struct {
 	const char *name;
+	const char *aliases;
 	const TSLanguage *(*language)(void);
 	const char *query_path;
 	int progressive_safe;
@@ -465,13 +466,27 @@ static char *copy_string(const char *text)
 
 static const LanguageSpec *find_language(const char *name)
 {
+	const char *alias;
+	const char *end;
 	size_t i;
+	size_t len;
+	size_t name_len;
 
 	if (!name || !*name)
 		return NULL;
+	name_len = strlen(name);
 	for (i = 0; i < sizeof(LANGUAGES) / sizeof(LANGUAGES[0]); i++) {
-		if (strcmp(LANGUAGES[i].name, name) == 0) {
+		if (strcmp(LANGUAGES[i].name, name) == 0)
 			return &LANGUAGES[i];
+		alias = LANGUAGES[i].aliases;
+		while (alias && *alias && strcmp(alias, "-")) {
+			end = strchr(alias, ',');
+			len = end ? (size_t)(end - alias) : strlen(alias);
+			if (name_len == len && !memcmp(alias, name, len))
+				return &LANGUAGES[i];
+			if (!end)
+				break;
+			alias = end + 1;
 		}
 	}
 	return NULL;

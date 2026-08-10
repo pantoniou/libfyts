@@ -187,6 +187,10 @@ source layout overrides:
   extensions: [ ".c", ".C" ]
 ```
 
+`aliases: [ sh ]` lists alternate language names accepted by `--lang` and the
+library API. The catalogue name remains the canonical name in language
+listings.
+
 Built-in catalogues:
 
 - `minimal.yaml`: small smoke-test set
