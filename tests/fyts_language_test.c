@@ -10,10 +10,13 @@ int main(void)
 		return 1;
 	if (!fyts_language_supported("c++"))
 		return 1;
+#ifndef FYTS_TEST_MINIMAL_CATALOGUE
+	/* csharp/javascript are not part of the minimal catalogue */
 	if (!fyts_language_supported("c#"))
 		return 1;
 	if (!fyts_language_supported("jsx"))
 		return 1;
+#endif
 	if (!fyts_language_supported("yml"))
 		return 1;
 	if (fyts_language_supported("not-a-language"))
