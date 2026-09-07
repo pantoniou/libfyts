@@ -170,6 +170,7 @@ set(TS_LANGUAGE_ENTRIES)
 set(TS_LANGUAGE_QUERIES)
 set(TS_HAVE_MAKE_LANGUAGE OFF)
 set(FYTS_C_FLAGS)
+set(FYTS_PREFIX_MAP_FLAGS)
 set(ASAN_C_FLAGS)
 set(HAVE_ASAN 0)
 
@@ -194,6 +195,19 @@ message(STATUS "HAVE_ASAN: ${HAVE_ASAN}")
 
 if(NOT MSVC)
   list(APPEND FYTS_C_FLAGS -Wall -Wsign-compare)
+  # __FILE__ names the machine that built the library: the grammars and
+  # Tree-sitter assert, so their source paths reach the binary. Map them to
+  # the name of the project they came from.
+  check_c_compiler_flag(-ffile-prefix-map=/x=y FYTS_COMPILER_SUPPORTS_FILE_PREFIX_MAP)
+  if(FYTS_COMPILER_SUPPORTS_FILE_PREFIX_MAP)
+    list(APPEND FYTS_PREFIX_MAP_FLAGS
+      "-ffile-prefix-map=${CMAKE_CURRENT_BINARY_DIR}=libfyts"
+      "-ffile-prefix-map=${CMAKE_CURRENT_SOURCE_DIR}=libfyts")
+    if(FETCHCONTENT_BASE_DIR)
+      list(APPEND FYTS_PREFIX_MAP_FLAGS
+        "-ffile-prefix-map=${FETCHCONTENT_BASE_DIR}=libfyts")
+    endif()
+  endif()
   if(CMAKE_C_COMPILER_ID MATCHES "GNU|Clang")
     list(APPEND FYTS_C_FLAGS -Wextra)
   endif()
@@ -616,6 +630,7 @@ target_include_directories(tree-sitter PUBLIC
   "${tree-sitter_SOURCE_DIR}/lib/include"
   "${tree-sitter_SOURCE_DIR}/lib/src"
 )
+target_compile_options(tree-sitter PRIVATE ${FYTS_PREFIX_MAP_FLAGS})
 if(HAVE_ASAN)
   target_compile_options(tree-sitter PRIVATE ${ASAN_C_FLAGS})
 endif()
@@ -633,6 +648,7 @@ set_target_properties(fyts PROPERTIES
 )
 add_library(libfyts::fyts ALIAS fyts)
 set_source_files_properties(src/fyts.c PROPERTIES COMPILE_OPTIONS "${FYTS_C_FLAGS}")
+target_compile_options(fyts PRIVATE ${FYTS_PREFIX_MAP_FLAGS})
 if(HAVE_ASAN)
   target_compile_options(fyts PRIVATE ${ASAN_C_FLAGS})
   if(BUILD_SHARED_LIBS)
@@ -677,6 +693,7 @@ set_target_properties(fyts_static PROPERTIES
   POSITION_INDEPENDENT_CODE ON
 )
 set_source_files_properties(src/fyts.c PROPERTIES COMPILE_OPTIONS "${FYTS_C_FLAGS}")
+target_compile_options(fyts_static PRIVATE ${FYTS_PREFIX_MAP_FLAGS})
 if(HAVE_ASAN)
   target_compile_options(fyts_static PRIVATE ${ASAN_C_FLAGS})
 endif()
