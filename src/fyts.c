@@ -17,7 +17,9 @@ typedef struct {
 	const char *name;
 	const char *aliases;
 	const TSLanguage *(*language)(void);
-	const char *query_path;
+	/* The highlight query, compiled into the library. */
+	const char *query;
+	size_t query_len;
 	int progressive_safe;
 } LanguageSpec;
 
@@ -111,6 +113,7 @@ static const char *RESET = "\033[0m";
 struct query_cache_entry;
 
 static int config_color_enabled(const struct fyts_config *config);
+static int same_string(const char *a, const char *b);
 static fy_generic styling_frame_background(Styling *styling, enum fyts_background_mode background);
 static char *read_file(const char *path, size_t *len_out);
 static char *copy_string(const char *text);
@@ -126,13 +129,14 @@ static char *copy_string(const char *text);
  * failed compile is cached too: a broken query is reported one time. Not
  * thread safe.
  *
- * The key holds the hash of the query text, not the name or the timestamp of
- * the file: a query file is a few kilobytes, so reading and hashing it costs
- * far less than the compile it saves, and content is the exact answer to
- * whether a compiled query still applies. Editing a query file thus takes
- * effect at once, and rewriting one with the same text costs nothing.
+ * The key holds the hash of the query text. A catalogue query is compiled
+ * into the library, so hashing it is a few microseconds against the compile
+ * it saves; an overriding query file is a few kilobytes, and content is the
+ * exact answer to whether a compiled query still applies. Editing such a file
+ * thus takes effect at once, and rewriting it with the same text costs
+ * nothing.
  *
- * A changed file retires its entry: the entry leaves the cache so no new
+ * Changed text retires its entry: the entry leaves the cache so no new
  * context borrows it, and the query goes with the last context that does. The
  * cache holds one entry per query in use, and an entry lives no longer than
  * its last borrower or the process.
@@ -200,33 +204,59 @@ static TSQuery *query_compile(const LanguageSpec *language, const char *path, co
 	return query;
 }
 
+/*
+ * The query text and the name to report it by. A context with no query path
+ * uses the query of its language, which the library carries; a path overrides
+ * it and is read. @ownedp says whether the caller frees the text.
+ */
+static const char *ctx_query_source(struct fyts_ctx *ctx, size_t *lenp, const char **namep,
+				    int *ownedp)
+{
+	char *source;
+
+	*ownedp = 0;
+	if (!ctx->query_path) {
+		*namep = ctx->language->name;
+		*lenp = ctx->language->query_len;
+		return ctx->language->query;
+	}
+	*namep = ctx->query_path;
+	source = read_file(ctx->query_path, lenp);
+	if (!source)
+		return NULL;
+	*ownedp = 1;
+	return source;
+}
+
 static TSQuery *ctx_query(struct fyts_ctx *ctx)
 {
 	struct query_cache_entry **link;
 	struct query_cache_entry *entry;
 	const uint8_t *hash;
-	char *source;
+	const char *source;
+	const char *name;
 	size_t source_len = 0;
+	int owned;
 
 	/* The entry, not the query, says the lookup ran: a cached failure
 	 * holds no query and must not be looked up again. A context that
 	 * owns its query outright (no cache) is done too. */
 	if (ctx->query_entry || ctx->query)
 		return ctx->query;
-	source = read_file(ctx->query_path, &source_len);
+	source = ctx_query_source(ctx, &source_len, &name, &owned);
 	if (!source)
 		return NULL;
 	hash = query_hash(source, source_len);
 	if (!hash) {
 		/* Without a key there is no cache; compile for this context
 		 * alone, as an uncached build does. */
-		ctx->query = query_compile(ctx->language, ctx->query_path, source, source_len);
-		free(source);
-		return ctx->query;
+		ctx->query = query_compile(ctx->language, name, source, source_len);
+		goto done;
 	}
 	link = &query_cache;
 	while ((entry = *link) != NULL) {
-		if (entry->language != ctx->language || strcmp(entry->path, ctx->query_path)) {
+		if (entry->language != ctx->language ||
+		    !same_string(entry->path, ctx->query_path)) {
 			link = &entry->next;
 			continue;
 		}
@@ -234,8 +264,7 @@ static TSQuery *ctx_query(struct fyts_ctx *ctx)
 			entry->refs++;
 			ctx->query_entry = entry;
 			ctx->query = entry->query;
-			free(source);
-			return ctx->query;
+			goto done;
 		}
 		/* The text changed: retire the entry and compile it again. */
 		*link = entry->next;
@@ -244,25 +273,27 @@ static TSQuery *ctx_query(struct fyts_ctx *ctx)
 			query_cache_free(entry);
 	}
 	entry = (struct query_cache_entry *)calloc(1, sizeof(*entry));
-	if (!entry) {
-		free(source);
-		return NULL;
-	}
-	entry->path = copy_string(ctx->query_path);
-	if (!entry->path) {
-		free(entry);
-		free(source);
-		return NULL;
+	if (!entry)
+		goto done;
+	if (ctx->query_path) {
+		entry->path = copy_string(ctx->query_path);
+		if (!entry->path) {
+			free(entry);
+			goto done;
+		}
 	}
 	entry->language = ctx->language;
 	memcpy(entry->hash, hash, sizeof(entry->hash));
-	entry->query = query_compile(ctx->language, ctx->query_path, source, source_len);
+	entry->query = query_compile(ctx->language, name, source, source_len);
 	entry->refs = 1;
 	entry->next = query_cache;
 	query_cache = entry;
 	ctx->query_entry = entry;
 	ctx->query = entry->query;
-	free(source);
+
+done:
+	if (owned)
+		free((char *)source);
 	return ctx->query;
 }
 
@@ -1924,11 +1955,12 @@ struct fyts_ctx *fyts_ctx_create(const struct fyts_config *config)
 		fprintf(stderr, "unknown language: %s\n", config->lang);
 		goto fail;
 	}
-	ctx->query_path =
-	    copy_string(config->query_path ? config->query_path : ctx->language->query_path);
+	/* Only an override is stored: the language carries its own query. */
+	ctx->query_path = config->query_path ? copy_string(config->query_path) : NULL;
 	ctx->styling_path = config->styling_path ? copy_string(config->styling_path) : NULL;
 	ctx->styling_name = config->styling_name ? copy_string(config->styling_name) : NULL;
-	if (!ctx->query_path || (config->styling_path && !ctx->styling_path) ||
+	if ((config->query_path && !ctx->query_path) ||
+	    (config->styling_path && !ctx->styling_path) ||
 	    (config->styling_name && !ctx->styling_name))
 		goto fail;
 	ctx->parser = ts_parser_new();
@@ -2021,15 +2053,13 @@ static int same_string(const char *a, const char *b)
 int fyts_ctx_configure(struct fyts_ctx *ctx, const struct fyts_config *config)
 {
 	const LanguageSpec *language;
-	const char *query_path;
 
 	if (!ctx || !config || !config->lang)
 		return -1;
 	language = find_language(config->lang);
 	if (!language)
 		return -1;
-	query_path = config->query_path ? config->query_path : language->query_path;
-	if (language != ctx->language || !same_string(query_path, ctx->query_path) ||
+	if (language != ctx->language || !same_string(config->query_path, ctx->query_path) ||
 	    !same_string(config->styling_path, ctx->styling_path) ||
 	    !same_string(config->styling_name, ctx->styling_name) ||
 	    config->styling.v != ctx->config.styling.v ||

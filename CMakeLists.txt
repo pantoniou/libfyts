@@ -167,6 +167,7 @@ set(TS_GRAMMAR_SOURCES)
 set(TS_GRAMMAR_QUERY_ROOT_ARGS)
 set(TS_LANGUAGE_DECLS)
 set(TS_LANGUAGE_ENTRIES)
+set(TS_LANGUAGE_QUERIES)
 set(TS_HAVE_MAKE_LANGUAGE OFF)
 set(FYTS_C_FLAGS)
 set(ASAN_C_FLAGS)
@@ -519,14 +520,25 @@ foreach(row IN LISTS TS_LANGUAGE_ROWS)
     message(FATAL_ERROR "${language_name}: missing highlight query at ${grammar_dir}/queries/highlights.scm")
   endif()
 
+  # The highlight query is compiled into the library. A path is a property of
+  # the machine that built it: an installed library must not read one.
+  file(READ "${query_path}" TS_QUERY_HEX HEX)
+  string(REGEX REPLACE "([0-9a-fA-F][0-9a-fA-F])" "0x\\1," TS_QUERY_BYTES "${TS_QUERY_HEX}")
+  string(APPEND TS_LANGUAGE_QUERIES
+    "static const char QUERY_${language_symbol}[] = {\n"
+    "${TS_QUERY_BYTES}"
+    "\n};\n"
+  )
+
   string(APPEND TS_LANGUAGE_DECLS "const TSLanguage *${language_entrypoint}(void);\n")
-  string(APPEND TS_LANGUAGE_ENTRIES "    {\"${language_name}\", \"${language_aliases}\", ${language_entrypoint}, \"${query_path}\", ${language_progressive_safe_c}},\n")
+  string(APPEND TS_LANGUAGE_ENTRIES "    {\"${language_name}\", \"${language_aliases}\", ${language_entrypoint}, QUERY_${language_symbol}, sizeof(QUERY_${language_symbol}), ${language_progressive_safe_c}},\n")
 endforeach()
 
 set(TS_LANGUAGE_TABLE "${CMAKE_CURRENT_BINARY_DIR}/generated/language_catalogue.inc")
 file(WRITE "${TS_LANGUAGE_TABLE}"
   "/* Generated from ${TS_LANGUAGE_CATALOGUE}. */\n"
   "${TS_LANGUAGE_DECLS}\n"
+  "${TS_LANGUAGE_QUERIES}"
   "static const LanguageSpec LANGUAGES[] = {\n"
   "${TS_LANGUAGE_ENTRIES}"
   "};\n"
