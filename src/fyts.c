@@ -9,6 +9,7 @@
 #include <termios.h>
 #include <unistd.h>
 #include <fyts/fyts.h>
+#include <libfyaml/libfyaml-blake3.h>
 #include <libfyaml/libfyaml-generic.h>
 #include <tree_sitter/api.h>
 
@@ -80,6 +81,7 @@ struct fyts_ctx {
 	TSParser *parser;
 	TSTree *tree;
 	TSQuery *query;
+	struct query_cache_entry *query_entry;
 	char *query_path;
 	char *styling_path;
 	char *styling_name;
@@ -106,6 +108,8 @@ struct fyts_ctx {
 
 static const char *RESET = "\033[0m";
 
+struct query_cache_entry;
+
 static int config_color_enabled(const struct fyts_config *config);
 static fy_generic styling_frame_background(Styling *styling, enum fyts_background_mode background);
 static char *read_file(const char *path, size_t *len_out);
@@ -115,29 +119,149 @@ static char *copy_string(const char *text);
 #include "embedded_catalogue.inc"
 #include "embedded_styling.inc"
 
-static TSQuery *ctx_query(struct fyts_ctx *ctx)
+/*
+ * Compiling a query costs tens of milliseconds, and the result depends only
+ * on the language and the query text. A query is immutable once compiled, so
+ * every context that asks for the same one borrows it from this cache. A
+ * failed compile is cached too: a broken query is reported one time. Not
+ * thread safe.
+ *
+ * The key holds the hash of the query text, not the name or the timestamp of
+ * the file: a query file is a few kilobytes, so reading and hashing it costs
+ * far less than the compile it saves, and content is the exact answer to
+ * whether a compiled query still applies. Editing a query file thus takes
+ * effect at once, and rewriting one with the same text costs nothing.
+ *
+ * A changed file retires its entry: the entry leaves the cache so no new
+ * context borrows it, and the query goes with the last context that does. The
+ * cache holds one entry per query in use, and an entry lives no longer than
+ * its last borrower or the process.
+ */
+struct query_cache_entry {
+	const LanguageSpec *language;
+	char *path;
+	uint8_t hash[FY_BLAKE3_OUT_LEN];
+	TSQuery *query;
+	unsigned int refs;
+	int retired;
+	struct query_cache_entry *next;
+};
+
+static struct query_cache_entry *query_cache;
+static struct fy_blake3_hasher *query_hasher;
+
+static void query_cache_free(struct query_cache_entry *entry)
 {
-	const char *path;
-	char *source = NULL;
-	size_t source_len = 0;
+	if (entry->query)
+		ts_query_delete(entry->query);
+	free(entry->path);
+	free(entry);
+}
+
+/* Give up one borrow. A retired entry goes with its last one. */
+static void query_cache_release(struct query_cache_entry *entry)
+{
+	if (!entry)
+		return;
+	entry->refs--;
+	if (!entry->refs && entry->retired)
+		query_cache_free(entry);
+}
+
+/* The hasher is reusable and is kept for the process. */
+static const uint8_t *query_hash(const char *source, size_t source_len)
+{
+	struct fy_blake3_hasher_cfg cfg;
+
+	if (!query_hasher) {
+		memset(&cfg, 0, sizeof(cfg));
+		query_hasher = fy_blake3_hasher_create(&cfg);
+		if (!query_hasher)
+			return NULL;
+	}
+	return fy_blake3_hash(query_hasher, source, source_len);
+}
+
+static TSQuery *query_compile(const LanguageSpec *language, const char *path, const char *source,
+			      size_t source_len)
+{
 	uint32_t error_offset;
 	TSQueryError error_type;
+	TSQuery *query;
 
-	if (ctx->query)
-		return ctx->query;
-	path = ctx->query_path;
-	source = read_file(path, &source_len);
-	if (!source)
-		return NULL;
 	if (source_len > UINT32_MAX) {
 		fprintf(stderr, "query %s is too large for tree-sitter\n", path);
-		goto done;
+		return NULL;
 	}
-	ctx->query = ts_query_new(ctx->language->language(), source, (uint32_t)source_len,
-				  &error_offset, &error_type);
-	if (!ctx->query)
+	query = ts_query_new(language->language(), source, (uint32_t)source_len, &error_offset,
+			     &error_type);
+	if (!query)
 		fprintf(stderr, "invalid query %s at byte %u\n", path, error_offset);
-done:
+	return query;
+}
+
+static TSQuery *ctx_query(struct fyts_ctx *ctx)
+{
+	struct query_cache_entry **link;
+	struct query_cache_entry *entry;
+	const uint8_t *hash;
+	char *source;
+	size_t source_len = 0;
+
+	/* The entry, not the query, says the lookup ran: a cached failure
+	 * holds no query and must not be looked up again. A context that
+	 * owns its query outright (no cache) is done too. */
+	if (ctx->query_entry || ctx->query)
+		return ctx->query;
+	source = read_file(ctx->query_path, &source_len);
+	if (!source)
+		return NULL;
+	hash = query_hash(source, source_len);
+	if (!hash) {
+		/* Without a key there is no cache; compile for this context
+		 * alone, as an uncached build does. */
+		ctx->query = query_compile(ctx->language, ctx->query_path, source, source_len);
+		free(source);
+		return ctx->query;
+	}
+	link = &query_cache;
+	while ((entry = *link) != NULL) {
+		if (entry->language != ctx->language || strcmp(entry->path, ctx->query_path)) {
+			link = &entry->next;
+			continue;
+		}
+		if (!memcmp(entry->hash, hash, sizeof(entry->hash))) {
+			entry->refs++;
+			ctx->query_entry = entry;
+			ctx->query = entry->query;
+			free(source);
+			return ctx->query;
+		}
+		/* The text changed: retire the entry and compile it again. */
+		*link = entry->next;
+		entry->retired = 1;
+		if (!entry->refs)
+			query_cache_free(entry);
+	}
+	entry = (struct query_cache_entry *)calloc(1, sizeof(*entry));
+	if (!entry) {
+		free(source);
+		return NULL;
+	}
+	entry->path = copy_string(ctx->query_path);
+	if (!entry->path) {
+		free(entry);
+		free(source);
+		return NULL;
+	}
+	entry->language = ctx->language;
+	memcpy(entry->hash, hash, sizeof(entry->hash));
+	entry->query = query_compile(ctx->language, ctx->query_path, source, source_len);
+	entry->refs = 1;
+	entry->next = query_cache;
+	query_cache = entry;
+	ctx->query_entry = entry;
+	ctx->query = entry->query;
 	free(source);
 	return ctx->query;
 }
@@ -1862,7 +1986,10 @@ void fyts_ctx_destroy(struct fyts_ctx *ctx)
 	if (!ctx)
 		return;
 	styling_cleanup(&ctx->styling);
-	if (ctx->query)
+	/* A query is borrowed from the cache, unless there was no cache. */
+	if (ctx->query_entry)
+		query_cache_release(ctx->query_entry);
+	else if (ctx->query)
 		ts_query_delete(ctx->query);
 	if (ctx->tree)
 		ts_tree_delete(ctx->tree);
