@@ -13,6 +13,16 @@ if(HAVE_ASAN)
   target_link_options(fyts-stream-test PRIVATE ${ASAN_C_FLAGS})
 endif()
 
+add_executable(fyts-query-cache-test
+  tests/fyts_query_cache_test.c
+)
+set_source_files_properties(tests/fyts_query_cache_test.c PROPERTIES COMPILE_OPTIONS "${FYTS_C_FLAGS}")
+target_link_libraries(fyts-query-cache-test PRIVATE fyts)
+if(HAVE_ASAN)
+  target_compile_options(fyts-query-cache-test PRIVATE ${ASAN_C_FLAGS})
+  target_link_options(fyts-query-cache-test PRIVATE ${ASAN_C_FLAGS})
+endif()
+
 add_executable(fyts-generic-style-test
   tests/fyts_generic_style_test.c
 )
@@ -322,6 +332,10 @@ set_tests_properties(parse-only-fallback PROPERTIES
 
 add_test(NAME fyts-stream
   COMMAND "$<TARGET_FILE:fyts-stream-test>"
+)
+
+add_test(NAME fyts-query-cache
+  COMMAND "$<TARGET_FILE:fyts-query-cache-test>"
 )
 
 add_test(NAME fyts-generic-style
