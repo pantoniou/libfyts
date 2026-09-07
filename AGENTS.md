@@ -108,6 +108,13 @@ later lines can change earlier highlighting.
 CMake parses the catalogue with `yq`, fetches each grammar, and generates the
 language table plus the embedded catalogue.
 
+Every highlight query is compiled into the library at that point. An installed
+library reads no query file and needs no build tree: a path is a property of
+the machine that built it. `fyts_config.query_path` overrides a language's
+query with a file, which is the one query read at run time. For the same
+reason the build maps its source and binary roots out of `__FILE__`, so an
+assert in a grammar names `libfyts/...` rather than the build machine.
+
 Do not commit expanded grammar source trees. `vendor/grammars` is ignored and
 only exists as local scratch or as the input to regenerate packs. If using
 `TS_GRAMMAR_SOURCE_MODE=vendor`, each `vendor/grammars/<name>` tree must be
