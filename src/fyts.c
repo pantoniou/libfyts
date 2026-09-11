@@ -12,6 +12,9 @@
 #include <libfyaml/libfyaml-blake3.h>
 #include <libfyaml/libfyaml-generic.h>
 #include <tree_sitter/api.h>
+#ifdef FYTS_WITH_FYPALETTE
+#include <libfypalette.h>
+#endif
 
 typedef struct {
 	const char *name;
@@ -27,6 +30,8 @@ typedef struct {
 	uint32_t start;
 	uint32_t end;
 	fy_generic ansi;
+	/* Set in palette mode; the escape is read from it when emitted. */
+	const struct fypal_role *role;
 	const char *capture;
 	uint32_t capture_len;
 	int priority;
@@ -36,6 +41,7 @@ typedef struct StyleCacheEntry {
 	const char *capture;
 	size_t capture_len;
 	fy_generic ansi;
+	const struct fypal_role *role;
 	int priority;
 	struct StyleCacheEntry *next;
 } StyleCacheEntry;
@@ -96,6 +102,8 @@ struct fyts_ctx {
 	size_t highlighted_source_len;
 	RegexCacheEntry *regexes;
 	Styling styling;
+	/* Borrowed; spans and cache entries point at its roles. */
+	struct fypal_ctx *palette;
 	enum fyts_background_mode terminal_background;
 	enum fyts_background_mode style_background;
 	enum fyts_background_mode frame_background;
@@ -511,9 +519,15 @@ static int apply_frame(struct fyts_ctx *ctx, Buffer *in, Buffer *out)
 
 	/* Resolve the per-line frame background once (the cast result is only valid
 	 * within this frame, so it must not be returned or recomputed per line). */
-	if (have_reverse)
-		frame_bg =
-		    fy_cast(styling_frame_background(&ctx->styling, ctx->frame_background), "");
+	if (have_reverse) {
+#ifdef FYTS_WITH_FYPALETTE
+		if (ctx->palette)
+			frame_bg = fypal_ctx_on(ctx->palette, "code.block");
+		else
+#endif
+			frame_bg = fy_cast(
+			    styling_frame_background(&ctx->styling, ctx->frame_background), "");
+	}
 
 	/* In reverse (bubble) mode the prolog is drawn as its own framed line
 	 * (background + line prefix + text, extended to the end of the line), so a
@@ -689,7 +703,7 @@ done:
 	return ok;
 }
 
-static void styling_cleanup(Styling *styling)
+static void styling_cache_clear(Styling *styling)
 {
 	StyleCacheEntry *entry;
 	StyleCacheEntry *next;
@@ -705,6 +719,11 @@ static void styling_cleanup(Styling *styling)
 		}
 		styling->cache[i] = NULL;
 	}
+}
+
+static void styling_cleanup(Styling *styling)
+{
+	styling_cache_clear(styling);
 
 	if (styling->builder)
 		fy_generic_builder_destroy(styling->builder);
@@ -1148,9 +1167,49 @@ static fy_generic capture_color_uncached(Styling *styling, const char *name, int
 	return fy_invalid;
 }
 
-static fy_generic capture_color(Styling *styling, const char *name, size_t name_len,
-				const char *lookup_name, int *priority)
+#ifdef FYTS_WITH_FYPALETTE
+/* The role of a capture. A role query answers with the nearest defined
+ * ancestor, so the language query is taken only when the answer is a role of
+ * that language; otherwise the capture is asked for without the language. A
+ * more specific role has more components and takes priority. */
+static const struct fypal_role *capture_role_uncached(struct fyts_ctx *ctx, const char *name,
+						      int *priority)
 {
+	const struct fypal_role *role = NULL;
+	const char *p;
+	char query[256];
+	int prefix;
+	int n;
+
+	prefix = snprintf(query, sizeof(query), "code.%s.", ctx->language->name);
+	if (prefix > 0 && (size_t)prefix < sizeof(query)) {
+		n = snprintf(query + prefix, sizeof(query) - (size_t)prefix, "%s", name);
+		if (n >= 0 && (size_t)n < sizeof(query) - (size_t)prefix) {
+			role = fypal_ctx_role(ctx->palette, query);
+			if (role && strncmp(fypal_role_name(role), query, (size_t)prefix))
+				role = NULL;
+		}
+	}
+	if (!role) {
+		n = snprintf(query, sizeof(query), "code.%s", name);
+		if (n >= 0 && (size_t)n < sizeof(query))
+			role = fypal_ctx_role(ctx->palette, query);
+	}
+
+	*priority = 0;
+	for (p = role ? fypal_role_name(role) : ""; *p; p++) {
+		if (*p == '.')
+			(*priority)++;
+	}
+	return role;
+}
+#endif
+
+static fy_generic capture_color(struct fyts_ctx *ctx, const char *name, size_t name_len,
+				const char *lookup_name, int *priority,
+				const struct fypal_role **role)
+{
+	Styling *styling = &ctx->styling;
 	size_t count = sizeof(styling->cache) / sizeof(styling->cache[0]);
 	size_t index;
 	StyleCacheEntry *entry;
@@ -1161,11 +1220,19 @@ static fy_generic capture_color(Styling *styling, const char *name, size_t name_
 	for (entry = styling->cache[index]; entry; entry = entry->next) {
 		if (entry->capture_len == name_len && memcmp(entry->capture, name, name_len) == 0) {
 			*priority = entry->priority;
+			*role = entry->role;
 			return entry->ansi;
 		}
 	}
 
-	ansi = capture_color_uncached(styling, lookup_name, priority);
+	*role = NULL;
+#ifdef FYTS_WITH_FYPALETTE
+	if (ctx->palette) {
+		*role = capture_role_uncached(ctx, lookup_name, priority);
+		ansi = fy_invalid;
+	} else
+#endif
+		ansi = capture_color_uncached(styling, lookup_name, priority);
 	entry = (StyleCacheEntry *)calloc(1, sizeof(*entry));
 	capture = (char *)malloc(name_len);
 	if (!entry || !capture) {
@@ -1178,6 +1245,7 @@ static fy_generic capture_color(Styling *styling, const char *name, size_t name_
 	entry->capture = capture;
 	entry->capture_len = name_len;
 	entry->ansi = ansi;
+	entry->role = *role;
 	entry->priority = *priority;
 	entry->next = styling->cache[index];
 	styling->cache[index] = entry;
@@ -1202,7 +1270,8 @@ static int push_span(Span **spans, size_t *count, size_t *capacity, Span span)
 	Span *next;
 	size_t new_capacity;
 
-	if (span.start >= span.end || (!fy_generic_is_valid(span.ansi) && !span.capture))
+	if (span.start >= span.end ||
+	    (!fy_generic_is_valid(span.ansi) && !span.role && !span.capture))
 		return 1;
 	if (*count == *capacity) {
 		new_capacity = *capacity ? *capacity * 2 : 128;
@@ -1422,7 +1491,12 @@ static int emit_highlighted(Buffer *out, const char *source, uint32_t source_len
 			    buffer_write(out, ">", 1))
 				return 0;
 		} else {
-			ansi = fy_cast(contrast_ansi(ctx, span.ansi), "");
+#ifdef FYTS_WITH_FYPALETTE
+			if (span.role)
+				ansi = fypal_role_on(ctx->palette, span.role);
+			else
+#endif
+				ansi = fy_cast(contrast_ansi(ctx, span.ansi), "");
 			if (buffer_write(out, ansi, strlen(ansi)))
 				return 0;
 		}
@@ -1460,8 +1534,15 @@ static void fyts_ctx_update_span_reset(struct fyts_ctx *ctx)
 	if (!ctx->config.reverse)
 		return;
 
-	background_g = styling_frame_background(&ctx->styling, ctx->frame_background);
-	background = fy_cast(background_g, "");
+#ifdef FYTS_WITH_FYPALETTE
+	if (ctx->palette) {
+		background = fypal_ctx_on(ctx->palette, "code.block");
+	} else
+#endif
+	{
+		background_g = styling_frame_background(&ctx->styling, ctx->frame_background);
+		background = fy_cast(background_g, "");
+	}
 	if (!*background)
 		return;
 
@@ -1723,6 +1804,7 @@ static int render_source(struct fyts_ctx *ctx, const char *source, size_t source
 	char name[128];
 	uint32_t copy_len;
 	fy_generic ansi_value;
+	const struct fypal_role *role;
 	Span span;
 	int use_color;
 	int use_debug;
@@ -1736,6 +1818,11 @@ static int render_source(struct fyts_ctx *ctx, const char *source, size_t source
 		goto done;
 	}
 	ts_source_len = (uint32_t)source_len;
+#ifdef FYTS_WITH_FYPALETTE
+	/* The palette can change variant or capabilities between renders. */
+	if (ctx->palette)
+		fyts_ctx_update_span_reset(ctx);
+#endif
 
 	tree = ctx_parse(ctx, source, ts_source_len);
 	if (!tree) {
@@ -1793,12 +1880,13 @@ static int render_source(struct fyts_ctx *ctx, const char *source, size_t source
 			memcpy(name, capture_name, copy_len);
 			name[copy_len] = '\0';
 			priority = 0;
-			ansi_value = use_color || use_debug || use_unmatched_report
-					 ? capture_color(&ctx->styling, capture_name, name_len,
-							 name, &priority)
-					 : fy_invalid;
+			role = NULL;
+			ansi_value =
+			    use_color || use_debug || use_unmatched_report
+				? capture_color(ctx, capture_name, name_len, name, &priority, &role)
+				: fy_invalid;
 			if (use_unmatched_report) {
-				if (!fy_generic_is_valid(ansi_value) &&
+				if (!fy_generic_is_valid(ansi_value) && !role &&
 				    !string_set_add(&unmatched, capture_name, name_len)) {
 					fprintf(stderr,
 						"out of memory collecting unmatched captures\n");
@@ -1806,10 +1894,11 @@ static int render_source(struct fyts_ctx *ctx, const char *source, size_t source
 				}
 				continue;
 			}
-			if (fy_generic_is_valid(ansi_value)) {
+			if (fy_generic_is_valid(ansi_value) || role) {
 				span.start = ts_node_start_byte(capture.node);
 				span.end = ts_node_end_byte(capture.node);
 				span.ansi = ansi_value;
+				span.role = role;
 				span.capture = use_debug ? capture_name : NULL;
 				span.capture_len = use_debug ? name_len : 0;
 				span.priority = priority;
@@ -2071,6 +2160,25 @@ int fyts_ctx_configure(struct fyts_ctx *ctx, const struct fyts_config *config)
 		return -1;
 	ctx->config = *config;
 	return 0;
+}
+
+int fyts_ctx_set_palette(struct fyts_ctx *ctx, struct fypal_ctx *palette)
+{
+	if (!ctx)
+		return -1;
+#ifdef FYTS_WITH_FYPALETTE
+	if (ctx->palette == palette)
+		return 0;
+	/* Cached captures and retained spans name roles of the old palette. */
+	ctx->palette = palette;
+	styling_cache_clear(&ctx->styling);
+	ctx->span_count = 0;
+	ctx->highlighted_source_len = 0;
+	fyts_ctx_update_span_reset(ctx);
+	return 0;
+#else
+	return palette ? -1 : 0;
+#endif
 }
 
 int fyts_highlight_source(const struct fyts_config *config, const char *source, size_t len)

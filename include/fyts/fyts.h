@@ -61,6 +61,16 @@ FYTS_EXPORT void fyts_ctx_destroy(struct fyts_ctx *ctx);
  * language, query and styling state. Returns -1 when a new context is needed. */
 FYTS_EXPORT int fyts_ctx_configure(struct fyts_ctx *ctx, const struct fyts_config *config);
 
+struct fypal_ctx;
+
+/* Style captures through the roles of a libfypalette context in place of the
+ * styling. A capture takes the role code.<lang>.<capture>, else
+ * code.<capture>; each name resolves through its dotted ancestors. The frame
+ * background of reverse mode is the role code.block. The palette is borrowed
+ * and must outlive its use by the context; NULL returns to the styling.
+ * Returns -1 when the library is built without libfypalette. */
+FYTS_EXPORT int fyts_ctx_set_palette(struct fyts_ctx *ctx, struct fypal_ctx *palette);
+
 FYTS_EXPORT int fyts_highlight_source(const struct fyts_config *config, const char *source, size_t len);
 /* Render a complete source buffer through a retained context. The returned
  * buffer is heap allocated and must be released with free(). */

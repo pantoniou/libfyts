@@ -6,6 +6,11 @@ set(libfyts_VERSION "@PROJECT_VERSION@")
 
 find_dependency(libfyaml REQUIRED CONFIG)
 
+set(libfyts_HAVE_FYPALETTE @FYTS_HAVE_FYPALETTE@)
+if(libfyts_HAVE_FYPALETTE)
+  find_dependency(libfypalette CONFIG)
+endif()
+
 include("${CMAKE_CURRENT_LIST_DIR}/libfyts-targets.cmake")
 
 check_required_components(libfyts)

@@ -111,6 +111,24 @@ if(NOT TARGET libfyaml::libfyaml)
   )
 endif()
 
+# libfypalette is optional. With it, fyts_ctx_set_palette() styles captures
+# through the roles of a palette context; without it, the call reports that
+# the support is missing and the stylings work as before.
+set(FYTS_FYPALETTE "auto" CACHE STRING "Palette styling through libfypalette: auto, on or off")
+set_property(CACHE FYTS_FYPALETTE PROPERTY STRINGS auto on off)
+set(FYTS_HAVE_FYPALETTE OFF)
+if(NOT FYTS_FYPALETTE STREQUAL "off")
+  if(NOT TARGET libfypalette::libfypalette)
+    find_package(libfypalette QUIET CONFIG)
+  endif()
+  if(TARGET libfypalette::libfypalette)
+    set(FYTS_HAVE_FYPALETTE ON)
+  elseif(FYTS_FYPALETTE STREQUAL "on")
+    message(FATAL_ERROR "libfypalette not found and FYTS_FYPALETTE is on")
+  endif()
+endif()
+message(STATUS "libfyts: palette styling ${FYTS_HAVE_FYPALETTE}")
+
 set(TS_UPDATE_PACK_ARGS
   "${PYTHON3_EXECUTABLE}"
   "${CMAKE_CURRENT_SOURCE_DIR}/scripts/update-grammar-packs.py"
@@ -671,6 +689,10 @@ if(BUILD_SHARED_LIBS AND NOT APPLE AND NOT WIN32)
   target_link_options(fyts PRIVATE "LINKER:--version-script=${FYTS_VERSION_SCRIPT}")
 endif()
 target_link_libraries(fyts PUBLIC libfyaml::libfyaml)
+if(FYTS_HAVE_FYPALETTE)
+  target_compile_definitions(fyts PRIVATE FYTS_WITH_FYPALETTE=1)
+  target_link_libraries(fyts PRIVATE libfypalette::libfypalette)
+endif()
 if(BUILD_SHARED_LIBS)
   target_link_libraries(fyts PRIVATE tree-sitter)
 endif()
@@ -707,12 +729,20 @@ target_include_directories(fyts_static PRIVATE
   "${CMAKE_CURRENT_BINARY_DIR}/generated"
 )
 target_link_libraries(fyts_static PUBLIC libfyaml::libfyaml)
+if(FYTS_HAVE_FYPALETTE)
+  target_compile_definitions(fyts_static PRIVATE FYTS_WITH_FYPALETTE=1)
+  target_link_libraries(fyts_static PUBLIC libfypalette::libfypalette)
+endif()
 
 add_executable(fyts-highlight
   src/fyts_highlight.c
 )
 set_source_files_properties(src/fyts_highlight.c PROPERTIES COMPILE_OPTIONS "${FYTS_C_FLAGS}")
 target_link_libraries(fyts-highlight PRIVATE fyts)
+if(FYTS_HAVE_FYPALETTE)
+  target_compile_definitions(fyts-highlight PRIVATE FYTS_WITH_FYPALETTE=1)
+  target_link_libraries(fyts-highlight PRIVATE libfypalette::libfypalette)
+endif()
 if(HAVE_ASAN)
   target_compile_options(fyts-highlight PRIVATE ${ASAN_C_FLAGS})
   target_link_options(fyts-highlight PRIVATE ${ASAN_C_FLAGS})

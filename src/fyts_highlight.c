@@ -6,6 +6,9 @@
 #include <sys/ioctl.h>
 #include <unistd.h>
 #include <fyts/fyts.h>
+#ifdef FYTS_WITH_FYPALETTE
+#include <libfypalette.h>
+#endif
 
 static void usage(FILE *out)
 {
@@ -14,7 +17,7 @@ static void usage(FILE *out)
 		     "[-s|--styling file.yaml] [-w auto|0|columns] [--prolog text] "
 		     "[--epilog text] [--line-prefix text] [--line-suffix text] "
 		     "[--debug-captures] [--report-unmatched-captures] [--reverse] "
-		     "[--stream] <source>\n");
+		     "[--palette theme|file.yaml] [--stream] <source>\n");
 }
 
 static int parse_color_mode(const char *arg, enum fyts_color_mode *mode)
@@ -144,7 +147,73 @@ static int output_chunk(char **data, size_t len)
 	return rc;
 }
 
-static int stream_file(const char *path, const struct fyts_config *config)
+#ifdef FYTS_WITH_FYPALETTE
+/* A palette context for a built-in theme or a theme file, for the output and
+ * the background that the options select. */
+static struct fypal_ctx *palette_create(const char *theme, const struct fyts_config *config)
+{
+	struct fypal_caps caps;
+	struct fypal_ctx *palette;
+	enum fypal_variant variant;
+	int rc;
+
+	fypal_caps_detect(STDOUT_FILENO, &caps);
+	if (config->color_mode == FYTS_COLOR_ON && caps.depth == FYPAL_DEPTH_NONE) {
+		caps.depth = FYPAL_DEPTH_TRUECOLOR;
+		caps.attrs = FYPAL_ATTR_ALL & ~FYPAL_ATTR_UNDERCURL;
+	}
+	if (config->background_mode == FYTS_BACKGROUND_LIGHT)
+		variant = FYPAL_VARIANT_LIGHT;
+	else if (config->background_mode == FYTS_BACKGROUND_DARK)
+		variant = FYPAL_VARIANT_DARK;
+	else
+		variant = fypal_detect_variant(STDOUT_FILENO, NULL);
+
+	palette = fypal_ctx_create(&caps);
+	if (!palette) {
+		fprintf(stderr, "cannot create a palette context\n");
+		return NULL;
+	}
+	fypal_ctx_set_variant(palette, variant);
+	if (strchr(theme, '/') || strstr(theme, ".yaml"))
+		rc = fypal_ctx_load_file(palette, theme);
+	else
+		rc = fypal_ctx_load_builtin(palette, theme);
+	if (rc) {
+		fprintf(stderr, "%s\n", fypal_ctx_error(palette));
+		fypal_ctx_destroy(palette);
+		return NULL;
+	}
+	return palette;
+}
+#endif
+
+static int highlight_file(const char *source, size_t source_len, const struct fyts_config *config,
+			  struct fypal_ctx *palette)
+{
+	struct fyts_ctx *ctx;
+	char *output = NULL;
+	size_t output_len = 0;
+	int rc = 1;
+
+	if (!palette)
+		return fyts_highlight_source(config, source, source_len) ? 1 : 0;
+
+	ctx = fyts_ctx_create(config);
+	if (!ctx)
+		return 1;
+	if (!fyts_ctx_set_palette(ctx, palette) &&
+	    !fyts_ctx_highlight_source(ctx, source, source_len, &output, &output_len)) {
+		rc = output_buffer(output, output_len);
+		output = NULL;
+	}
+	free(output);
+	fyts_ctx_destroy(ctx);
+	return rc;
+}
+
+static int stream_file(const char *path, const struct fyts_config *config,
+		       struct fypal_ctx *palette)
 {
 	FILE *file;
 	struct fyts_ctx *ctx;
@@ -161,7 +230,7 @@ static int stream_file(const char *path, const struct fyts_config *config)
 	}
 
 	ctx = fyts_ctx_create(config);
-	if (!ctx)
+	if (!ctx || fyts_ctx_set_palette(ctx, palette))
 		goto done;
 
 	for (;;) {
@@ -206,6 +275,7 @@ int main(int argc, char **argv)
 		OPT_REVERSE,
 		OPT_DEBUG_CAPTURES,
 		OPT_REPORT_UNMATCHED_CAPTURES,
+		OPT_PALETTE,
 	};
 	static const struct option options[] = {
 	    {"background", required_argument, NULL, 'b'},
@@ -226,10 +296,13 @@ int main(int argc, char **argv)
 	    {"debug-captures", no_argument, NULL, OPT_DEBUG_CAPTURES},
 	    {"report-unmatched-captures", no_argument, NULL, OPT_REPORT_UNMATCHED_CAPTURES},
 	    {"reverse", no_argument, NULL, OPT_REVERSE},
+	    {"palette", required_argument, NULL, OPT_PALETTE},
 	    {"help", no_argument, NULL, 'h'},
 	    {NULL, 0, NULL, 0},
 	};
 	struct fyts_config config = {0};
+	struct fypal_ctx *palette = NULL;
+	const char *palette_theme = NULL;
 	const char *source_path = NULL;
 	char *detected_lang_name = NULL;
 	char *output = NULL;
@@ -313,6 +386,9 @@ int main(int argc, char **argv)
 		case OPT_REVERSE:
 			config.reverse = 1;
 			break;
+		case OPT_PALETTE:
+			palette_theme = optarg;
+			break;
 		case 'h':
 			usage(stdout);
 			return 0;
@@ -368,18 +444,36 @@ int main(int argc, char **argv)
 		}
 	}
 
-	if (should_stream) {
-		rc = stream_file(source_path, &config);
-	} else {
-		source = read_file(source_path, &source_len);
-		if (!source) {
+	if (palette_theme) {
+#ifdef FYTS_WITH_FYPALETTE
+		palette = palette_create(palette_theme, &config);
+		if (!palette) {
 			free(detected_lang_name);
 			return 1;
 		}
-		rc = fyts_highlight_source(&config, source, source_len);
+#else
+		fprintf(stderr, "--palette: built without libfypalette\n");
+		free(detected_lang_name);
+		return 2;
+#endif
 	}
 
+	if (should_stream) {
+		rc = stream_file(source_path, &config, palette);
+	} else {
+		source = read_file(source_path, &source_len);
+		if (!source) {
+			rc = 1;
+			goto out;
+		}
+		rc = highlight_file(source, source_len, &config, palette);
+	}
+
+out:
 	free(source);
 	free(detected_lang_name);
+#ifdef FYTS_WITH_FYPALETTE
+	fypal_ctx_destroy(palette);
+#endif
 	return rc ? 1 : 0;
 }
