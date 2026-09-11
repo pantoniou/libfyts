@@ -346,6 +346,43 @@ add_test(NAME fyts-language-supported
   COMMAND "$<TARGET_FILE:fyts-language-test>"
 )
 
+if(FYTS_HAVE_FYPALETTE)
+  add_executable(fyts-palette-test
+    tests/fyts_palette_test.c
+  )
+  set_source_files_properties(tests/fyts_palette_test.c PROPERTIES COMPILE_OPTIONS "${FYTS_C_FLAGS}")
+  target_link_libraries(fyts-palette-test PRIVATE fyts libfypalette::libfypalette)
+  if(HAVE_ASAN)
+    target_compile_options(fyts-palette-test PRIVATE ${ASAN_C_FLAGS})
+    target_link_options(fyts-palette-test PRIVATE ${ASAN_C_FLAGS})
+  endif()
+
+  add_test(NAME fyts-palette
+    COMMAND "$<TARGET_FILE:fyts-palette-test>"
+  )
+
+  add_test(NAME palette-cli
+    COMMAND "$<TARGET_FILE:fyts-highlight>" --palette ember --background dark --color on --lang c "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/sample.c"
+  )
+  set_tests_properties(palette-cli PROPERTIES
+    PASS_REGULAR_EXPRESSION "\\[38;2;[0-9;]*m"
+  )
+
+  add_test(NAME palette-cli-stream
+    COMMAND "$<TARGET_FILE:fyts-highlight>" --palette ember --background light --color on --stream --lang c "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/sample.c"
+  )
+  set_tests_properties(palette-cli-stream PROPERTIES
+    PASS_REGULAR_EXPRESSION "\\[38;2;[0-9;]*m"
+  )
+
+  add_test(NAME palette-cli-bad-theme
+    COMMAND "$<TARGET_FILE:fyts-highlight>" --palette no-such-theme --color on --lang c "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/sample.c"
+  )
+  set_tests_properties(palette-cli-bad-theme PROPERTIES
+    WILL_FAIL TRUE
+  )
+endif()
+
 if(HAVE_ASAN)
   get_property(FYTS_TESTS DIRECTORY PROPERTY TESTS)
   # LeakSanitizer was never ported to arm64 Darwin; requesting detect_leaks
