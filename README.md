@@ -214,6 +214,37 @@ Available bundled themes include:
 - `vscode.yaml`
 - `vscode-nvim.yaml`
 
+## Palette Styling
+
+When libfyts is built with libfypalette, a context can take its colours from
+a palette theme in place of a styling. The palette supplies the colours for
+the terminal capabilities and the dark or light variant that the palette
+context was given:
+
+```c
+struct fypal_ctx *palette = fypal_ctx_create(&caps);
+
+fypal_ctx_load_builtin(palette, "ember");
+ctx = fyts_ctx_create(&config);
+fyts_ctx_set_palette(ctx, palette);
+```
+
+A capture takes the role `code.<lang>.<capture>`, else `code.<capture>`. A
+role name resolves through its dotted ancestors, so the capture
+`keyword.control.return` uses `code.keyword.control` or `code.keyword` when
+the theme does not define the more specific role. A theme can thus define a
+few roles for all languages and add roles for one language, such as
+`code.rust.keyword`. In reverse mode the frame background is the role
+`code.block`.
+
+The palette is borrowed: it must stay alive while the context uses it. Pass
+NULL to return to the styling. `fyts_ctx_set_palette()` returns -1 when the
+library is built without libfypalette.
+
+The build uses libfypalette when it finds the package. `-DFYTS_FYPALETTE=on`
+makes it required and `-DFYTS_FYPALETTE=off` disables it. `fyts-highlight
+--palette ember` or `--palette theme.yaml` highlights with a palette theme.
+
 ## Grammar Packs
 
 Expanded grammar repositories are not committed. The repository keeps compact

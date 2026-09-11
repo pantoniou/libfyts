@@ -50,6 +50,19 @@ Use SSH GitHub URLs for catalogue fetches with:
 cmake -S . -B build -DGITHUB_USE_SSH=ON
 ```
 
+libfypalette is an optional dependency. It adds `fyts_ctx_set_palette()`,
+which styles captures through palette roles. The build uses it when the
+package is found; select it with:
+
+```sh
+cmake -S . -B build -DFYTS_FYPALETTE=auto
+cmake -S . -B build -DFYTS_FYPALETTE=on
+cmake -S . -B build -DFYTS_FYPALETTE=off
+```
+
+Keep the build and the tests correct in both configurations. The palette
+tests are registered only when the support is built.
+
 Enable the sanitizer build with:
 
 ```sh
