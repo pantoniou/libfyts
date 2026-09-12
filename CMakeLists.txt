@@ -731,7 +731,11 @@ target_include_directories(fyts_static PRIVATE
 target_link_libraries(fyts_static PUBLIC libfyaml::libfyaml)
 if(FYTS_HAVE_FYPALETTE)
   target_compile_definitions(fyts_static PRIVATE FYTS_WITH_FYPALETTE=1)
-  target_link_libraries(fyts_static PUBLIC libfypalette::libfypalette)
+  if(TARGET libfypalette::libfypalette_static)
+    target_link_libraries(fyts_static PUBLIC libfypalette::libfypalette_static)
+  else()
+    target_link_libraries(fyts_static PUBLIC libfypalette::libfypalette)
+  endif()
 endif()
 
 add_executable(fyts-highlight
