@@ -1374,16 +1374,46 @@ static int source_char_width(const char *source, size_t len, size_t *char_len, i
 	return codepoint_width(cp);
 }
 
+/* Bytes of the terminal escape at @text: a CSI, an OSC, or an escape and one
+ * byte. An escape occupies no column. */
+static size_t escape_len(const char *text)
+{
+	size_t i;
+
+	if (text[0] != '\033' || !text[1])
+		return 0;
+	if (text[1] == '[') {
+		for (i = 2; text[i] && !(text[i] >= 0x40 && text[i] <= 0x7e); i++)
+			;
+		return text[i] ? i + 1 : i;
+	}
+	if (text[1] == ']') {
+		for (i = 2; text[i]; i++) {
+			if (text[i] == '\a')
+				return i + 1;
+			if (text[i] == '\033' && text[i + 1] == '\\')
+				return i + 2;
+		}
+		return i;
+	}
+	return 2;
+}
+
 static int text_visible_width(const char *text)
 {
 	int col = 0;
-	size_t i = 0;
+	size_t i = 0, esc;
 
 	if (!text)
 		return 0;
 	while (text[i]) {
 		size_t char_len;
 
+		esc = escape_len(text + i);
+		if (esc) {
+			i += esc;
+			continue;
+		}
 		col += source_char_width(text + i, strlen(text + i), &char_len, col);
 		i += char_len;
 	}
@@ -1406,8 +1436,9 @@ static int render_content_width(const struct fyts_config *config)
 	frame_width = text_visible_width(config->line_prefix);
 	if (config->line_suffix && *config->line_suffix)
 		frame_width += text_visible_width(config->line_suffix);
+	/* A frame as wide as the clip leaves one column: 0 would mean no clip. */
 	if (frame_width >= width)
-		return 0;
+		return 1;
 	return width - frame_width;
 }
 
