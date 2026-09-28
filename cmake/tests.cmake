@@ -46,6 +46,16 @@ if(HAVE_ASAN)
   target_link_options(fyts-language-test PRIVATE ${ASAN_C_FLAGS})
 endif()
 
+add_executable(fyts-prefix-test
+  tests/fyts_prefix_test.c
+)
+set_source_files_properties(tests/fyts_prefix_test.c PROPERTIES COMPILE_OPTIONS "${FYTS_C_FLAGS}")
+target_link_libraries(fyts-prefix-test PRIVATE fyts)
+if(HAVE_ASAN)
+  target_compile_options(fyts-prefix-test PRIVATE ${ASAN_C_FLAGS})
+  target_link_options(fyts-prefix-test PRIVATE ${ASAN_C_FLAGS})
+endif()
+
 enable_testing()
 
 function(add_highlight_test name lang fixture)
@@ -332,6 +342,10 @@ set_tests_properties(parse-only-fallback PROPERTIES
 
 add_test(NAME fyts-stream
   COMMAND "$<TARGET_FILE:fyts-stream-test>"
+)
+
+add_test(NAME fyts-prefix
+  COMMAND "$<TARGET_FILE:fyts-prefix-test>"
 )
 
 add_test(NAME fyts-query-cache
