@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: MIT
+#define _GNU_SOURCE
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -15,13 +16,14 @@ static int discard_output(const void *data, size_t len, void *user)
 	return 0;
 }
 
-static char *highlight(int width)
+static char *highlight(int width, size_t *out_len)
 {
 	struct fyts_config config = {0};
 	struct fyts_ctx *ctx;
 	char *out = NULL;
 	size_t len = 0;
 
+	*out_len = 0;
 	config.lang = "c";
 	config.color_mode = FYTS_COLOR_OFF;
 	config.write = discard_output;
@@ -36,18 +38,22 @@ static char *highlight(int width)
 		out = NULL;
 	}
 	fyts_ctx_destroy(ctx);
+	*out_len = out ? len : 0;
 	return out;
 }
 
 static int check(int width, const char *want, const char *forbid)
 {
-	char *out = highlight(width);
+	size_t len;
+	char *out = highlight(width, &len);
 	int ok;
 
-	ok = out && strstr(out, want) && !strstr(out, forbid);
+	/* The output is not NUL terminated, so search it by length. */
+	ok = out && memmem(out, len, want, strlen(want)) &&
+	     !memmem(out, len, forbid, strlen(forbid));
 	if (!ok)
-		fprintf(stderr, "width %d: want \"%s\", forbid \"%s\", got \"%s\"\n",
-			width, want, forbid, out ? out : "(none)");
+		fprintf(stderr, "width %d: want \"%s\", forbid \"%s\", got \"%.*s\"\n",
+			width, want, forbid, (int)len, out ? out : "(none)");
 	free(out);
 	return ok;
 }
